@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RMI Notes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 3 · Networking &amp; RMI</div>
+  <div class="pages">
+    <a href="unit-1-1.html">1.1</a>
+    <a href="unit-1-2.html">1.2</a>
+    <a href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a href="unit-2-3.html">2.3</a>
+    <a href="unit-3-1.html">3.1</a>
+    <a class="on" href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#rmi">1. RMI</a></li>
+    <li><a href="#arch">2. Architecture</a></li>
+    <li><a href="#working">3. Working of RMI</a></li>
+    <li><a href="#marshal">4. Marshalling &amp; Unmarshalling</a></li>
+    <li><a href="#stub">5. Stub &amp; Skeleton</a></li>
+    <li><a href="#distributed">6. Distributed App Requirements</a></li>
+    <li><a href="#registry">7. RMI Registry</a></li>
+    <li><a href="#goals">8. Goals of RMI</a></li>
+    <li><a href="#naming">9. Naming Class</a></li>
+    <li><a href="#example">10. RMI Example (6 Steps)</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 3.2: Remote Method Invocation (RMI)</h1>
+  <p>How a Java program calls a method on an object running in a different JVM, possibly on another machine.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="rmi">
+  <h2><span class="num">1</span>Remote Method Invocation (RMI)</h2>
+  <h3>Definition</h3>
+  <p><strong>RMI (Remote Method Invocation)</strong> is a mechanism that lets an object in one JVM <strong>access or invoke methods of an object running in another JVM</strong>.</p>
+  <h3>Description</h3>
+  <ul>
+    <li>It is used to build <strong>distributed applications</strong>, and it provides remote communication between Java programs.</li>
+    <li>It is provided in the <code>java.rmi</code> package.</li>
+    <li>A <strong>remote object</strong> is an object whose methods can be invoked from another JVM.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="arch">
+  <h2><span class="num">2</span>Architecture of an RMI Application</h2>
+  <p>An RMI application has <strong>two programs</strong>:</p>
+  <ul>
+    <li><strong>Server program:</strong> creates a <strong>remote object</strong> and makes its reference available to clients through the <strong>registry</strong>.</li>
+    <li><strong>Client program:</strong> requests the remote object from the server and invokes its methods.</li>
+  </ul>
+<div class="tree">      CLIENT JVM                           SERVER JVM
+ ┌───────────────────┐               ┌───────────────────┐
+ │   Client Program  │               │   Remote Object   │
+ │         │         │               │         ▲         │
+ │       Stub        │               │      Skeleton     │
+ │         │         │               │         ▲         │
+ │ Remote Reference  │               │ Remote Reference  │
+ │    Layer (RRL)    │               │    Layer (RRL)    │
+ │         │         │               │         ▲         │
+ │  Transport Layer ─┼──── network ──┼─▶ Transport Layer │
+ └───────────────────┘               └───────────────────┘</div>
+  <h3>Components</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Component</th><th>Role</th></tr>
+    <tr><td><strong>Transport Layer</strong></td><td>Connects the client and server. It manages existing connections and sets up new ones.</td></tr>
+    <tr><td><strong>Stub</strong></td><td>A representation (<strong>proxy</strong>) of the remote object on the <strong>client</strong>. It acts as the gateway for the client program.</td></tr>
+    <tr><td><strong>Skeleton</strong></td><td>An object on the <strong>server</strong> side. The stub talks to the skeleton, which passes the request to the remote object.</td></tr>
+    <tr><td><strong>RRL</strong> (Remote Reference Layer)</td><td>Manages the references the client makes to the remote object.</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="working">
+  <h2><span class="num">3</span>Working of an RMI Application</h2>
+  <ol>
+    <li>The client calls a method on the remote object. The call is received by the <strong>stub</strong>, which passes it to the <strong>RRL</strong>.</li>
+    <li>The client-side RRL calls <code>invoke()</code> on the <code>remoteRef</code> object and passes the request to the <strong>server-side RRL</strong>.</li>
+    <li>The server-side RRL passes the request to the <strong>skeleton</strong> (the server proxy), which calls the actual method on the remote object.</li>
+    <li>The <strong>result is passed all the way back</strong> to the client.</li>
+  </ol>
+<div class="tree">Client → Stub → RRL → Transport → RRL → Skeleton → Remote Object
+Client ← Stub ← RRL ← Transport ← RRL ← Skeleton ← (result)</div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="marshal">
+  <h2><span class="num">4</span>Marshalling and Unmarshalling</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Marshalling (client side)</th><th>Unmarshalling (server side)</th></tr>
+    <tr><td>When the client calls a remote method with parameters, the parameters are <strong>bundled into a message</strong> before being sent over the network.</td><td>On the server, the packed parameters are <strong>unbundled</strong> and the required method is called.</td></tr>
+    <tr><td><strong>Primitive</strong> parameters are put together and a header is attached.</td><td>The values are extracted again.</td></tr>
+    <tr><td><strong>Object</strong> parameters are <strong>serialized</strong>.</td><td>Objects are <strong>deserialized</strong>.</td></tr>
+  </table></div>
+  <p>The same thing happens in reverse for the return value: the server marshals it and the client unmarshals it.</p>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="stub">
+  <h2><span class="num">5</span>Stub and Skeleton</h2>
+  <p>RMI uses stub and skeleton objects to communicate with the remote object.</p>
+  <h3>Stub (client side)</h3>
+  <p>The stub is the <strong>gateway for the client</strong>. All outgoing requests go through it, and it represents the remote object. When the caller invokes a method on the stub, the stub:</p>
+  <ol>
+    <li>Initiates a connection with the remote JVM.</li>
+    <li>Writes and transmits (<strong>marshals</strong>) the parameters to the remote JVM.</li>
+    <li>Waits for the result.</li>
+    <li>Reads (<strong>unmarshals</strong>) the return value or exception.</li>
+    <li>Returns the value to the caller.</li>
+  </ol>
+  <h3>Skeleton (server side)</h3>
+  <p>The skeleton is the <strong>gateway for the server-side object</strong>. All incoming requests go through it. When it receives a request, it:</p>
+  <ol>
+    <li>Reads the parameters for the remote method.</li>
+    <li>Invokes the method on the actual remote object.</li>
+    <li>Writes and transmits (<strong>marshals</strong>) the result to the caller.</li>
+  </ol>
+  <div class="note">From the <strong>Java 2 SDK</strong> onwards, a new stub protocol removed the need for skeletons.</div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="distributed">
+  <h2><span class="num">6</span>Requirements for Distributed Applications</h2>
+  <p>An application that does all of the following is a distributed application:</p>
+  <ul>
+    <li>It <strong>locates</strong> the remote method.</li>
+    <li>It <strong>communicates</strong> with the remote objects.</li>
+    <li>It <strong>loads the class definitions</strong> for the objects.</li>
+  </ul>
+  <p>RMI applications have all of these features, so they are distributed applications.</p>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="registry">
+  <h2><span class="num">7</span>RMI Registry</h2>
+  <h3>Definition</h3>
+  <p>The <strong>RMI registry</strong> is a <strong>namespace where all server objects are placed</strong>.</p>
+  <ul>
+    <li>When the server creates a remote object, it <strong>registers</strong> it with the registry using <code>bind()</code> or <code>rebind()</code> under a unique name called the <strong>bind name</strong>.</li>
+    <li>To call the remote object, the client needs a reference to it. The client <strong>fetches it from the registry by its bind name</strong> using <code>lookup()</code>.</li>
+  </ul>
+<div class="tree">   Server ──bind("sonoo", obj)──▶  [ RMI Registry ]
+   Client ──lookup("sonoo")─────▶  [ RMI Registry ] ──stub──▶ Client
+   Client ──stub.add(34,4)─────────────────────────────────▶ Server</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="goals">
+  <h2><span class="num">8</span>Goals of RMI</h2>
+  <ul>
+    <li>Minimise the complexity of the application.</li>
+    <li>Preserve type safety.</li>
+    <li>Distributed garbage collection.</li>
+    <li>Minimise the difference between working with local and remote objects.</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="naming">
+  <h2><span class="num">9</span>Naming Class</h2>
+  <h3>Definition</h3>
+  <p>The <code>java.rmi.Naming</code> class provides methods to <strong>store and get remote objects</strong> in the RMI registry. All 5 methods are static.</p>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>static Remote lookup(String name)</td><td>Returns the reference (stub) of the remote object.</td></tr>
+    <tr><td>static void bind(String name, Remote obj)</td><td>Binds the remote object to the given name. Throws AlreadyBoundException if the name is taken.</td></tr>
+    <tr><td>static void unbind(String name)</td><td>Removes the remote object bound to the given name.</td></tr>
+    <tr><td>static void rebind(String name, Remote obj)</td><td>Binds the remote object to the name, replacing any existing binding.</td></tr>
+    <tr><td>static String[] list(String name)</td><td>Returns the names of all remote objects bound in the registry.</td></tr>
+  </table></div>
+  <p>Names are written as URLs: <code>rmi://host:port/bindName</code>, e.g. <code>rmi://localhost:5000/sonoo</code>.</p>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="example">
+  <h2><span class="num">10</span>RMI Example: 6 Steps</h2>
+  <ol>
+    <li>Create the <strong>remote interface</strong>.</li>
+    <li>Provide the <strong>implementation</strong> of the remote interface.</li>
+    <li>Compile the implementation class and create the <strong>stub and skeleton</strong> using the <code>rmic</code> tool.</li>
+    <li>Start the <strong>registry</strong> service with the <code>rmiregistry</code> tool.</li>
+    <li>Create and start the <strong>server</strong> application.</li>
+    <li>Create and start the <strong>client</strong> application.</li>
+  </ol>
+  <p>The client needs only two files: the remote interface and the client program.</p>
+
+  <h3>Step 1: Remote interface</h3>
+  <p>Extend the <code>Remote</code> interface, and declare <code>RemoteException</code> on every method.</p>
+<div class="code"><pre>
+import java.rmi.*;
+
+public interface Adder extends Remote {
+    public int add(int x, int y) throws RemoteException;
+}
+</pre></div>
+
+  <h3>Step 2: Implementation</h3>
+  <p>Either <strong>extend <code>UnicastRemoteObject</code></strong> or use its <code>exportObject()</code> method. If you extend it, you must define a constructor that declares <code>RemoteException</code>.</p>
+<div class="code"><pre>
+import java.rmi.*;
+import java.rmi.server.*;
+
+public class AdderRemote extends UnicastRemoteObject implements Adder {
+    AdderRemote() throws RemoteException {
+        super();
+    }
+    public int add(int x, int y) {
+        return x + y;
+    }
+}
+</pre></div>
+
+  <h3>Step 3: Create the stub and skeleton</h3>
+<div class="code"><pre>
+rmic AdderRemote
+</pre></div>
+  <div class="note"><code>rmic</code> was removed in Java 15. On modern Java, stubs are generated automatically at runtime, so you can skip this step.</div>
+
+  <h3>Step 4: Start the registry</h3>
+  <p>If no port is given, the default port 1099 is used. This example uses port 5000.</p>
+<div class="code"><pre>
+rmiregistry 5000
+</pre></div>
+
+  <h3>Step 5: Server, which binds the object as "sonoo"</h3>
+<div class="code"><pre>
+import java.rmi.*;
+
+public class MyServer {
+    public static void main(String[] args) {
+        try {
+            Adder stub = new AdderRemote();
+            Naming.rebind("rmi://localhost:5000/sonoo", stub);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+
+  <h3>Step 6: Client, which looks up the stub and calls add()</h3>
+<div class="code"><pre>
+import java.rmi.*;
+
+public class MyClient {
+    public static void main(String[] args) {
+        try {
+            Adder stub = (Adder) Naming.lookup("rmi://localhost:5000/sonoo");
+            System.out.println(stub.add(34, 4));     // prints 38
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+  <p>To call from another machine, replace <code>localhost</code> with the server's host name or IP address.</p>
+
+  <h3>Running it (separate command prompts)</h3>
+<div class="code"><pre>
+javac *.java          // 1. compile all files
+rmic AdderRemote      // 2. stub + skeleton (old Java only)
+rmiregistry 5000      // 3. prompt 1: start registry
+java MyServer         // 4. prompt 2: start server
+java MyClient         // 5. prompt 3: run client  → 38
+</pre></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

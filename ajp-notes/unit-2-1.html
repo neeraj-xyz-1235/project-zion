@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layout Managers</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 2 · Layouts, Events, JDBC</div>
+  <div class="pages">
+    <a href="unit-1-1.html">1.1</a>
+    <a href="unit-1-2.html">1.2</a>
+    <a class="on" href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a href="unit-2-3.html">2.3</a>
+    <a href="unit-3-1.html">3.1</a>
+    <a href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#intro">1. Layout Managers</a></li>
+    <li><a href="#border">2. BorderLayout</a></li>
+    <li><a href="#flow">3. FlowLayout</a></li>
+    <li><a href="#grid">4. GridLayout</a></li>
+    <li><a href="#card">5. CardLayout</a></li>
+    <li><a href="#compare">6. Quick Comparison</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 2.1: Java Layout Managers</h1>
+  <p>How Java arranges components inside a container automatically, so you don't have to position each one with setBounds().</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="intro">
+  <h2><span class="num">1</span>Layout Managers: Introduction</h2>
+  <h3>Definition</h3>
+  <p>A <strong>LayoutManager</strong> arranges components in a container in a particular manner. It controls the <strong>position and size</strong> of every component in a GUI form.</p>
+  <h3>Description</h3>
+  <ul>
+    <li><code>LayoutManager</code> is an <strong>interface</strong> that every layout manager class implements.</li>
+    <li>You set one on a container with <code>container.setLayout(new XyzLayout())</code>.</li>
+    <li><code>setLayout(null)</code> removes the layout manager. You then have to place everything yourself with <code>setBounds()</code>, as in Unit 1.</li>
+    <li>When the window is resized, the layout manager re-arranges the components automatically.</li>
+  </ul>
+  <h3>Layout manager classes</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Package</th><th>Classes</th></tr>
+    <tr><td><code>java.awt</code></td><td>BorderLayout, FlowLayout, GridLayout, CardLayout, GridBagLayout</td></tr>
+    <tr><td><code>javax.swing</code></td><td>BoxLayout, GroupLayout, ScrollPaneLayout, SpringLayout</td></tr>
+  </table></div>
+  <h3>Default layouts</h3>
+  <ul>
+    <li><strong>JFrame / Window / Dialog</strong> use BorderLayout by default.</li>
+    <li><strong>JPanel / Applet</strong> use FlowLayout by default.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="border">
+  <h2><span class="num">2</span>BorderLayout</h2>
+  <h3>Definition</h3>
+  <p><code>BorderLayout</code> arranges components in <strong>five regions: NORTH, SOUTH, EAST, WEST and CENTER</strong>.</p>
+  <ul>
+    <li>Each region can hold <strong>only one component</strong>.</li>
+    <li>It is the <strong>default layout of a frame or window</strong>.</li>
+    <li>CENTER takes all the space left over after the other four regions.</li>
+  </ul>
+<div class="tree">┌──────────────────────────┐
+│          NORTH           │
+├──────┬────────────┬──────┤
+│ WEST │   CENTER   │ EAST │
+├──────┴────────────┴──────┤
+│          SOUTH           │
+└──────────────────────────┘</div>
+  <h3>Fields (region constants)</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>public static final String NORTH</td><td>Top region.</td></tr>
+    <tr><td>public static final String SOUTH</td><td>Bottom region.</td></tr>
+    <tr><td>public static final String EAST</td><td>Right region.</td></tr>
+    <tr><td>public static final String WEST</td><td>Left region.</td></tr>
+    <tr><td>public static final String CENTER</td><td>Middle region (the default when no region is given).</td></tr>
+  </table></div>
+  <div class="note">The slide lists these as <code>int</code>. In real Java they are <code>String</code> constants (for example <code>NORTH = "North"</code>).</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>BorderLayout()</td><td>Creates a border layout with no gaps between components.</td></tr>
+    <tr><td>BorderLayout(int hgap, int vgap)</td><td>Creates a border layout with the given horizontal and vertical gaps.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>container.add(Component c, Object region)</td><td>Adds a component to a region, e.g. <code>f.add(b, BorderLayout.NORTH)</code>.</td></tr>
+    <tr><td>void setHgap(int hgap)</td><td>Sets the horizontal gap.</td></tr>
+    <tr><td>void setVgap(int vgap)</td><td>Sets the vertical gap.</td></tr>
+  </table></div>
+  <h3>Without specifying a region</h3>
+  <p>If you call <code>add()</code> without a region, every component goes to <strong>CENTER</strong>. Each one replaces the last, so <strong>only the last component added is shown</strong> and it covers the whole area. Gaps have no effect in that case.</p>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.awt.*;
+import javax.swing.*;
+
+public class Border {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("BorderLayout");
+        f.setLayout(new BorderLayout(20, 15));   // hgap 20, vgap 15
+
+        f.add(new JButton("NORTH"),  BorderLayout.NORTH);
+        f.add(new JButton("SOUTH"),  BorderLayout.SOUTH);
+        f.add(new JButton("EAST"),   BorderLayout.EAST);
+        f.add(new JButton("WEST"),   BorderLayout.WEST);
+        f.add(new JButton("CENTER"), BorderLayout.CENTER);
+
+        f.setSize(300, 300);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="flow">
+  <h2><span class="num">3</span>FlowLayout</h2>
+  <h3>Definition</h3>
+  <p><code>FlowLayout</code> arranges components <strong>in a line, one after another (in a flow)</strong>, like words in a sentence. When a row is full, the next component wraps to a new row.</p>
+  <ul>
+    <li>It is the <strong>default layout of a panel or applet</strong>.</li>
+    <li>Components keep their preferred size. They are not stretched.</li>
+  </ul>
+  <h3>Fields</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>public static final int LEFT</td><td>Each row is left-aligned.</td></tr>
+    <tr><td>public static final int RIGHT</td><td>Each row is right-aligned.</td></tr>
+    <tr><td>public static final int CENTER</td><td>Each row is centred (the default).</td></tr>
+    <tr><td>public static final int LEADING</td><td>Aligned to the leading edge of the container's orientation.</td></tr>
+    <tr><td>public static final int TRAILING</td><td>Aligned to the trailing edge of the container's orientation.</td></tr>
+  </table></div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>FlowLayout()</td><td>Centre alignment, with default 5-unit horizontal and vertical gaps.</td></tr>
+    <tr><td>FlowLayout(int align)</td><td>The given alignment, with default 5-unit gaps.</td></tr>
+    <tr><td>FlowLayout(int align, int hgap, int vgap)</td><td>The given alignment and gaps.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setAlignment(int align)</td><td>Changes the alignment.</td></tr>
+    <tr><td>int getAlignment()</td><td>Returns the alignment.</td></tr>
+    <tr><td>void setHgap(int) / setVgap(int)</td><td>Changes the gaps.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.awt.*;
+import javax.swing.*;
+
+public class MyFlowLayout {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("FlowLayout");
+        f.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 25));  // left, hgap 20, vgap 25
+
+        for (int i = 1; i &lt;= 10; i++) {
+            f.add(new JButton("" + i));
+        }
+
+        f.setSize(300, 300);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="grid">
+  <h2><span class="num">4</span>GridLayout</h2>
+  <h3>Definition</h3>
+  <p><code>GridLayout</code> arranges components in a <strong>rectangular grid</strong> of rows and columns. <strong>One component goes in each cell</strong>, and all cells are the same size.</p>
+  <ul>
+    <li>Components are filled in left to right, then top to bottom.</li>
+    <li>Each component stretches to fill its cell.</li>
+  </ul>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>GridLayout()</td><td>One row, with one column per component.</td></tr>
+    <tr><td>GridLayout(int rows, int columns)</td><td>The given rows and columns, with no gaps.</td></tr>
+    <tr><td>GridLayout(int rows, int columns, int hgap, int vgap)</td><td>The given rows and columns, plus gaps.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setRows(int rows)</td><td>Sets the number of rows.</td></tr>
+    <tr><td>void setColumns(int cols)</td><td>Sets the number of columns.</td></tr>
+    <tr><td>void setHgap(int) / setVgap(int)</td><td>Sets the gaps.</td></tr>
+  </table></div>
+  <h3>Demo: a 3 × 3 grid</h3>
+<div class="code"><pre>
+import java.awt.*;
+import javax.swing.*;
+
+public class MyGridLayout {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("GridLayout");
+        f.setLayout(new GridLayout(3, 3, 20, 25));   // 3 rows, 3 cols, gaps
+
+        for (int i = 1; i &lt;= 9; i++) {
+            f.add(new JButton("" + i));
+        }
+
+        f.setSize(300, 300);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+  <div class="note">In the slide's GridLayoutExample1, <code>main()</code> calls <code>new GridLayoutExample()</code> instead of <code>new GridLayoutExample1()</code>, so it shows the wrong window.</div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="card">
+  <h2><span class="num">5</span>CardLayout</h2>
+  <h3>Definition</h3>
+  <p><code>CardLayout</code> manages components so that <strong>only one component is visible at a time</strong>. It treats each component as a <strong>card</strong> in a deck, which is where the name comes from.</p>
+  <ul>
+    <li>Each card is added with a name: <code>container.add("name", component)</code>.</li>
+    <li>It's used for wizards (Next/Back screens), slideshows and tab-like screens.</li>
+  </ul>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>CardLayout()</td><td>Creates a card layout with zero horizontal and vertical gaps.</td></tr>
+    <tr><td>CardLayout(int hgap, int vgap)</td><td>Creates a card layout with the given gaps.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>public void next(Container parent)</td><td>Flips to the next card. After the last card, it goes back to the first.</td></tr>
+    <tr><td>public void previous(Container parent)</td><td>Flips to the previous card.</td></tr>
+    <tr><td>public void first(Container parent)</td><td>Flips to the first card.</td></tr>
+    <tr><td>public void last(Container parent)</td><td>Flips to the last card.</td></tr>
+    <tr><td>public void show(Container parent, String name)</td><td>Flips to the card with the given name.</td></tr>
+  </table></div>
+  <h3>Demo: click to see the next card</h3>
+<div class="code"><pre>
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class CardLayoutExample extends JFrame implements ActionListener {
+    CardLayout card;
+    Container c;
+
+    CardLayoutExample() {
+        c = getContentPane();
+        card = new CardLayout(40, 30);
+        c.setLayout(card);
+
+        JButton b1 = new JButton("Apple");
+        JButton b2 = new JButton("Boy");
+        JButton b3 = new JButton("Cat");
+        b1.addActionListener(this);
+        b2.addActionListener(this);
+        b3.addActionListener(this);
+
+        c.add("a", b1);     // each button is one card
+        c.add("b", b2);
+        c.add("c", b3);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        card.next(c);       // show the next card
+    }
+
+    public static void main(String[] args) {
+        CardLayoutExample cl = new CardLayoutExample();
+        cl.setSize(400, 400);
+        cl.setVisible(true);
+        cl.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="compare">
+  <h2><span class="num">6</span>Quick Comparison</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Layout</th><th>Arrangement</th><th>Default for</th><th>Key point</th></tr>
+    <tr><td>BorderLayout</td><td>5 regions (N, S, E, W, Center)</td><td>JFrame, Window</td><td>One component per region</td></tr>
+    <tr><td>FlowLayout</td><td>Row by row, left to right</td><td>JPanel, Applet</td><td>Keeps preferred size, wraps</td></tr>
+    <tr><td>GridLayout</td><td>Equal-sized grid of cells</td><td>-</td><td>One component per cell</td></tr>
+    <tr><td>CardLayout</td><td>Stack of cards</td><td>-</td><td>Only one visible at a time</td></tr>
+  </table></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

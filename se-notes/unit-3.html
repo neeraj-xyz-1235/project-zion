@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Engineering</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">SE Notes</a></div>
+  <div class="sub">Unit 3 · Design Engineering</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a href="unit-2.html">Unit 2</a>
+    <a class="on" href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#design">1. Design Engineering</a></li>
+    <li><a href="#process">2. Design Process</a></li>
+    <li><a href="#objectives">3. Objectives of Design</a></li>
+    <li><a href="#concepts">4. Design Concepts</a></li>
+    <li><a href="#abstraction">5. Abstraction</a></li>
+    <li><a href="#modularity">6. Modularity</a></li>
+    <li><a href="#hiding">7. Information Hiding</a></li>
+    <li><a href="#refinement">8. Refinement</a></li>
+    <li><a href="#independence">9. Functional Independence</a></li>
+    <li><a href="#phases">10. Phases of Design</a></li>
+    <li><a href="#model">11. Design Model</a></li>
+    <li><a href="#architecture">12. Software Architecture</a></li>
+    <li><a href="#control">13. Control Architecture</a></li>
+    <li><a href="#partitioning">14. Structural Partitioning</a></li>
+    <li><a href="#cohesion">15. Cohesion</a></li>
+    <li><a href="#coupling">16. Coupling</a></li>
+    <li><a href="#styles">17. Architectural Styles</a></li>
+    <li><a href="#data-centered">18. Data-Centered</a></li>
+    <li><a href="#data-flow">19. Data Flow</a></li>
+    <li><a href="#call-return">20. Call and Return</a></li>
+    <li><a href="#oo">21. Object-Oriented</a></li>
+    <li><a href="#layered">22. Layered</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 3: Design Engineering</h1>
+  <p>Turning the SRS into a design: the core design concepts, cohesion and coupling, the design model and architectural styles.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="design">
+  <h2><span class="num">1</span>Design Engineering</h2>
+  <div class="def">The <strong>design phase</strong> of the SDLC produces a <strong>solution to the problem</strong> described in the <strong>SRS</strong>. Its output is the <strong>Software Design Document (SDD)</strong>.</div>
+<div class="tree">SRS (what to build) ──▶ DESIGN ──▶ SDD (how to build it) ──▶ Coding</div>
+  <h3>Two levels of design</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Conceptual Design</th><th>Technical Design</th></tr>
+    <tr><td>Written in simple, <strong>customer-understandable</strong> language.</td><td>Written for <strong>developers</strong>.</td></tr>
+    <tr><td>Explains system characteristics and describes functionality.</td><td>Covers hardware components, the hierarchy of software components, software and network architecture.</td></tr>
+    <tr><td><strong>Independent of implementation</strong>.</td><td>Data structures and data flow, I/O components, interfaces.</td></tr>
+    <tr><td>Linked to the requirement document.</td><td>Linked to implementation.</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="process">
+  <h2><span class="num">2</span>Design Process</h2>
+  <div class="def"><strong>Software design</strong> is the process of <strong>transforming user requirements into a suitable form</strong> that helps the programmer code and implement the software. It turns the <strong>SRS document into the design document</strong>.</div>
+  <h3>What gets designed and documented</h3>
+  <ul>
+    <li>The different <strong>modules</strong> required.</li>
+    <li><strong>Control relationships</strong> among modules.</li>
+    <li><strong>Interfaces</strong> among modules.</li>
+    <li><strong>Data structures</strong> of the modules.</li>
+    <li><strong>Algorithms</strong> needed to implement each module.</li>
+  </ul>
+  <p>Software design is both a <strong>process</strong> (a sequence of steps that describe all aspects of the software) and a <strong>model</strong> (which gives different views of the software).</p>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="objectives">
+  <h2><span class="num">3</span>Objectives of Software Design</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Objective</th><th>Meaning</th></tr>
+    <tr><td><strong>Correctness</strong></td><td>Correctly implements all the required functionality.</td></tr>
+    <tr><td><strong>Efficiency</strong></td><td>Optimises resources, time and cost.</td></tr>
+    <tr><td><strong>Understandability</strong></td><td>Easy to understand: modular, with modules arranged in layers.</td></tr>
+    <tr><td><strong>Completeness</strong></td><td>Has all the components: data structures, modules, external interfaces.</td></tr>
+    <tr><td><strong>Maintainability</strong></td><td>Easy to change when the customer asks for changes.</td></tr>
+  </table></div>
+  <div class="tip"><strong>Mnemonic:</strong> CEUCM, "Can Every User Change Me?": Correctness, Efficiency, Understandability, Completeness, Maintainability.</div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="concepts">
+  <h2><span class="num">4</span>Design Concepts</h2>
+  <div class="def"><strong>Design concepts</strong> are the fundamental principles that guide the designer towards a good-quality design.</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Concept</th><th>One-line idea</th></tr>
+    <tr><td><strong>Abstraction</strong></td><td>Show the essentials and hide the details.</td></tr>
+    <tr><td><strong>Modularity</strong></td><td>Divide the software into separate modules.</td></tr>
+    <tr><td><strong>Information hiding</strong></td><td>A module's internals are hidden from other modules.</td></tr>
+    <tr><td><strong>Refinement</strong></td><td>Add detail step by step, top-down.</td></tr>
+    <tr><td><strong>Functional independence</strong></td><td>Each module does one job: high cohesion, low coupling.</td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="abstraction">
+  <h2><span class="num">5</span>Abstraction</h2>
+  <div class="def"><strong>Abstraction</strong> means focusing on the <strong>essential features</strong> of a problem or solution while <strong>hiding the low-level details</strong>.</div>
+  <h3>Levels of abstraction</h3>
+  <ul>
+    <li><strong>Highest level:</strong> the solution is stated in broad terms, in the language of the problem.</li>
+    <li><strong>Lower levels:</strong> a more procedural, detailed description.</li>
+    <li><strong>Lowest level:</strong> the solution is stated so that it can be implemented directly as code.</li>
+  </ul>
+  <h3>Types of abstraction</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><strong>Procedural abstraction</strong></td><td>A <strong>named sequence of instructions</strong> with a specific, limited function</td><td>"<em>Open</em>" a door means walk to the door, grasp the knob, turn it, pull, and step away.</td></tr>
+    <tr><td><strong>Data abstraction</strong></td><td>A <strong>named collection of data</strong> that describes a data object</td><td>"<em>Door</em>" has type, swing direction, opening mechanism, weight and dimensions.</td></tr>
+    <tr><td><strong>Control abstraction</strong></td><td>A program control mechanism <strong>without its internal details</strong></td><td>A <strong>semaphore</strong> used to synchronise activities in an OS.</td></tr>
+  </table></div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="modularity">
+  <h2><span class="num">6</span>Modularity</h2>
+  <div class="def"><strong>Modularity</strong> means dividing software into <strong>separately named and addressable components called modules</strong>, which are integrated to meet the problem's requirements. "Modularity is the single attribute of software that allows a program to be intellectually manageable."</div>
+  <ul>
+    <li><strong>Monolithic software</strong> (one large module) is almost impossible to understand. It has too many control paths and variables, and too much overall complexity.</li>
+    <li>Splitting the problem into modules makes each piece easier to solve (divide and conquer).</li>
+  </ul>
+  <h3>Modularity and software cost</h3>
+<div class="tree">Cost │ \                         /  total cost
+     │  \  cost per module      /
+     │   \___            ______/
+     │       \____  ____/   cost to integrate
+     │            \/  ← region of minimum cost (M)
+     └──────────────────────────── Number of modules</div>
+  <ul>
+    <li>More modules means a <strong>lower cost per module</strong>, because each is smaller.</li>
+    <li>But more modules also means a <strong>higher integration (interface) cost</strong>.</li>
+    <li>So there is an <strong>optimum number of modules (M)</strong> where the total cost is lowest. Avoid both under-modularity and over-modularity.</li>
+  </ul>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="hiding">
+  <h2><span class="num">7</span>Information Hiding</h2>
+  <div class="def"><strong>Information hiding</strong> means modules are designed so that the <strong>information inside a module</strong> (its algorithms and data) is <strong>not accessible to other modules</strong> that don't need it.</div>
+  <ul>
+    <li>Modules communicate only through well-defined <strong>interfaces</strong>.</li>
+    <li><strong>Benefits:</strong> changes inside one module don't affect others, errors don't spread, and testing and maintenance are easier.</li>
+    <li>In OOP this is achieved with <strong>encapsulation</strong> (private members).</li>
+  </ul>
+<div class="tree">┌─── Module A ───┐                ┌─── Module B ───┐
+│ hidden data    │   interface    │ hidden data    │
+│ hidden logic   │ ◀────only────▶ │ hidden logic   │
+└────────────────┘                └────────────────┘</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="refinement">
+  <h2><span class="num">8</span>Refinement (Stepwise Refinement)</h2>
+  <div class="def"><strong>Refinement</strong> is a <strong>top-down design approach</strong> and a <strong>process of elaboration</strong>. A high-level statement of a function is decomposed step by step until programming-language statements are reached.</div>
+  <ul>
+    <li>The original statement describes a function or information, but not how it works internally.</li>
+    <li>Each refinement step adds more detail.</li>
+    <li>Every step involves <strong>design decisions</strong>, so the designer should be aware of the criteria and of alternative solutions.</li>
+    <li><strong>Abstraction and refinement are complementary:</strong> abstraction hides low-level details, and refinement reveals them step by step.</li>
+  </ul>
+  <h3>Example</h3>
+<div class="tree">Open door
+ └─ Walk to door
+ └─ Grasp knob
+     └─ Reach out hand
+     └─ Close fingers around knob
+ └─ Turn knob and pull
+     └─ Rotate knob 90°
+     └─ Pull door towards you
+ └─ Step away</div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="independence">
+  <h2><span class="num">9</span>Functional Independence</h2>
+  <div class="def"><strong>Functional independence</strong> is achieved by building modules that have a <strong>single-minded function</strong> and <strong>avoid excessive interaction</strong> with other modules. A functionally independent module has <strong>high cohesion and low coupling</strong>.</div>
+  <ul>
+    <li>It follows directly from modularity, abstraction and information hiding.</li>
+    <li>It is <strong>essential for good design</strong>: such modules are easier to develop, test and maintain, and errors spread less.</li>
+  </ul>
+  <h3>Two measures</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Cohesion (keep HIGH)</th><th>Coupling (keep LOW)</th></tr>
+    <tr><td>How strongly the elements <strong>inside</strong> a module work together for one purpose</td><td>How much a module <strong>depends on other</strong> modules</td></tr>
+    <tr><td>An <strong>intra</strong>-module measure</td><td>An <strong>inter</strong>-module measure</td></tr>
+    <tr><td>Best: functional cohesion</td><td>Best: no coupling or data coupling</td></tr>
+  </table></div>
+  <div class="tip"><strong>Golden rule:</strong> High Cohesion + Low Coupling = Good Design.</div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="phases">
+  <h2><span class="num">10</span>Phases (Levels) of Design</h2>
+  <p>The design phase turns the customer requirements in the SRS into a form that can be implemented in a programming language. It has three levels:</p>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Level</th><th>Description</th></tr>
+    <tr><td><strong>1. Interface design</strong></td><td>The highest level. Treats the system as a <strong>black box</strong> and focuses on its interaction with users, devices and other systems.</td></tr>
+    <tr><td><strong>2. Architectural design</strong></td><td>Breaks the system into <strong>major components</strong>, with their responsibilities, properties, interfaces and interactions.</td></tr>
+    <tr><td><strong>3. Detailed design</strong></td><td>The internal design of each component: <strong>data structures and algorithms</strong>.</td></tr>
+  </table></div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="model">
+  <h2><span class="num">11</span>Design Model</h2>
+  <div class="def">The <strong>design model</strong> represents the features of the software that help engineers build it: the data structure, program architecture, interfaces and component-level detail. It gives <strong>different views of the system</strong>, like the architect's plan for a house.</div>
+  <p>Methods such as data-driven, pattern-driven or object-oriented design all follow a set of design principles. The model has <strong>four elements</strong>, usually drawn as a pyramid:</p>
+<div class="tree">              ╱╲
+             ╱  ╲   Component-level design
+            ╱────╲
+           ╱      ╲  Interface design
+          ╱────────╲
+         ╱          ╲ Architectural design
+        ╱────────────╲
+       ╱              ╲ Data design
+      ╱────────────────╲</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Element</th><th>Description</th></tr>
+    <tr><td><strong>Data design</strong></td><td>Represents the <strong>data objects and their relationships</strong> in an ER diagram, and the structure of the data as tables. It covers 1:1, 1:N and M:N relationships.</td></tr>
+    <tr><td><strong>Architectural design</strong></td><td>Defines the relationships between the <strong>major structural elements</strong> and breaks the system into interacting components. It is shown as a <strong>block diagram</strong>.</td></tr>
+    <tr><td><strong>Interface design</strong></td><td>How the software <strong>communicates with users</strong> (the system's behaviour), through controls and displays. It is optimised through <strong>usability testing</strong>.</td></tr>
+    <tr><td><strong>Component-level design</strong></td><td>Turns the architecture's structural elements into a <strong>procedural description of each component</strong>. Components don't need to handle central concerns such as backup and security of data.</td></tr>
+  </table></div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="architecture">
+  <h2><span class="num">12</span>Software Architecture</h2>
+  <div class="def"><strong>Software architecture</strong> is the <strong>hierarchical structure of program components</strong>, the way they interact, and the structure of the data they use.</div>
+  <h3>Set of properties</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Property</th><th>Meaning</th></tr>
+    <tr><td><strong>Structural properties</strong></td><td>The components (modules, objects, filters) and how they are packaged and interact.</td></tr>
+    <tr><td><strong>Extra-functional properties</strong></td><td>How the architecture achieves performance, capacity, reliability, security, adaptability and so on.</td></tr>
+    <tr><td><strong>Families of related systems</strong></td><td><strong>Reusable</strong> patterns that recur in the design of similar systems.</td></tr>
+  </table></div>
+  <h3>Architectural design models</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Model</th><th>Represents</th></tr>
+    <tr><td><strong>Structural</strong></td><td>An organised collection of program components</td></tr>
+    <tr><td><strong>Framework</strong></td><td>Repeatable architectural frameworks (patterns) in similar applications</td></tr>
+    <tr><td><strong>Dynamic</strong></td><td>The behavioural aspects of the architecture</td></tr>
+    <tr><td><strong>Process</strong></td><td>The design of the business or technical process</td></tr>
+    <tr><td><strong>Functional</strong></td><td>The functional hierarchy of the system</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="control">
+  <h2><span class="num">13</span>Control Architecture (Program Structure Terms)</h2>
+  <div class="def">The <strong>control hierarchy</strong> (program structure) shows how modules are <strong>organised and call each other</strong>. It is usually drawn as a tree.</div>
+<div class="tree">                    M            ← depth level 1
+            ┌───────┼───────┐
+            a       b       c    ← level 2
+          ┌─┴─┐     │     ┌─┴─┐
+          d   e     f     g   h  ← level 3
+                    │     │
+                    └──┬──┘
+                       i         ← level 4  (fan-in of i = 2)
+   width = 5 (max modules at one level) · depth = 4 · fan-out of M = 3</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td><strong>Superordinate module</strong></td><td>A module that <strong>controls</strong> another (e.g. M over a, b, c).</td></tr>
+    <tr><td><strong>Subordinate module</strong></td><td>A module <strong>controlled by</strong> another (e.g. a, b, c under M).</td></tr>
+    <tr><td><strong>Depth</strong></td><td>The number of <strong>levels</strong> of control.</td></tr>
+    <tr><td><strong>Width</strong></td><td>The overall <strong>span</strong> of control: the most modules at any one level.</td></tr>
+    <tr><td><strong>Fan-out</strong></td><td>The number of modules <strong>directly controlled by</strong> a module.</td></tr>
+    <tr><td><strong>Fan-in</strong></td><td>The number of modules that <strong>directly control</strong> a module. High fan-in means good reuse.</td></tr>
+    <tr><td><strong>Visibility</strong></td><td>The set of components that can be <strong>invoked or used</strong> by a given component.</td></tr>
+    <tr><td><strong>Connectivity</strong></td><td>The set of components that a given component <strong>actually invokes or uses</strong>.</td></tr>
+  </table></div>
+  <div class="tip"><strong>Good design:</strong> high fan-in for low-level utility modules, moderate fan-out (avoid very high fan-out).</div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="partitioning">
+  <h2><span class="num">14</span>Structural Partitioning</h2>
+  <div class="def"><strong>Partitioning</strong> is breaking a large, complex system into <strong>smaller, more manageable and often independent</strong> components. The program structure can be partitioned <strong>horizontally</strong> or <strong>vertically</strong>.</div>
+  <h3>Horizontal partitioning</h3>
+  <p>Separate branches of the hierarchy for each <strong>major program function</strong>, usually three: <strong>input, processing (transformation) and output</strong>.</p>
+<div class="tree">                 Main control
+        ┌──────────────┼──────────────┐
+      Input        Processing       Output
+     (branch)       (branch)       (branch)</div>
+  <ul>
+    <li><strong>Benefits:</strong> easier to test and maintain, fewer side effects, easier to extend.</li>
+    <li><strong>Drawback:</strong> more data is passed across module interfaces, which can complicate control flow.</li>
+  </ul>
+  <h3>Vertical partitioning (factoring)</h3>
+  <p><strong>Control (decision-making)</strong> modules sit at the <strong>top</strong>, and the <strong>workers</strong> that do the actual processing sit at the <strong>bottom</strong>.</p>
+<div class="tree">   Decision-making (control) modules     ← top
+              │
+   Intermediate modules
+              │
+   Worker modules (input, compute, output) ← bottom</div>
+  <ul>
+    <li><strong>Benefit:</strong> changes in worker modules (the most frequent kind of change) are less likely to spread upward, so the structure is <strong>easier to maintain</strong>.</li>
+  </ul>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="cohesion">
+  <h2><span class="num">15</span>Cohesion</h2>
+  <div class="def"><strong>Cohesion</strong> is a measure of how strongly the elements <strong>within a module</strong> are related. A cohesive module performs <strong>a single task</strong> and needs little interaction with other parts of the program. Ideally, it does just one thing. Cohesion is a natural extension of information hiding.</div>
+  <h3>The cohesion spectrum (worst to best)</h3>
+<div class="tree">LOW (bad) ◀──────────────────────────────────────────────────▶ HIGH (good)
+Coincidental → Logical → Temporal → Procedural → Communicational → Sequential → Functional</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><strong>1. Coincidental</strong> (worst)</td><td>Tasks are only <strong>loosely related</strong>, or not related at all.</td><td>A "utilities" module that prints, sorts and sends email</td></tr>
+    <tr><td><strong>2. Logical</strong></td><td>Tasks are <strong>logically similar</strong> (same category), and one is chosen by a flag.</td><td>One module for all input: keyboard, file or network</td></tr>
+    <tr><td><strong>3. Temporal</strong></td><td>Tasks must run <strong>in the same span of time</strong>.</td><td>Initialisation: open files, set counters, clear the screen</td></tr>
+    <tr><td><strong>4. Procedural</strong></td><td>Elements are related and must run in a <strong>specific order</strong>.</td><td>Check the password, then open the menu</td></tr>
+    <tr><td><strong>5. Communicational</strong></td><td>All elements work on the <strong>same data</strong> (one area of a data structure).</td><td>Calculate the average and the maximum of the same marks list</td></tr>
+    <tr><td><strong>6. Sequential</strong></td><td>The <strong>output of one part is the input to the next</strong>, like an assembly line.</td><td>Read data → validate → format</td></tr>
+    <tr><td><strong>7. Functional</strong> (best)</td><td>All parts contribute to <strong>one well-defined task</strong>.</td><td>A <code>calculateTax()</code> module</td></tr>
+  </table></div>
+  <div class="tip"><strong>Mnemonic (worst to best):</strong> "<strong>C</strong>an <strong>L</strong>azy <strong>T</strong>eachers <strong>P</strong>ass <strong>C</strong>lever <strong>S</strong>tudents <strong>F</strong>airly?": Coincidental, Logical, Temporal, Procedural, Communicational, Sequential, Functional.</div>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="coupling">
+  <h2><span class="num">16</span>Coupling</h2>
+  <div class="def"><strong>Coupling</strong> is a measure of the <strong>interdependence between modules</strong>. It depends on how complex the interfaces between them are. We aim for the <strong>lowest possible coupling</strong>.</div>
+  <ul>
+    <li>Simple connections make software easier to understand and less prone to the <strong>"ripple effect"</strong>, where an error in one place spreads through the system.</li>
+  </ul>
+  <h3>Types of coupling (best to worst)</h3>
+<div class="tree">LOW (good) ◀────────────────────────────────────────────────▶ HIGH (bad)
+No → Data → Stamp → Control → External → Common → Content</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><strong>No coupling</strong> (best)</td><td>Modules don't communicate at all.</td><td>Two completely independent modules</td></tr>
+    <tr><td><strong>Data coupling</strong></td><td>Modules share data through <strong>simple parameters</strong>.</td><td><code>area(length, width)</code></td></tr>
+    <tr><td><strong>Stamp coupling</strong></td><td>A <strong>whole data structure</strong> is passed, but only part of it is used.</td><td>Passing a whole <code>Student</code> record just to use the roll number</td></tr>
+    <tr><td><strong>Control coupling</strong></td><td>One module <strong>controls the flow</strong> of another by passing a flag that says what to do.</td><td><code>print(data, mode)</code>, where the mode flag decides the behaviour</td></tr>
+    <tr><td><strong>External coupling</strong></td><td>Modules share an <strong>externally imposed</strong> data format, protocol or device interface.</td><td>Two modules using the same file format or hardware device</td></tr>
+    <tr><td><strong>Common coupling</strong></td><td>Modules share the same <strong>global data</strong>.</td><td>Several modules reading and writing a global variable</td></tr>
+    <tr><td><strong>Content coupling</strong> (worst)</td><td>One module <strong>modifies or relies on the internal workings</strong> of another.</td><td>Jumping into the middle of another module, or changing its local data</td></tr>
+  </table></div>
+  <div class="tip"><strong>Mnemonic (best to worst):</strong> "<strong>N</strong>o <strong>D</strong>og <strong>S</strong>hould <strong>C</strong>hase <strong>E</strong>very <strong>C</strong>at <strong>C</strong>onstantly": No, Data, Stamp, Control, External, Common, Content.</div>
+  <h3>Cohesion vs coupling<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Cohesion</th><th>Coupling</th></tr>
+    <tr><td>Relationship <strong>within</strong> a module</td><td>Relationship <strong>between</strong> modules</td></tr>
+    <tr><td>Should be <strong>high</strong></td><td>Should be <strong>low</strong></td></tr>
+    <tr><td>Measures a module's functional strength</td><td>Measures a module's independence</td></tr>
+    <tr><td>Best: functional · Worst: coincidental</td><td>Best: no or data coupling · Worst: content</td></tr>
+  </table></div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="styles">
+  <h2><span class="num">17</span>Architectural Styles</h2>
+  <div class="def">An <strong>architectural style</strong> is a template for building a system category. <strong>Architectural design</strong> represents the structure of data and program components, their properties, and the relationships among them.</div>
+  <h3>Each style describes</h3>
+  <ul>
+    <li>A set of <strong>components</strong> (e.g. a database or computational modules).</li>
+    <li>A set of <strong>connectors</strong> that let the components communicate, coordinate and cooperate.</li>
+    <li><strong>Constraints</strong> on how components can be integrated into a system.</li>
+    <li><strong>Semantic models</strong> that let a designer understand the overall system properties from the known properties of its parts.</li>
+  </ul>
+  <h3>Taxonomy (types)</h3>
+  <ol>
+    <li>Data-centered architecture</li>
+    <li>Data flow architecture</li>
+    <li>Call and return architecture</li>
+    <li>Object-oriented architecture</li>
+    <li>Layered architecture</li>
+  </ol>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="data-centered">
+  <h2><span class="num">18</span>Data-Centered Architecture</h2>
+  <div class="def">A <strong>data store</strong> (a file or database) sits at the <strong>centre</strong> and is accessed frequently by other components, which add, update, delete or modify the data.</div>
+<div class="tree">   Client A        Client B
+        ╲            ╱
+         ▼          ▼
+       ┌──────────────┐
+       │  Central     │ ◀── Client C
+       │  Data Store  │
+       │ (repository) │ ◀── Client D
+       └──────────────┘</div>
+  <ul>
+    <li>Client software accesses a <strong>central repository</strong>. It can be <strong>passive</strong>, with clients accessing data independently.</li>
+    <li>A variant is the <strong>"blackboard"</strong>, which <strong>notifies</strong> clients when data they're interested in changes.</li>
+    <li>It promotes <strong>integrability</strong>: you can change existing components or add new ones without affecting the other clients, because clients work independently.</li>
+    <li>Examples: library management systems, banking databases.</li>
+  </ul>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="data-flow">
+  <h2><span class="num">19</span>Data Flow Architecture</h2>
+  <div class="def">Used when <strong>input data is transformed through a series of computational components</strong> into output data.</div>
+  <h3>Pipe and filter</h3>
+<div class="tree">Input ──pipe──▶ [Filter 1] ──pipe──▶ [Filter 2] ──pipe──▶ [Filter 3] ──▶ Output</div>
+  <ul>
+    <li><strong>Filters</strong> are components connected by <strong>pipes</strong>, which carry data from one filter to the next.</li>
+    <li>Each filter works <strong>independently</strong> of the filters before and after it. It expects input in a set form and produces output in a set form.</li>
+  </ul>
+  <h3>Batch sequential</h3>
+  <p>If the data flow becomes a <strong>single line of transforms</strong>, it is called <strong>batch sequential</strong>.</p>
+<div class="tree">[Validate] ──▶ [Sort] ──▶ [Update] ──▶ [Report]</div>
+  <ul><li>Examples: compilers (lexer → parser → code generator), Unix pipes (<code>cat | grep | sort</code>).</li></ul>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="call-return">
+  <h2><span class="num">20</span>Call and Return Architecture</h2>
+  <div class="def">This style gives a program structure that is <strong>relatively easy to modify and scale</strong>.</div>
+  <h3>Sub-styles</h3>
+  <ul>
+    <li><strong>Main program / subprogram:</strong> the classic structure. Function is decomposed into a <strong>control hierarchy</strong>, where the main program invokes components, which may in turn invoke others.</li>
+    <li><strong>Remote procedure call (RPC):</strong> the components of a main/subprogram architecture are <strong>distributed across multiple computers</strong> on a network.</li>
+  </ul>
+<div class="tree">              Main Program
+         ┌─────────┼─────────┐
+   Controller 1  Controller 2  Controller 3
+     ┌──┴──┐        │        ┌──┴──┐
+   App 1  App 2   App 3    App 4  App 5</div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="oo">
+  <h2><span class="num">21</span>Object-Oriented Architecture</h2>
+  <div class="def">The system's components <strong>encapsulate data and the operations</strong> that manipulate that data. Components communicate and coordinate through <strong>message passing</strong>.</div>
+<div class="tree">┌─── Object A ───┐   message    ┌─── Object B ───┐
+│ data           │ ───────────▶ │ data           │
+│ operations()   │ ◀─────────── │ operations()   │
+└────────────────┘    reply     └────────────────┘
+        │                               │
+        └─────── message ──▶ Object C ◀─┘</div>
+  <ul>
+    <li>Supports encapsulation, inheritance and polymorphism.</li>
+    <li>Good for reuse and maintainability.</li>
+  </ul>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="layered">
+  <h2><span class="num">22</span>Layered Architecture</h2>
+  <div class="def">A number of <strong>layers</strong> are defined, each doing operations that get <strong>progressively closer to the machine instruction set</strong>.</div>
+<div class="tree">┌──────────────────────────────┐
+│   User Interface layer       │ ← outer layer
+├──────────────────────────────┤
+│   Application layer          │
+├──────────────────────────────┤
+│   Utility layer              │
+├──────────────────────────────┤
+│   Core layer (OS interface)  │ ← inner layer
+└──────────────────────────────┘</div>
+  <ul>
+    <li><strong>Outer layer:</strong> components handle <strong>user interface</strong> operations.</li>
+    <li><strong>Inner layer:</strong> components handle <strong>operating system</strong> interfacing.</li>
+    <li><strong>Intermediate layers:</strong> provide <strong>utility services</strong> and application functions.</li>
+    <li>Each layer uses only the services of the layer directly below it.</li>
+    <li>Examples: the OSI network model, OS architecture.</li>
+  </ul>
+  <h3>Comparison of styles<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Style</th><th>Key idea</th><th>Example</th></tr>
+    <tr><td>Data-centered</td><td>Central shared data store</td><td>Database applications</td></tr>
+    <tr><td>Data flow</td><td>Data transformed through filters</td><td>Compiler, Unix pipes</td></tr>
+    <tr><td>Call and return</td><td>Main program calls subprograms</td><td>Traditional C programs, RPC</td></tr>
+    <tr><td>Object-oriented</td><td>Objects plus message passing</td><td>Java applications</td></tr>
+    <tr><td>Layered</td><td>Layers from UI down to the OS</td><td>OSI model</td></tr>
+  </table></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

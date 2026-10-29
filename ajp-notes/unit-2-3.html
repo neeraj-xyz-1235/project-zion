@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JDBC Notes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 2 · Layouts, Events, JDBC</div>
+  <div class="pages">
+    <a href="unit-1-1.html">1.1</a>
+    <a href="unit-1-2.html">1.2</a>
+    <a href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a class="on" href="unit-2-3.html">2.3</a>
+    <a href="unit-3-1.html">3.1</a>
+    <a href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#intro">1. JDBC Introduction</a></li>
+    <li><a href="#why">2. Why Use JDBC?</a></li>
+    <li><a href="#api">3. JDBC API</a></li>
+    <li><a href="#drivers">4. JDBC Drivers &amp; Types</a></li>
+    <li><a href="#steps">5. Steps to Connect</a></li>
+    <li><a href="#oracle">6. Connect with Oracle</a></li>
+    <li><a href="#mysql">7. Connect with MySQL</a></li>
+    <li><a href="#drivermanager">8. DriverManager Class</a></li>
+    <li><a href="#connection">9. Connection Interface</a></li>
+    <li><a href="#statement">10. Statement Interface</a></li>
+    <li><a href="#resultset">11. ResultSet Interface</a></li>
+    <li><a href="#prepared">12. PreparedStatement</a></li>
+    <li><a href="#callable">13. CallableStatement</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 2.3: Java Database Connectivity (JDBC)</h1>
+  <p>How a Java program connects to a database, runs SQL and reads the results.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="intro">
+  <h2><span class="num">1</span>JDBC: Introduction</h2>
+  <h3>Definition</h3>
+  <p><strong>JDBC (Java Database Connectivity)</strong> is a Java API for <strong>connecting to a database, executing queries and processing the results</strong>.</p>
+  <h3>Description</h3>
+  <ul>
+    <li>It is part of <strong>Java SE</strong> (Standard Edition). Its classes and interfaces are in the <code>java.sql</code> package.</li>
+    <li>The JDBC API uses <strong>JDBC drivers</strong> to talk to the database.</li>
+    <li>It can access tabular data in <strong>any relational database</strong> to save, update, delete and fetch data.</li>
+    <li>It works like Microsoft's <strong>ODBC</strong> (Open Database Connectivity).</li>
+    <li>The current version is <strong>JDBC 4.3</strong>, stable since 21 September 2017.</li>
+    <li>It is based on the <strong>X/Open SQL Call Level Interface (CLI)</strong>, a standard for calling SQL that keeps applications portable across database vendors.</li>
+  </ul>
+<div class="tree">Java Application ──▶ JDBC API ──▶ JDBC Driver ──▶ Database</div>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="why">
+  <h2><span class="num">2</span>Why Should We Use JDBC?</h2>
+  <ul>
+    <li>Before JDBC, the <strong>ODBC API</strong> was used to connect to databases. ODBC drivers are written in <strong>C</strong>, so they are <strong>platform-dependent and unsecured</strong>.</li>
+    <li>Java therefore defined its own API (JDBC) with drivers <strong>written in Java</strong>.</li>
+  </ul>
+  <h3>With JDBC you can:</h3>
+  <ul>
+    <li>Connect to the database.</li>
+    <li>Execute queries and update statements.</li>
+    <li>Retrieve the results returned by the database.</li>
+  </ul>
+  <h3>Extra features</h3>
+  <ul>
+    <li><strong>Metadata:</strong> <code>DatabaseMetaData</code> gives information about tables, columns and indexes. This is useful for building SQL queries dynamically.</li>
+    <li><strong>Batch processing:</strong> groups several SQL statements and runs them together, which cuts round trips to the database and improves performance.</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="api">
+  <h2><span class="num">3</span>JDBC API: Interfaces &amp; Classes</h2>
+  <h3>Popular interfaces</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Interface</th><th>Purpose</th></tr>
+    <tr><td><code>Driver</code></td><td>Implemented by every database driver.</td></tr>
+    <tr><td><code>Connection</code></td><td>A session with the database.</td></tr>
+    <tr><td><code>Statement</code></td><td>Runs simple SQL queries.</td></tr>
+    <tr><td><code>PreparedStatement</code></td><td>Runs parameterised (precompiled) queries.</td></tr>
+    <tr><td><code>CallableStatement</code></td><td>Calls stored procedures and functions.</td></tr>
+    <tr><td><code>ResultSet</code></td><td>Holds the rows returned by a query.</td></tr>
+    <tr><td><code>ResultSetMetaData</code></td><td>Information about the result's columns.</td></tr>
+    <tr><td><code>DatabaseMetaData</code></td><td>Information about the database itself.</td></tr>
+    <tr><td><code>RowSet</code></td><td>A scrollable, updatable wrapper around a ResultSet.</td></tr>
+  </table></div>
+  <h3>Popular classes</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Class</th><th>Purpose</th></tr>
+    <tr><td><code>DriverManager</code></td><td>Manages the list of loaded drivers. It picks the right driver for the JDBC URL and opens the connection.</td></tr>
+    <tr><td><code>Blob</code></td><td>Represents SQL <strong>BLOB</strong> (Binary Large Object): images, audio, video and other binary data.</td></tr>
+    <tr><td><code>Clob</code></td><td>Represents SQL <strong>CLOB</strong> (Character Large Object): long text, XML and similar.</td></tr>
+    <tr><td><code>Types</code></td><td>Constants for generic SQL data types (INTEGER, VARCHAR, FLOAT…).</td></tr>
+  </table></div>
+  <div class="note">The slides call Blob and Clob "classes". They are actually <strong>interfaces</strong> in <code>java.sql</code>, which the slide's own description also says.</div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="drivers">
+  <h2><span class="num">4</span>JDBC Drivers and Types</h2>
+  <h3>Definition</h3>
+  <p>A <strong>JDBC driver</strong> is a software component that lets a Java application interact with a database. There are <strong>4 types</strong>.</p>
+
+  <h3>Type 1: JDBC-ODBC Bridge Driver</h3>
+  <ul>
+    <li>Uses an <strong>ODBC driver</strong> to connect to the database. It converts JDBC method calls into ODBC function calls.</li>
+    <li>It is now discouraged because the thin driver is better. Oracle <strong>does not support it from Java 8</strong>.</li>
+  </ul>
+<div class="tree">Java App → JDBC API → JDBC-ODBC Bridge → ODBC Driver → Database</div>
+  <p><strong>Advantages:</strong> easy to use, and can connect to any database.<br>
+  <strong>Disadvantages:</strong> slow, because every JDBC call is converted to an ODBC call. The ODBC driver must be installed on the client machine.</p>
+
+  <h3>Type 2: Native-API Driver (partially Java)</h3>
+  <ul>
+    <li>Uses the database's <strong>client-side libraries</strong>. It converts JDBC calls into <strong>native calls of the database API</strong>, which the database understands directly.</li>
+    <li>It is <strong>not written entirely in Java</strong>.</li>
+  </ul>
+<div class="tree">Java App → JDBC API → Native-API Driver → Vendor Client Library (C/C++) → Database</div>
+  <p><strong>Advantage:</strong> better performance than Type 1.<br>
+  <strong>Disadvantages:</strong> the native driver and the vendor's client library must be installed on every client machine.</p>
+
+  <h3>Type 3: Network Protocol Driver (fully Java)</h3>
+  <ul>
+    <li>Uses <strong>middleware (an application server)</strong> that converts JDBC calls, directly or indirectly, into the vendor-specific database protocol.</li>
+    <li>It is <strong>fully written in Java</strong>.</li>
+  </ul>
+<div class="tree">Java App → JDBC API → Network Driver → Middleware (App Server) → Database</div>
+  <p><strong>Advantage:</strong> no client-side library needed. The application server can handle auditing, load balancing, logging and so on.<br>
+  <strong>Disadvantages:</strong> needs network support on the client, and database-specific coding in the middle tier, which makes it costly to maintain.</p>
+
+  <h3>Type 4: Thin Driver (fully Java)</h3>
+  <ul>
+    <li>Converts JDBC calls <strong>directly into the vendor-specific database protocol</strong>, which is why it is called "thin".</li>
+    <li>It is <strong>fully written in Java</strong>, and it's the most widely used today.</li>
+  </ul>
+<div class="tree">Java App → JDBC API → Thin Driver → Database</div>
+  <p><strong>Advantages:</strong> best performance of all four types. No software needed on the client or server side.<br>
+  <strong>Disadvantage:</strong> the driver depends on the database.</p>
+
+  <h3>Summary</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Name</th><th>Pure Java?</th><th>Pros</th><th>Cons</th></tr>
+    <tr><td>1</td><td>JDBC-ODBC Bridge</td><td>No</td><td>Works when no direct driver exists</td><td>Platform-dependent, slow, removed in newer JDKs</td></tr>
+    <tr><td>2</td><td>Native-API</td><td>Partly</td><td>Faster than Type 1</td><td>Needs vendor native libraries; not portable</td></tr>
+    <tr><td>3</td><td>Network Protocol</td><td>Yes (client)</td><td>Middleware handles security and load balancing; one driver for many DBs</td><td>Extra latency; depends on middleware</td></tr>
+    <tr><td>4</td><td>Thin</td><td>Yes</td><td>Best performance, portable, no native libraries</td><td>Vendor-specific</td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="steps">
+  <h2><span class="num">5</span>Steps to Connect a Database in Java</h2>
+  <p>There are <strong>5 steps</strong>:</p>
+
+  <h3>Step 1: Register the driver class</h3>
+  <p>The <code>forName()</code> method of the <code>Class</code> class loads the driver class dynamically.</p>
+  <div class="decl">public static Class forName(String className) throws ClassNotFoundException</div>
+<div class="code"><pre>
+Class.forName("oracle.jdbc.driver.OracleDriver");
+</pre></div>
+
+  <h3>Step 2: Create the connection</h3>
+  <p>The <code>getConnection()</code> method of <code>DriverManager</code> opens the connection.</p>
+  <div class="decl">public static Connection getConnection(String url) throws SQLException
+public static Connection getConnection(String url, String name, String password) throws SQLException</div>
+<div class="code"><pre>
+Connection con = DriverManager.getConnection(
+        "jdbc:oracle:thin:@localhost:1521:xe", "system", "password");
+</pre></div>
+
+  <h3>Step 3: Create the statement</h3>
+  <p>The <code>createStatement()</code> method of <code>Connection</code> creates a Statement, which executes queries.</p>
+  <div class="decl">public Statement createStatement() throws SQLException</div>
+<div class="code"><pre>
+Statement stmt = con.createStatement();
+</pre></div>
+
+  <h3>Step 4: Execute the query</h3>
+  <p>The <code>executeQuery()</code> method of <code>Statement</code> runs the query and returns a <code>ResultSet</code> holding the records.</p>
+  <div class="decl">public ResultSet executeQuery(String sql) throws SQLException</div>
+<div class="code"><pre>
+ResultSet rs = stmt.executeQuery("select * from emp");
+while (rs.next()) {
+    System.out.println(rs.getInt(1) + " " + rs.getString(2));
+}
+</pre></div>
+
+  <h3>Step 5: Close the connection</h3>
+  <p>Closing the connection also closes its Statement and ResultSet automatically.</p>
+  <div class="decl">public void close() throws SQLException</div>
+<div class="code"><pre>
+con.close();
+</pre></div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="oracle">
+  <h2><span class="num">6</span>Example: Connect Java with Oracle</h2>
+  <h3>What you need to know</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Driver class</td><td><code>oracle.jdbc.driver.OracleDriver</code></td></tr>
+    <tr><td>Connection URL</td><td><code>jdbc:oracle:thin:@localhost:1521:xe</code></td></tr>
+    <tr><td>Username</td><td><code>system</code> (default)</td></tr>
+    <tr><td>Password</td><td>The one set when Oracle was installed</td></tr>
+  </table></div>
+  <h3>URL breakdown</h3>
+  <p><code>jdbc</code> = API · <code>oracle</code> = database · <code>thin</code> = driver · <code>localhost</code> = server name (or IP) · <code>1521</code> = port · <code>xe</code> = Oracle service name. You can find all of these in the <code>tnsnames.ora</code> file.</p>
+  <h3>Create the table first</h3>
+<div class="code"><pre>
+create table emp(id number(10), name varchar2(40), age number(3));
+</pre></div>
+  <h3>Program</h3>
+<div class="code"><pre>
+import java.sql.*;
+
+class OracleCon {
+    public static void main(String[] args) {
+        try {
+            // 1. load driver
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            // 2. connect
+            Connection con = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+            // 3. statement
+            Statement stmt = con.createStatement();
+            // 4. execute query
+            ResultSet rs = stmt.executeQuery("select * from emp");
+            while (rs.next())
+                System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getString(3));
+            // 5. close
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+  <h3>Loading the jar file (ojdbc14.jar)</h3>
+  <ol>
+    <li><strong>Paste it into</strong> the <code>JRE/lib/ext</code> folder, <strong>or</strong></li>
+    <li><strong>Set the classpath:</strong>
+      <ul>
+        <li><em>Temporary:</em> <code>C:&gt;set classpath=c:\folder\ojdbc14.jar;.;</code></li>
+        <li><em>Permanent:</em> Environment Variables → New → name <code>classpath</code>, value <code>...\ojdbc14.jar;.;</code></li>
+      </ul>
+    </li>
+  </ol>
+  <div class="note">The <code>jre/lib/ext</code> folder was removed in Java 9. On modern Java, use the classpath: <code>java -cp ".;ojdbc14.jar" OracleCon</code>.</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="mysql">
+  <h2><span class="num">7</span>Example: Connect Java with MySQL</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Driver class</td><td><code>com.mysql.jdbc.Driver</code></td></tr>
+    <tr><td>Connection URL</td><td><code>jdbc:mysql://localhost:3306/sonoo</code></td></tr>
+    <tr><td>Username</td><td><code>root</code> (default)</td></tr>
+    <tr><td>Password</td><td>The one set when MySQL was installed (here: <code>root</code>)</td></tr>
+  </table></div>
+  <p>URL breakdown: <code>jdbc</code> = API · <code>mysql</code> = database · <code>localhost</code> = server · <code>3306</code> = port · <code>sonoo</code> = database name.</p>
+  <div class="note">Newer MySQL connectors (8.x) use the driver class <code>com.mysql.cj.jdbc.Driver</code>.</div>
+<div class="code"><pre>
+create database sonoo;
+use sonoo;
+create table emp(id int(10), name varchar(40), age int(3));
+</pre></div>
+<div class="code"><pre>
+import java.sql.*;
+
+class MysqlCon {
+    public static void main(String[] args) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/sonoo", "root", "root");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from emp");
+            while (rs.next())
+                System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getString(3));
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+  <p>The jar (<code>mysql-connector.jar</code>) is loaded the same way as for Oracle: <code>jre/lib/ext</code> or the classpath.</p>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="drivermanager">
+  <h2><span class="num">8</span>DriverManager Class</h2>
+  <h3>Definition</h3>
+  <p><code>DriverManager</code> (in <code>java.sql</code>) <strong>acts as an interface between the user and the drivers</strong>. It keeps track of the available drivers and sets up the connection between a database and the right driver.</p>
+  <ul>
+    <li>It keeps a list of Driver classes that registered themselves with <code>DriverManager.registerDriver()</code>.</li>
+    <li>A driver <strong>must be registered</strong> before you use the database, otherwise an exception is thrown.</li>
+  </ul>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>static synchronized void registerDriver(Driver d)</td><td>Registers the driver. Does nothing if it's already registered.</td></tr>
+    <tr><td>static synchronized void deregisterDriver(Driver d)</td><td>Removes the driver from the list.</td></tr>
+    <tr><td>static Connection getConnection(String url)</td><td>Connects to the given URL. Throws SQLException if no matching driver is registered.</td></tr>
+    <tr><td>static Connection getConnection(String url, String user, String pwd)</td><td>Connects with a URL, username and password.</td></tr>
+    <tr><td>static Connection getConnection(String url, Properties prop)</td><td>Connects using a Properties object that holds the username and password.</td></tr>
+    <tr><td>static Driver getDriver(String url)</td><td>Returns a registered driver that understands the URL.</td></tr>
+    <tr><td>static int getLoginTimeout()</td><td>Returns the maximum time a driver may wait to connect.</td></tr>
+    <tr><td>static void setLoginTimeout(int sec)</td><td>Sets that time in seconds. 0 means wait forever.</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="connection">
+  <h2><span class="num">9</span>Connection Interface</h2>
+  <h3>Definition</h3>
+  <p>A <code>Connection</code> is a <strong>session between a Java application and a database</strong>.</p>
+  <ul>
+    <li>It is a <strong>factory</strong> for Statement, PreparedStatement and DatabaseMetaData objects.</li>
+    <li>It provides transaction-management methods: <code>commit()</code>, <code>rollback()</code>, <code>setAutoCommit()</code> and <code>setTransactionIsolation()</code>.</li>
+    <li>By default, it <strong>auto-commits</strong> changes after each query.</li>
+  </ul>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>Statement createStatement()</td><td>Creates a Statement for running SQL.</td></tr>
+    <tr><td>Statement createStatement(int type, int concurrency)</td><td>Creates a Statement whose ResultSets have the given type and concurrency (e.g. scrollable or updatable).</td></tr>
+    <tr><td>PreparedStatement prepareStatement(String sql)<span class="tag add">not in slides</span></td><td>Creates a PreparedStatement.</td></tr>
+    <tr><td>CallableStatement prepareCall(String sql)<span class="tag add">not in slides</span></td><td>Creates a CallableStatement.</td></tr>
+    <tr><td>void setAutoCommit(boolean status)</td><td>Turns auto-commit on or off. It's true by default.</td></tr>
+    <tr><td>void commit()</td><td>Makes all changes since the last commit or rollback permanent.</td></tr>
+    <tr><td>void rollback()</td><td>Discards all changes since the last commit or rollback.</td></tr>
+    <tr><td>void close()</td><td>Closes the connection and releases JDBC resources immediately.</td></tr>
+  </table></div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="statement">
+  <h2><span class="num">10</span>Statement Interface</h2>
+  <h3>Definition</h3>
+  <p><code>Statement</code> provides methods to <strong>execute queries</strong> against the database. It is a <strong>factory for ResultSet</strong>.</p>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>ResultSet executeQuery(String sql)</td><td>Runs a <strong>SELECT</strong> query and returns a ResultSet.</td></tr>
+    <tr><td>int executeUpdate(String sql)</td><td>Runs CREATE, DROP, INSERT, UPDATE, DELETE and similar. Returns the number of rows affected.</td></tr>
+    <tr><td>boolean execute(String sql)</td><td>Runs queries that may return multiple results.</td></tr>
+    <tr><td>int[] executeBatch()</td><td>Runs a batch of commands.</td></tr>
+  </table></div>
+  <h3>Demo: insert / update / delete</h3>
+<div class="code"><pre>
+import java.sql.*;
+
+class FetchRecord {
+    public static void main(String[] args) throws Exception {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+        Statement stmt = con.createStatement();
+
+        // stmt.executeUpdate("insert into emp765 values(33,'Irfan',50000)");
+        // stmt.executeUpdate("update emp765 set name='Vimal' where id=33");
+        int result = stmt.executeUpdate("delete from emp765 where id=33");
+        System.out.println(result + " records affected");
+
+        con.close();
+    }
+}
+</pre></div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="resultset">
+  <h2><span class="num">11</span>ResultSet Interface</h2>
+  <h3>Definition</h3>
+  <p>A <code>ResultSet</code> object keeps a <strong>cursor pointing to one row</strong> of a table. At the start, the cursor is <strong>before the first row</strong>.</p>
+  <ul>
+    <li>By default, it can only move <strong>forward</strong> and is <strong>not updatable</strong>.</li>
+    <li>To move both ways and allow updates, create the statement with:</li>
+  </ul>
+<div class="code"><pre>
+Statement stmt = con.createStatement(
+        ResultSet.TYPE_SCROLL_INSENSITIVE,   // or TYPE_SCROLL_SENSITIVE
+        ResultSet.CONCUR_UPDATABLE);
+</pre></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>boolean next()</td><td>Moves the cursor to the next row.</td></tr>
+    <tr><td>boolean previous()</td><td>Moves the cursor to the previous row.</td></tr>
+    <tr><td>boolean first()</td><td>Moves the cursor to the first row.</td></tr>
+    <tr><td>boolean last()</td><td>Moves the cursor to the last row.</td></tr>
+    <tr><td>boolean absolute(int row)</td><td>Moves the cursor to the given row number.</td></tr>
+    <tr><td>boolean relative(int row)</td><td>Moves the cursor forward (+) or back (−) by that many rows.</td></tr>
+    <tr><td>int getInt(int columnIndex)</td><td>Returns the column value (by index) as an int.</td></tr>
+    <tr><td>int getInt(String columnName)</td><td>Returns the column value (by name) as an int.</td></tr>
+    <tr><td>String getString(int columnIndex)</td><td>Returns the column value (by index) as a String.</td></tr>
+    <tr><td>String getString(String columnName)</td><td>Returns the column value (by name) as a String.</td></tr>
+  </table></div>
+  <h3>Demo: read the 3rd row (scrollable ResultSet)</h3>
+<div class="code"><pre>
+import java.sql.*;
+
+class ScrollDemo {
+    public static void main(String[] args) throws Exception {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+        Statement stmt = con.createStatement(
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        ResultSet rs = stmt.executeQuery("select * from emp765");
+
+        rs.absolute(3);     // jump to row 3
+        System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3));
+
+        con.close();
+    }
+}
+</pre></div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="prepared">
+  <h2><span class="num">12</span>PreparedStatement Interface</h2>
+  <h3>Definition</h3>
+  <p><code>PreparedStatement</code> is a <strong>sub-interface of Statement</strong> used to run <strong>parameterised queries</strong>. Values are written as <code>?</code> and filled in later with setter methods.</p>
+<div class="code"><pre>
+String sql = "insert into emp values(?,?,?)";
+</pre></div>
+  <h3>Why use it?</h3>
+  <ul>
+    <li><strong>Better performance:</strong> the query is <strong>compiled only once</strong> and can be run many times.</li>
+    <li>It also protects against SQL injection, because values are never pasted into the SQL text.</li>
+  </ul>
+  <h3>How to get it</h3>
+  <div class="decl">public PreparedStatement prepareStatement(String query) throws SQLException   // method of Connection</div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setInt(int paramIndex, int value)</td><td>Sets an int value for parameter number <em>paramIndex</em>.</td></tr>
+    <tr><td>void setString(int paramIndex, String value)</td><td>Sets a String value.</td></tr>
+    <tr><td>void setFloat(int paramIndex, float value)</td><td>Sets a float value.</td></tr>
+    <tr><td>void setDouble(int paramIndex, double value)</td><td>Sets a double value.</td></tr>
+    <tr><td>int executeUpdate()</td><td>Runs CREATE, DROP, INSERT, UPDATE, DELETE and similar.</td></tr>
+    <tr><td>ResultSet executeQuery()</td><td>Runs a SELECT and returns a ResultSet.</td></tr>
+  </table></div>
+  <h3>Demo: insert, update, delete, select</h3>
+<div class="code"><pre>
+import java.sql.*;
+
+class InsertPrepared {
+    public static void main(String[] args) {
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+
+            // INSERT
+            PreparedStatement ps = con.prepareStatement("insert into emp values(?,?)");
+            ps.setInt(1, 101);            // 1st ?
+            ps.setString(2, "Ratan");     // 2nd ?
+            System.out.println(ps.executeUpdate() + " records inserted");
+
+            // UPDATE
+            ps = con.prepareStatement("update emp set name=? where id=?");
+            ps.setString(1, "Sonoo");
+            ps.setInt(2, 101);
+            System.out.println(ps.executeUpdate() + " records updated");
+
+            // SELECT
+            ps = con.prepareStatement("select * from emp");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+                System.out.println(rs.getInt(1) + " " + rs.getString(2));
+
+            // DELETE
+            ps = con.prepareStatement("delete from emp where id=?");
+            ps.setInt(1, 101);
+            System.out.println(ps.executeUpdate() + " records deleted");
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="callable">
+  <h2><span class="num">13</span>CallableStatement Interface</h2>
+  <h3>Definition</h3>
+  <p><code>CallableStatement</code> is used to <strong>call stored procedures and functions</strong> in the database.</p>
+  <ul>
+    <li>It keeps business logic in the database. Procedures and functions are <strong>precompiled</strong>, which improves performance.</li>
+    <li>Example: a function that takes a date of birth and returns the employee's age.</li>
+  </ul>
+  <h3>Stored procedure vs function</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Stored Procedure</th><th>Function</th></tr>
+    <tr><td>Performs business logic.</td><td>Performs a calculation.</td></tr>
+    <tr><td>Must not have a return type.</td><td>Must have a return type.</td></tr>
+    <tr><td>May return 0 or more values.</td><td>Returns only one value.</td></tr>
+    <tr><td>Can call functions.</td><td>Can't call a procedure.</td></tr>
+    <tr><td>Supports input and output parameters.</td><td>Supports only input parameters.</td></tr>
+    <tr><td>Can use try/catch exception handling.</td><td>Can't use try/catch.</td></tr>
+  </table></div>
+  <h3>How to get it</h3>
+  <div class="decl">public CallableStatement prepareCall("{call procedurename(?,?...?)}")   // method of Connection</div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setInt / setString(int index, value)</td><td>Sets the IN parameters.</td></tr>
+    <tr><td>void registerOutParameter(int index, int sqlType)</td><td>Registers an OUT parameter and its type (e.g. <code>Types.INTEGER</code>).</td></tr>
+    <tr><td>boolean execute()</td><td>Runs the call.</td></tr>
+    <tr><td>int getInt(int index)</td><td>Reads an OUT or return value.</td></tr>
+  </table></div>
+  <h3>Demo 1: call a stored procedure</h3>
+<div class="code"><pre>
+-- SQL: create the table and procedure first
+create table user420(id number(10), name varchar2(200));
+
+create or replace procedure "INSERTR"(id IN NUMBER, name IN VARCHAR2) is
+begin
+  insert into user420 values(id, name);
+end;
+/
+</pre></div>
+<div class="code"><pre>
+import java.sql.*;
+
+public class Proc {
+    public static void main(String[] args) throws Exception {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+
+        CallableStatement stmt = con.prepareCall("{call insertR(?,?)}");
+        stmt.setInt(1, 1011);
+        stmt.setString(2, "Amit");
+        stmt.execute();
+        System.out.println("success");
+        con.close();
+    }
+}
+</pre></div>
+  <h3>Demo 2: call a function (returns a value)</h3>
+<div class="code"><pre>
+-- SQL
+create or replace function sum4(n1 in number, n2 in number) return number is
+  temp number(8);
+begin
+  temp := n1 + n2;
+  return temp;
+end;
+/
+</pre></div>
+<div class="code"><pre>
+import java.sql.*;
+
+public class FuncSum {
+    public static void main(String[] args) throws Exception {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection con = DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
+
+        CallableStatement stmt = con.prepareCall("{?= call sum4(?,?)}");
+        stmt.setInt(2, 10);
+        stmt.setInt(3, 43);
+        stmt.registerOutParameter(1, Types.INTEGER);   // the return value
+        stmt.execute();
+        System.out.println(stmt.getInt(1));            // Output: 53
+        con.close();
+    }
+}
+</pre></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

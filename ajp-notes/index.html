@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AJP Study Notes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main style="margin: 0 auto;">
+  <header class="page">
+    <h1>Advanced Java Programming: Notes</h1>
+    <p>Built from the AJP unit PDFs. Each topic has a definition, then constructors, methods and a short demo program.</p>
+  </header>
+
+  <div class="cards">
+    <a class="card" href="unit-1-1.html">
+      <h2>Unit 1.1 · Introduction to Swing</h2>
+      <p>Swing, its features and applications, AWT vs Swing, JFC, the class hierarchy, Component methods, two ways to create a frame, AWT.</p>
+    </a>
+    <a class="card" href="unit-1-2.html">
+      <h2>Unit 1.2 · Swing Controls</h2>
+      <p>JButton, JLabel, JTextField, JTextArea, JCheckBox, JRadioButton, JComboBox, JTable, JList, JScrollBar, menus, JProgressBar, JTabbedPane, JDialog, JPanel, JFrame, JScrollPane, JComponent, JLayeredPane.</p>
+    </a>
+    <a class="card" href="unit-2-1.html">
+      <h2>Unit 2.1 · Layout Managers</h2>
+      <p>LayoutManager introduction, BorderLayout, FlowLayout, GridLayout, CardLayout.</p>
+    </a>
+    <a class="card" href="unit-2-2.html">
+      <h2>Unit 2.2 · Event Handling</h2>
+      <p>Events and their types, the delegation event model, EventObject, event classes, listeners, adapters, and programs for Action, Key, Mouse, Window, MouseMotion and Item events.</p>
+    </a>
+    <a class="card" href="unit-2-3.html">
+      <h2>Unit 2.3 · JDBC</h2>
+      <p>Introduction, the 4 driver types, 5 steps to connect, Oracle and MySQL examples, DriverManager, Connection, Statement, ResultSet, PreparedStatement, CallableStatement.</p>
+    </a>
+    <a class="card" href="unit-3-1.html">
+      <h2>Unit 3.1 · Networking</h2>
+      <p>IP, port, URL, MAC, sockets, protocols, TCP vs UDP, URL, URLConnection, InetAddress, DatagramSocket, ServerSocket and Socket, chat and concurrent server.</p>
+    </a>
+    <a class="card" href="unit-3-2.html">
+      <h2>Unit 3.2 · RMI</h2>
+      <p>RMI architecture, stub and skeleton, marshalling, registry, the Naming class, and the 6-step RMI example.</p>
+    </a>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:15px;">Labels used in these notes</h3>
+  <p><span class="tag add">not in slides</span> means something was added from the Java API, either because the slide left it out or because the slide was an image that couldn't be read.</p>
+  <p><span class="tag warn">not in real Java</span> means the slide lists it, but it doesn't exist in the JDK. Learn it for the exam if you must, but don't use it in code because it won't compile.</p>
+  <p>How to run a demo: save it as <code>ClassName.java</code>, then run <code>javac ClassName.java</code> and <code>java ClassName</code>.</p>
+  <button class="theme-btn">Toggle theme</button>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

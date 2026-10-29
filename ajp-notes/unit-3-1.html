@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Java Networking</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 3 · Networking &amp; RMI</div>
+  <div class="pages">
+    <a href="unit-1-1.html">1.1</a>
+    <a href="unit-1-2.html">1.2</a>
+    <a href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a href="unit-2-3.html">2.3</a>
+    <a class="on" href="unit-3-1.html">3.1</a>
+    <a href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#networking">1. Networking</a></li>
+    <li><a href="#types">2. LAN, MAN, WAN</a></li>
+    <li><a href="#www">3. World Wide Web</a></li>
+    <li><a href="#ip">4. IP Address</a></li>
+    <li><a href="#port">5. Port &amp; Socket Address</a></li>
+    <li><a href="#url-concept">6. URL</a></li>
+    <li><a href="#mac">7. MAC Address</a></li>
+    <li><a href="#socket-concept">8. Socket</a></li>
+    <li><a href="#protocols">9. Protocols</a></li>
+    <li><a href="#conn">10. Connection-oriented vs Connectionless</a></li>
+    <li><a href="#stream-dgram">11. Stream vs Datagram Sockets</a></li>
+    <li><a href="#javanet">12. java.net Package</a></li>
+    <li><a href="#url">13. URL Class</a></li>
+    <li><a href="#urlconn">14. URLConnection Class</a></li>
+    <li><a href="#httpurl">15. HttpURLConnection Class</a></li>
+    <li><a href="#inet">16. InetAddress Class</a></li>
+    <li><a href="#datagram">17. DatagramSocket &amp; DatagramPacket</a></li>
+    <li><a href="#serversocket">18. ServerSocket Class</a></li>
+    <li><a href="#socket">19. Socket Class</a></li>
+    <li><a href="#oneway">20. Client-Server (One-way)</a></li>
+    <li><a href="#chat">21. Client-Server Dialogue</a></li>
+    <li><a href="#concurrent">22. Concurrent Server</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 3.1: Java Networking</h1>
+  <p>Networking basics (IP, ports, protocols) and the java.net classes for talking to other machines.</p>
+</header>
+
+<div class="note">Most of the class slides in this PDF (the constructor and method tables for URL, Socket, ServerSocket, DatagramSocket and InetAddress) are images and couldn't be read. Those tables are filled in from the Java API and tagged <span class="tag add">not in slides</span>.</div>
+
+<!-- 1 -->
+<section class="topic" id="networking">
+  <h2><span class="num">1</span>Networking</h2>
+  <h3>Definition</h3>
+  <p><strong>Networking</strong> is the process of <strong>communication between two or more computers</strong> connected through a communication channel (the network).</p>
+  <h3>Description</h3>
+  <ul>
+    <li>Connected computers can <strong>communicate, share files and talk to each other</strong>.</li>
+    <li>As the number of connected users grows, the network becomes complex, and programs must deal with that complexity.</li>
+    <li>Java is well suited to network programming. You can write programs that communicate with any party on the network. This is <strong>Java networking</strong>.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="types">
+  <h2><span class="num">2</span>Types of Network: LAN, MAN, WAN</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Full form</th><th>Span</th><th>Example</th></tr>
+    <tr><td><strong>LAN</strong></td><td>Local Area Network</td><td>About 1–10 km</td><td>A college campus or office</td></tr>
+    <tr><td><strong>MAN</strong></td><td>Metropolitan Area Network</td><td>About 10–40 km</td><td>A city-wide network</td></tr>
+    <tr><td><strong>WAN</strong></td><td>Wide Area Network</td><td>40 km and above</td><td>The Internet</td></tr>
+  </table></div>
+  <ul>
+    <li>The <strong>Internet</strong> is a public, worldwide WAN.</li>
+    <li>A <strong>private network</strong> is limited to peer-to-peer communication among its members. In a <strong>public network</strong>, anyone can connect and share.</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="www">
+  <h2><span class="num">3</span>World Wide Web (WWW)</h2>
+  <ul>
+    <li>The WWW is a <strong>huge collection of documents</strong> (hypertext pages) spread across the Internet.</li>
+    <li>The Internet is often called a <strong>network of networks</strong>, since many networks are connected to each other.</li>
+    <li>Related terms: <strong>browsers, search engines, content, hypertext documents</strong>.</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="ip">
+  <h2><span class="num">4</span>IP Address</h2>
+  <h3>Definition</h3>
+  <p>An <strong>IP (Internet Protocol) address</strong> is a <strong>logical address</strong> that uniquely identifies a computer on a network.</p>
+  <h3>Description</h3>
+  <ul>
+    <li>An IPv4 address is <strong>4 bytes (32 bits)</strong>, split into 4 parts of <strong>8 bits</strong> each. Each part ranges from <strong>0 to 255</strong>.</li>
+    <li>Example: <code>192.168.0.1</code>. Here <code>192.168.0</code> is the <strong>network ID</strong> and <code>.1</code> is the <strong>host ID</strong> (the computer).</li>
+    <li>It is <strong>logical, not physical</strong>. It is assigned by the network administrator or the service provider.</li>
+  </ul>
+  <div class="note">The slide says the address is "segmented into 8 bytes each". It's 8 <strong>bits</strong> each (4 × 8 = 32 bits).</div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="port">
+  <h2><span class="num">5</span>Port Number &amp; Socket Address</h2>
+  <ul>
+    <li>An IP address identifies a <strong>machine</strong>. A <strong>port number</strong> identifies an <strong>application</strong> running on that machine, such as a browser or mail program.</li>
+    <li>Port numbers range from 0 to 65535. Well-known ports include HTTP = 80, HTTPS = 443, FTP = 21 and SMTP = 25.</li>
+    <li><strong>IP address + port number = socket address</strong>, which is the address of an application. Example: <code>10.14.90.85:27017</code>.</li>
+  </ul>
+  <div class="note">The slide says "every machine is given a unique port number". Strictly, each <strong>application</strong> on a machine gets its own port. One machine has many ports.</div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="url-concept">
+  <h2><span class="num">6</span>URL (Uniform Resource Locator)</h2>
+  <h3>Definition</h3>
+  <p>A <strong>URL</strong> is the address of a resource (a hypertext document or file) on the Internet, e.g. <code>https://www.example.com</code>.</p>
+  <h3>Parts of a URL</h3>
+<div class="tree">https :// nptel.ac.in : 5050 / course.php
+  │          │          │        │
+protocol   server     port    file name
+          (host)   (optional)</div>
+  <ul>
+    <li><strong>Protocol:</strong> how to fetch the resource (http, https, ftp).</li>
+    <li><strong>Host / domain name:</strong> the server the file is on.
+      <ul>
+        <li><code>www</code> means it's on the web.</li>
+        <li><code>example</code> is the server name.</li>
+        <li><code>.com</code> (commercial), <code>.org</code> (organisation), <code>.edu</code> (education), and country codes such as <code>.in</code> India, <code>.au</code> Australia, <code>.us</code> USA, <code>.uk</code> United Kingdom.</li>
+      </ul>
+    </li>
+    <li><strong>Port:</strong> optional. If it's not given, Java's <code>getPort()</code> returns <strong>−1</strong>.</li>
+    <li><strong>File name:</strong> the actual document, e.g. <code>course.php</code>.</li>
+  </ul>
+  <p>A <strong>DNS / proxy</strong> server keeps a table that maps domain names to IP addresses.</p>
+  <div class="note">The slide gives ".ua for USA". <code>.ua</code> is Ukraine, and USA is <code>.us</code>. It also says ".org for educational institutions". <code>.org</code> is for (non-profit) organisations, and <code>.edu</code> is for education.</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="mac">
+  <h2><span class="num">7</span>MAC Address</h2>
+  <ul>
+    <li><strong>MAC (Media Access Control) address</strong> is the <strong>physical address</strong> of a machine. The IP address is the logical one.</li>
+    <li>It is assigned by the <strong>manufacturer</strong> and is unique for every network card.</li>
+    <li>It is <strong>48 bits (6 bytes)</strong>, written in hexadecimal, e.g. <code>00:1A:2B:3C:4D:5E</code>.</li>
+  </ul>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>IP Address</th><th>MAC Address</th></tr>
+    <tr><td>Logical</td><td>Physical</td></tr>
+    <tr><td>Assigned by the network administrator or ISP</td><td>Assigned by the manufacturer</td></tr>
+    <tr><td>32 bits (IPv4)</td><td>48 bits</td></tr>
+    <tr><td>Can change</td><td>Fixed</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="socket-concept">
+  <h2><span class="num">8</span>Socket</h2>
+  <ul>
+    <li>When two computers communicate, the connection is controlled by <strong>two programs, one at each end</strong>. These are called <strong>socket programs</strong>.</li>
+    <li>Each socket is uniquely identified by its <strong>socket address (IP + port)</strong>.</li>
+    <li>A socket is <strong>software, not a hardware device</strong>. It is an endpoint of a two-way communication link.</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="protocols">
+  <h2><span class="num">9</span>Communication Protocols</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Protocol</th><th>Full form</th><th>Use</th></tr>
+    <tr><td><strong>TCP</strong></td><td>Transmission Control Protocol</td><td><strong>Connection-oriented</strong> and reliable</td></tr>
+    <tr><td><strong>UDP</strong></td><td>User Datagram Protocol</td><td><strong>Connectionless</strong> and fast</td></tr>
+    <tr><td><strong>IP</strong></td><td>Internet Protocol</td><td>Connectionless. Addresses and routes packets.</td></tr>
+    <tr><td><strong>TCP/IP</strong></td><td>-</td><td>TCP on top of IP. It combines reliable connections with IP routing.</td></tr>
+    <tr><td><strong>FTP</strong></td><td>File Transfer Protocol</td><td>Transfers files between machines</td></tr>
+    <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol</td><td>Accesses web documents (HTML pages, scripts…)</td></tr>
+    <tr><td><strong>HTTPS</strong></td><td>HTTP Secure</td><td>HTTP with encryption, for secure transmission</td></tr>
+    <tr><td><strong>SMTP</strong></td><td>Simple Mail Transfer Protocol</td><td>Sends email through mail servers</td></tr>
+  </table></div>
+  <p>Java supports all of these: UDP, TCP, TCP/IP, HTTP and HTTPS.</p>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="conn">
+  <h2><span class="num">10</span>Connection-oriented vs Connectionless</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Connection-oriented (TCP)</th><th>Connectionless (UDP)</th></tr>
+    <tr><td>A connection is <strong>set up first</strong>, then data is sent.</td><td>No prior connection. The sender <strong>just starts sending</strong>.</td></tr>
+    <tr><td>Like a <strong>phone call</strong>.</td><td>Like <strong>posting a letter</strong>: write the address and drop it in the post box.</td></tr>
+    <tr><td><strong>Reliable</strong>, but slower.</td><td><strong>Fast</strong>, but not reliable.</td></tr>
+    <tr><td>Data arrives in order.</td><td>Packets may arrive out of order or be lost.</td></tr>
+    <tr><td>Java: <code>Socket</code>, <code>ServerSocket</code></td><td>Java: <code>DatagramSocket</code>, <code>DatagramPacket</code></td></tr>
+  </table></div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="stream-dgram">
+  <h2><span class="num">11</span>Stream Sockets vs Datagram Sockets</h2>
+  <p>Java network programs come in two styles:</p>
+  <h3>Stream sockets (TCP)</h3>
+  <ul>
+    <li>A connection is <strong>established first</strong>, then data <strong>streams continuously</strong> from one machine to the other. That's where the name comes from.</li>
+    <li>Connection-oriented. Uses TCP.</li>
+  </ul>
+  <h3>Datagram sockets (UDP)</h3>
+  <ul>
+    <li>Content is split into small parts called <strong>packets</strong> or <strong>datagrams</strong>. The size is set by the network administrator, e.g. 64 or 1024 bytes.</li>
+    <li>Each packet carries the <strong>sender and receiver</strong> addresses and is dropped into the network. Routers decide which way to forward it until it reaches its destination.</li>
+    <li>Connectionless. Uses <strong>UDP (User Datagram Protocol)</strong>.</li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="javanet">
+  <h2><span class="num">12</span>The java.net Package</h2>
+  <p>All Java networking classes are in the <code>java.net</code> package.</p>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Class</th><th>Used for</th></tr>
+    <tr><td><code>URL</code></td><td>Represents a web address</td></tr>
+    <tr><td><code>URLConnection</code></td><td>A connection to a URL, used to read its content</td></tr>
+    <tr><td><code>HttpURLConnection</code></td><td>A URLConnection for HTTP only</td></tr>
+    <tr><td><code>InetAddress</code></td><td>An IP address and host name</td></tr>
+    <tr><td><code>DatagramSocket</code>, <code>DatagramPacket</code></td><td>UDP (connectionless) communication</td></tr>
+    <tr><td><code>ServerSocket</code></td><td>TCP: makes a machine a <strong>server</strong></td></tr>
+    <tr><td><code>Socket</code></td><td>TCP: makes a machine a <strong>client</strong></td></tr>
+  </table></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="url">
+  <h2><span class="num">13</span>URL Class</h2>
+  <h3>Definition</h3>
+  <p>The <code>java.net.URL</code> class represents a <strong>Uniform Resource Locator</strong>. A URL object holds the protocol, host name, port and file name. You read them with its <code>getXxx()</code> methods.</p>
+  <h3>Constructors<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>URL(String spec)</td><td>Creates a URL from a string.</td></tr>
+    <tr><td>URL(String protocol, String host, String file)</td><td>Creates a URL from its parts.</td></tr>
+    <tr><td>URL(String protocol, String host, int port, String file)</td><td>Creates a URL from its parts, including the port.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>String getProtocol()</td><td>Returns the protocol, e.g. "https".</td></tr>
+    <tr><td>String getHost()</td><td>Returns the host name.</td></tr>
+    <tr><td>int getPort()</td><td>Returns the port, or −1 if none was given.</td></tr>
+    <tr><td>String getFile()</td><td>Returns the file name.</td></tr>
+    <tr><td>URLConnection openConnection()</td><td>Opens a connection to this URL.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.net.*;
+
+public class URLClass {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://nptel.ac.in/course.php");
+            System.out.println("Protocol : " + url.getProtocol());
+            System.out.println("Host Name: " + url.getHost());
+            System.out.println("Port     : " + url.getPort());   // -1
+            System.out.println("File Name: " + url.getFile());
+        } catch (Exception e) {
+            System.out.println("Exception is " + e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="urlconn">
+  <h2><span class="num">14</span>URLConnection Class</h2>
+  <h3>Definition</h3>
+  <p><code>URLConnection</code> represents a <strong>communication link between the URL and the program</strong>. It is used to <strong>read data from</strong> (or write to) the resource the URL points to.</p>
+  <h3>Main methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>URLConnection url.openConnection()</td><td>Establishes a connection from this machine to the remote one.</td></tr>
+    <tr><td>InputStream getInputStream()</td><td>Returns a stream for reading data from the remote machine.</td></tr>
+    <tr><td>OutputStream getOutputStream()<span class="tag add">not in slides</span></td><td>Returns a stream for writing data to it.</td></tr>
+    <tr><td>void connect()<span class="tag add">not in slides</span></td><td>Opens the link if it isn't already open.</td></tr>
+    <tr><td>String getHeaderField(String name)<span class="tag add">not in slides</span></td><td>Returns a response header, e.g. "Content-Type".</td></tr>
+  </table></div>
+  <h3>Demo: read a web page</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class URLConnectionClass {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://nptel.ac.in/course.php");
+            URLConnection urlcon = url.openConnection();
+            InputStream stream = urlcon.getInputStream();
+            int b;
+            while ((b = stream.read()) != -1) {
+                System.out.print((char) b);
+            }
+        } catch (Exception e) {
+            System.out.println("Exception is " + e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="httpurl">
+  <h2><span class="num">15</span>HttpURLConnection Class</h2>
+  <h3>Definition</h3>
+  <p><code>HttpURLConnection</code> is like URLConnection, but it works <strong>only with the HTTP protocol</strong>. It is a subclass of URLConnection, and you get it by casting the result of <code>openConnection()</code>.</p>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>String getHeaderFieldKey(int n)</td><td>Returns the name of the n-th header.</td></tr>
+    <tr><td>String getHeaderField(int n)</td><td>Returns the value of the n-th header.</td></tr>
+    <tr><td>void disconnect()</td><td>Closes the connection.</td></tr>
+    <tr><td>int getResponseCode()<span class="tag add">not in slides</span></td><td>Returns the HTTP status, e.g. 200 or 404.</td></tr>
+    <tr><td>void setRequestMethod(String m)<span class="tag add">not in slides</span></td><td>Sets the request method: "GET", "POST" and so on.</td></tr>
+  </table></div>
+  <h3>Demo: print the response headers</h3>
+<div class="code"><pre>
+import java.net.*;
+
+public class HttpURLConnectionDemo {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://www.tutorialspoint.com");
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            for (int i = 1; i &lt;= 8; i++) {
+                System.out.println(huc.getHeaderFieldKey(i) + " = " + huc.getHeaderField(i));
+            }
+            huc.disconnect();
+        } catch (Exception e) {
+            System.out.println("Exception is " + e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="inet">
+  <h2><span class="num">16</span>InetAddress Class</h2>
+  <h3>Definition</h3>
+  <p><code>InetAddress</code> represents an <strong>IP address</strong>. It can find the IP address of a host name, and the reverse. It has <strong>no public constructor</strong>, so you get objects from its static factory methods.</p>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>static InetAddress getByName(String host)</td><td>Returns the address of the given host name.</td></tr>
+    <tr><td>static InetAddress getLocalHost()</td><td>Returns the address of this machine.</td></tr>
+    <tr><td>String getHostName()</td><td>Returns the host name.</td></tr>
+    <tr><td>String getHostAddress()</td><td>Returns the IP address as a string.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.net.*;
+
+public class InetAddressClass {
+    public static void main(String[] args) {
+        try {
+            InetAddress ip = InetAddress.getByName("www.nptel.ac.in");
+            System.out.println("Host Name  = " + ip.getHostName());
+            System.out.println("IP Address = " + ip.getHostAddress());
+        } catch (Exception e) {
+            System.out.println("Exception is " + e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="datagram">
+  <h2><span class="num">17</span>DatagramSocket &amp; DatagramPacket</h2>
+  <h3>Definition</h3>
+  <ul>
+    <li><code>DatagramSocket</code> is a socket for <strong>sending and receiving datagram packets</strong> using <strong>UDP</strong> (connectionless).</li>
+    <li><code>DatagramPacket</code> is the <strong>data container</strong>, one packet holding the bytes plus the destination address and port.</li>
+  </ul>
+  <h3>Constructors<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>DatagramSocket()</td><td>Creates a socket on any free port (used by the sender).</td></tr>
+    <tr><td>DatagramSocket(int port)</td><td>Creates a socket bound to the given port (used by the receiver).</td></tr>
+    <tr><td>DatagramPacket(byte[] buf, int length)</td><td>A packet for <strong>receiving</strong> data.</td></tr>
+    <tr><td>DatagramPacket(byte[] buf, int length, InetAddress addr, int port)</td><td>A packet for <strong>sending</strong> data to the given address and port.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void send(DatagramPacket p)</td><td>DatagramSocket: sends a packet.</td></tr>
+    <tr><td>void receive(DatagramPacket p)</td><td>DatagramSocket: waits for and receives a packet.</td></tr>
+    <tr><td>void close()</td><td>DatagramSocket: closes the socket.</td></tr>
+    <tr><td>byte[] getData()</td><td>DatagramPacket: returns the data. This is the important one for reading what arrived.</td></tr>
+    <tr><td>int getLength()</td><td>DatagramPacket: returns the number of bytes received.</td></tr>
+  </table></div>
+  <h3>Demo: receiver (run first)</h3>
+<div class="code"><pre>
+import java.net.*;
+
+public class DReceiver {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket ds = new DatagramSocket(3000);       // listen on port 3000
+        byte[] buf = new byte[1024];
+        DatagramPacket dp = new DatagramPacket(buf, 1024);
+        ds.receive(dp);                                     // wait for a packet
+        String str = new String(dp.getData(), 0, dp.getLength());
+        System.out.println(str);
+        ds.close();
+    }
+}
+</pre></div>
+  <h3>Demo: sender</h3>
+<div class="code"><pre>
+import java.net.*;
+
+public class DSender {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket ds = new DatagramSocket();
+        String str = "Welcome java";
+        InetAddress ip = InetAddress.getByName("127.0.0.1");   // same machine
+        DatagramPacket dp = new DatagramPacket(str.getBytes(), str.length(), ip, 3000);
+        ds.send(dp);
+        ds.close();
+    }
+}
+</pre></div>
+  <p><code>127.0.0.1</code> is <strong>localhost</strong>, the default address for talking within the same machine. Sender and receiver must use the <strong>same port (3000)</strong>.</p>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="serversocket">
+  <h2><span class="num">18</span>ServerSocket Class</h2>
+  <h3>Definition</h3>
+  <p><code>ServerSocket</code> makes a machine act as a <strong>server</strong> (TCP). It <strong>waits for client requests</strong> and accepts connections from clients on the same machine or remote ones.</p>
+  <h3>Constructors<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>ServerSocket(int port)</td><td>Creates a server socket on the given port.</td></tr>
+    <tr><td>ServerSocket(int port, int backlog)</td><td>Also sets the maximum number of waiting clients.</td></tr>
+    <tr><td>ServerSocket(int port, int backlog, InetAddress bindAddr)</td><td>Also binds to a specific IP address.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>Socket accept()</td><td>Waits for a client and returns a Socket connected to it.</td></tr>
+    <tr><td>int getLocalPort()</td><td>Returns the port the server is listening on.</td></tr>
+    <tr><td>void setSoTimeout(int ms)</td><td>Sets how long <code>accept()</code> waits.</td></tr>
+    <tr><td>void close()</td><td>Closes the server socket.</td></tr>
+  </table></div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="socket">
+  <h2><span class="num">19</span>Socket Class</h2>
+  <h3>Definition</h3>
+  <p><code>Socket</code> is similar to ServerSocket, but it represents the <strong>client</strong> machine. It is one endpoint of the TCP connection.</p>
+  <h3>Constructors<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>Socket(String host, int port)</td><td>Connects to the server at the given host and port.</td></tr>
+    <tr><td>Socket(InetAddress addr, int port)</td><td>The same, using an InetAddress.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>InputStream getInputStream()</td><td>Stream for reading data from the other side.</td></tr>
+    <tr><td>OutputStream getOutputStream()</td><td>Stream for sending data to the other side.</td></tr>
+    <tr><td>InetAddress getInetAddress()</td><td>The remote machine's address.</td></tr>
+    <tr><td>int getPort()</td><td>The remote port.</td></tr>
+    <tr><td>void close()</td><td>Closes the socket.</td></tr>
+  </table></div>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="oneway">
+  <h2><span class="num">20</span>Client-Server Program (One-way)</h2>
+  <p>The client sends one message, and the server receives and prints it.</p>
+  <ul>
+    <li>Server: <code>ss.accept()</code> waits for a client request. <code>DataInputStream</code> reads the data.</li>
+    <li>Client: creates a <code>Socket</code> and sends with <code>DataOutputStream</code>.</li>
+    <li>The <strong>port number must be the same</strong> on both sides (6666).</li>
+  </ul>
+  <h3>MyServer.java (run first)</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class MyServer {
+    public static void main(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(6666);
+            Socket s = ss.accept();                  // wait for a client
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            String str = dis.readUTF();
+            System.out.println("message = " + str);
+            ss.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+  <h3>MyClient.java</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class MyClient {
+    public static void main(String[] args) {
+        try {
+            Socket s = new Socket("localhost", 6666);
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            dout.writeUTF("Hello Server");
+            dout.flush();
+            dout.close();
+            s.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="chat">
+  <h2><span class="num">21</span>Client-Server Dialogue (Two-way Chat)</h2>
+  <p>A <strong>dialogue</strong>: the client sends something and the server responds, then the client sends again, and so on. Both sides use <code>DataInputStream</code> and <code>DataOutputStream</code>, plus a <code>BufferedReader</code> to read from the keyboard. Typing <strong>"stop"</strong> ends the chat.</p>
+  <p>To talk between <strong>two different machines</strong>, use the server's real IP address in the client instead of <code>"localhost"</code>. Nothing else changes.</p>
+  <h3>Server</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class ChatServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(3333);
+        Socket s = ss.accept();
+        DataInputStream din = new DataInputStream(s.getInputStream());
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String str = "", reply = "";
+        while (!str.equals("stop")) {
+            str = din.readUTF();
+            System.out.println("client says: " + str);
+            reply = br.readLine();
+            dout.writeUTF(reply);
+            dout.flush();
+        }
+        s.close();
+        ss.close();
+    }
+}
+</pre></div>
+  <h3>Client</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class ChatClient {
+    public static void main(String[] args) throws Exception {
+        Socket s = new Socket("localhost", 3333);
+        DataInputStream din = new DataInputStream(s.getInputStream());
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String str = "", reply = "";
+        while (!str.equals("stop")) {
+            str = br.readLine();
+            dout.writeUTF(str);
+            dout.flush();
+            reply = din.readUTF();
+            System.out.println("Server says: " + reply);
+        }
+        s.close();
+    }
+}
+</pre></div>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="concurrent">
+  <h2><span class="num">22</span>Concurrent Server</h2>
+  <h3>Definition</h3>
+  <p>A <strong>concurrent server</strong> can <strong>serve more than one client at the same time</strong>.</p>
+  <h3>How it works</h3>
+  <ul>
+    <li>The server loops forever on <code>ss.accept()</code>.</li>
+    <li>For each client that connects, it starts a <strong>new thread</strong> (a ClientHandler) with its own input and output streams.</li>
+    <li>Each thread talks to its own client, while the main thread goes straight back to accepting the next client.</li>
+    <li>The client program is the same as before.</li>
+  </ul>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.io.*;
+import java.net.*;
+
+public class ConcurrentServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(5056);
+        while (true) {
+            Socket s = ss.accept();                       // new client
+            System.out.println("Client connected: " + s);
+            new ClientHandler(s).start();                 // one thread per client
+        }
+    }
+}
+
+class ClientHandler extends Thread {
+    Socket s;
+    ClientHandler(Socket s) { this.s = s; }
+
+    public void run() {
+        try {
+            DataInputStream din = new DataInputStream(s.getInputStream());
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            String msg = "";
+            while (!msg.equals("stop")) {
+                msg = din.readUTF();
+                dout.writeUTF("Server got: " + msg);   // echo back
+            }
+            s.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+</pre></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

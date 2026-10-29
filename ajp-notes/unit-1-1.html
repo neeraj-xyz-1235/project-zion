@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction to Swing</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 1 · Swing</div>
+  <div class="pages">
+    <a class="on" href="unit-1-1.html">1.1</a>
+    <a href="unit-1-2.html">1.2</a>
+    <a href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a href="unit-2-3.html">2.3</a>
+    <a href="unit-3-1.html">3.1</a>
+    <a href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#swing">1. Swing</a></li>
+    <li><a href="#features">2. Features of Swing</a></li>
+    <li><a href="#applications">3. Applications of Swing</a></li>
+    <li><a href="#awt-vs-swing">4. AWT vs Swing</a></li>
+    <li><a href="#jfc">5. JFC</a></li>
+    <li><a href="#hierarchy">6. Swing Class Hierarchy</a></li>
+    <li><a href="#component-methods">7. Component Class Methods</a></li>
+    <li><a href="#examples">8. Two Ways to Create a Frame</a></li>
+    <li><a href="#awt">9. AWT</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 1.1: Introduction to Swing</h1>
+  <p>The theory behind Swing: what it is, why it replaced AWT, how its classes are arranged, and how to open your first window.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="swing">
+  <h2><span class="num">1</span>Swing</h2>
+  <h3>Definition</h3>
+  <p><strong>Java Swing</strong> is a GUI (Graphical User Interface) toolkit that is part of the <strong>Java Foundation Classes (JFC)</strong>. You use it to build window-based desktop applications.</p>
+  <h3>Description</h3>
+  <ul>
+    <li>Swing was introduced in the late 1990s to fix the limitations of the older <strong>AWT</strong> (Abstract Window Toolkit).</li>
+    <li>It is <strong>built on top of AWT</strong> but is <strong>written entirely in Java</strong>. It doesn't rely on the operating system's native components, so an app looks the same on Windows, Linux and macOS.</li>
+    <li>It provides a full set of components: buttons, text fields, panels, tables, trees, menus and more. All of them can be customised.</li>
+    <li>All Swing classes live in the <code>javax.swing</code> package, for example <code>JButton</code>, <code>JTextField</code>, <code>JCheckBox</code> and <code>JMenu</code>.</li>
+    <li>Swing component names start with <strong>J</strong>, which separates them from the AWT versions (<code>Button</code> vs <code>JButton</code>).</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="features">
+  <h2><span class="num">2</span>Features of Swing</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>Description</th></tr>
+    <tr><td><strong>Platform independence</strong></td><td>A Swing app runs on any platform that supports Java, with no code changes.</td></tr>
+    <tr><td><strong>Rich set of components</strong></td><td>Ranges from basic components (buttons, labels) to advanced ones (tables, trees, scroll panes, colour chooser, tabbed pane).</td></tr>
+    <tr><td><strong>Customizability</strong></td><td>You can change the size, colour, font, border, layout and behaviour of every component.</td></tr>
+    <tr><td><strong>Event handling</strong></td><td>A robust event model lets the program respond to user actions such as button clicks, key presses and mouse movement.</td></tr>
+    <tr><td><strong>Layout managers</strong></td><td>Layout managers (FlowLayout, BorderLayout, GridLayout…) arrange and resize components automatically as the window size changes.</td></tr>
+    <tr><td><strong>Lightweight</strong></td><td>Swing draws its own components, so they don't need a native OS peer.</td></tr>
+    <tr><td><strong>Pluggable look and feel</strong></td><td>The appearance (theme) can be changed at runtime without changing the code.</td></tr>
+    <tr><td><strong>MVC architecture</strong></td><td>Components separate data (Model), display (View) and control logic (Controller).</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="applications">
+  <h2><span class="num">3</span>Applications of Java Swing</h2>
+  <ul>
+    <li><strong>Desktop applications:</strong> Swing suits apps that need a rich, responsive UI, such as IDEs (NetBeans is built with Swing), productivity tools and media players.</li>
+    <li><strong>Legacy systems:</strong> many enterprise applications built with Swing are still in use. Swing gives a stable base for maintaining and extending them.</li>
+    <li><strong>Educational purposes:</strong> Swing is simple and versatile, so it's widely used to teach GUI programming concepts to beginners.</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="awt-vs-swing">
+  <h2><span class="num">4</span>Difference Between AWT and Swing</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Java AWT</th><th>Java Swing</th></tr>
+    <tr><td>Components are <strong>platform-dependent</strong>.</td><td>Components are <strong>platform-independent</strong>.</td></tr>
+    <tr><td>Components are <strong>heavyweight</strong> because they use native OS peers.</td><td>Components are <strong>lightweight</strong> because they are drawn in pure Java.</td></tr>
+    <tr><td>Doesn't support pluggable look and feel.</td><td>Supports pluggable look and feel.</td></tr>
+    <tr><td>Fewer components.</td><td>More powerful components: tables, lists, scroll panes, colour chooser, tabbed pane, etc.</td></tr>
+    <tr><td>Doesn't follow MVC.</td><td>Follows <strong>MVC</strong>: the Model is the data, the View is the presentation, and the Controller connects the two.</td></tr>
+    <tr><td>Package: <code>java.awt</code></td><td>Package: <code>javax.swing</code></td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="jfc">
+  <h2><span class="num">5</span>JFC (Java Foundation Classes)</h2>
+  <h3>Definition</h3>
+  <p>The <strong>Java Foundation Classes (JFC)</strong> are a set of GUI components and services that simplify building desktop applications.</p>
+  <h3>Parts of JFC</h3>
+  <ul>
+    <li><strong>Swing components</strong>: the GUI widgets (JButton, JTable…)</li>
+    <li><strong>AWT</strong>: the base windowing toolkit Swing is built on</li>
+    <li><strong>Pluggable look and feel</strong>: changeable themes</li>
+    <li><strong>Java 2D</strong>: advanced 2D graphics and imaging</li>
+    <li><strong>Accessibility API</strong>: support for screen readers and similar tools</li>
+    <li><strong>Drag and drop</strong>: moving data between applications</li>
+  </ul>
+  <p>Swing is the best-known part of JFC, which is why the two terms are often used together.</p>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="hierarchy">
+  <h2><span class="num">6</span>Hierarchy of Java Swing Classes</h2>
+  <p>Every Swing component ultimately inherits from AWT's <code>Component</code> class. Top-level windows (<code>JFrame</code>, <code>JDialog</code>) extend AWT windows. All other components extend <code>JComponent</code>.</p>
+<div class="tree">Object
+└── Component                (java.awt)
+    └── Container            (java.awt)
+        ├── Window
+        │   ├── Frame
+        │   │   └── JFrame
+        │   └── Dialog
+        │       └── JDialog
+        ├── Panel
+        │   └── Applet
+        │       └── JApplet
+        └── JComponent        (javax.swing)
+            ├── JLabel
+            ├── JList
+            ├── JTable
+            ├── JComboBox
+            ├── JPanel
+            ├── JScrollBar / JScrollPane
+            ├── JProgressBar / JTabbedPane / JLayeredPane
+            ├── JMenuBar
+            ├── JTextComponent
+            │   ├── JTextField
+            │   └── JTextArea
+            └── AbstractButton
+                ├── JButton
+                ├── JMenuItem
+                │   └── JMenu
+                └── JToggleButton
+                    ├── JCheckBox
+                    └── JRadioButton</div>
+  <div class="note">The slide shows this as an image, which couldn't be extracted. This tree is the standard Swing hierarchy that the slide is based on.</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="component-methods">
+  <h2><span class="num">7</span>Commonly Used Methods of the Component Class</h2>
+  <p>These methods come from <code>java.awt.Component</code>, so every AWT and Swing component has them.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>public void add(Component c)</td><td>Adds a component onto another component (container).</td></tr>
+    <tr><td>public void setSize(int width, int height)</td><td>Sets the size of the component.</td></tr>
+    <tr><td>public void setLayout(LayoutManager m)</td><td>Sets the layout manager for the component.</td></tr>
+    <tr><td>public void setVisible(boolean b)</td><td>Shows or hides the component. It is <strong>false by default</strong>.</td></tr>
+    <tr><td>public void setBounds(int x, int y, int w, int h)<span class="tag add">not in slides</span></td><td>Sets position and size together. Used with <code>setLayout(null)</code>.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ComponentDemo {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Component Methods");
+        JButton b = new JButton("OK");
+        b.setBounds(100, 80, 80, 30);   // position + size
+        f.add(b);                       // add()
+        f.setSize(300, 200);            // setSize()
+        f.setLayout(null);              // setLayout()
+        f.setVisible(true);             // setVisible()
+    }
+}
+</pre></div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="examples">
+  <h2><span class="num">8</span>Java Swing Examples: Two Ways to Create a Frame</h2>
+  <p>A frame is the main window of a Swing application. You can create one in two ways, and you can write the code inside <code>main()</code>, a constructor or any other method.</p>
+
+  <h3>Way 1: By creating an object of the JFrame class (Association)</h3>
+  <p>Your class <strong>has a</strong> JFrame. You create it with <code>new JFrame()</code> and call methods on that object.</p>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class FirstSwingExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame();            // create frame object
+        JButton b = new JButton("click");   // create button
+        b.setBounds(130, 100, 100, 40);     // x, y, width, height
+        f.add(b);                           // add button to frame
+        f.setSize(400, 500);
+        f.setLayout(null);                  // no layout manager
+        f.setVisible(true);
+    }
+}
+</pre></div>
+
+  <h3>Way 1b: Association inside a constructor</h3>
+  <p>The same code moved into the class constructor. <code>main()</code> just creates an object of the class.</p>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class Simple {
+    JFrame f;
+
+    Simple() {
+        f = new JFrame();
+        JButton b = new JButton("click");
+        b.setBounds(130, 100, 100, 40);
+        f.add(b);
+        f.setSize(400, 500);
+        f.setLayout(null);
+        f.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Simple();
+    }
+}
+</pre></div>
+
+  <h3>Way 2: By extending the JFrame class (Inheritance)</h3>
+  <p>Your class <strong>is a</strong> JFrame. You don't create a JFrame object yourself, and you call <code>add()</code>, <code>setSize()</code> and the rest directly.</p>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class Simple2 extends JFrame {
+    Simple2() {
+        JButton b = new JButton("click");
+        b.setBounds(130, 100, 100, 40);
+        add(b);                 // no "f." needed: this class IS the frame
+        setSize(400, 500);
+        setLayout(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Simple2();
+    }
+}
+</pre></div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Association</th><th>Inheritance</th></tr>
+    <tr><td>"has-a" relationship</td><td>"is-a" relationship</td></tr>
+    <tr><td><code>JFrame f = new JFrame();</code></td><td><code>class X extends JFrame</code></td></tr>
+    <tr><td>Call methods as <code>f.add(...)</code></td><td>Call methods directly as <code>add(...)</code></td></tr>
+    <tr><td>Your class can still extend another class.</td><td>Your class can't extend any other class.</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="awt">
+  <h2><span class="num">9</span>Java AWT</h2>
+  <h3>Definition</h3>
+  <p><strong>AWT (Abstract Window Toolkit)</strong> is Java's original API for building GUI and window-based applications. Its classes are in the <code>java.awt</code> package.</p>
+  <h3>Description</h3>
+  <ul>
+    <li>It provides GUI classes such as <code>Label</code>, <code>Button</code>, <code>TextField</code>, <code>Checkbox</code> and <code>Menu</code>.</li>
+    <li>It is <strong>heavyweight</strong>: each component uses a native component of the operating system.</li>
+    <li>It is <strong>platform-dependent</strong>: the same AWT program can look different on Windows, Linux and macOS.</li>
+  </ul>
+  <h3>AWT Hierarchy</h3>
+<div class="tree">Object
+└── Component
+    ├── Button
+    ├── Label
+    ├── Checkbox
+    ├── Choice
+    ├── List
+    ├── Scrollbar
+    ├── Canvas
+    ├── TextComponent
+    │   ├── TextField
+    │   └── TextArea
+    └── Container
+        ├── Window
+        │   ├── Frame
+        │   └── Dialog
+        └── Panel
+            └── Applet</div>
+  <h3>AWT Example (from slides, a simple form)</h3>
+<div class="code"><pre>
+import java.awt.*;
+
+public class AwtApp extends Frame {
+    AwtApp() {
+        Label firstName = new Label("First Name");
+        firstName.setBounds(20, 50, 80, 20);
+        Label lastName = new Label("Last Name");
+        lastName.setBounds(20, 80, 80, 20);
+
+        TextField firstNameTF = new TextField();
+        firstNameTF.setBounds(120, 50, 100, 20);
+        TextField lastNameTF = new TextField();
+        lastNameTF.setBounds(120, 80, 100, 20);
+
+        Button sbmt = new Button("Submit");
+        sbmt.setBounds(20, 160, 100, 30);
+        Button reset = new Button("Reset");
+        reset.setBounds(120, 160, 100, 30);
+
+        add(firstName); add(lastName);
+        add(firstNameTF); add(lastNameTF);
+        add(sbmt); add(reset);
+
+        setSize(300, 300);
+        setLayout(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new AwtApp();
+    }
+}
+</pre></div>
+  <h3>The same form in Swing</h3>
+  <p>The only changes are the <code>javax.swing</code> import and the <strong>J</strong> prefix on each class.</p>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class SwingApp {
+    SwingApp() {
+        JFrame f = new JFrame();
+
+        JLabel firstName = new JLabel("First Name");
+        firstName.setBounds(20, 50, 80, 20);
+        JTextField firstNameTF = new JTextField();
+        firstNameTF.setBounds(120, 50, 100, 20);
+
+        JButton sbmt = new JButton("Submit");
+        sbmt.setBounds(20, 160, 100, 30);
+        JButton reset = new JButton("Reset");
+        reset.setBounds(120, 160, 100, 30);
+
+        f.add(firstName); f.add(firstNameTF);
+        f.add(sbmt); f.add(reset);
+
+        f.setSize(300, 300);
+        f.setLayout(null);
+        f.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new SwingApp();
+    }
+}
+</pre></div>
+  <div class="note">An AWT <code>Frame</code> doesn't close when you click X unless you add a WindowListener. In Swing, call <code>f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)</code>.</div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

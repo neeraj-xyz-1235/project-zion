@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Requirement Engineering</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">SE Notes</a></div>
+  <div class="sub">Unit 2 · Requirement Engineering</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a class="on" href="unit-2.html">Unit 2</a>
+    <a href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#re">1. Requirements Engineering</a></li>
+    <li><a href="#req">2. What is a Requirement?</a></li>
+    <li><a href="#user-sys">3. User vs System Requirements</a></li>
+    <li><a href="#fnf">4. Functional &amp; Non-functional</a></li>
+    <li><a href="#re-process">5. RE Process Activities</a></li>
+    <li><a href="#re-tasks">6. Seven RE Tasks</a></li>
+    <li><a href="#problems">7. Problems of Requirement Analysis</a></li>
+    <li><a href="#analysis-process">8. Requirement Analysis Process</a></li>
+    <li><a href="#negotiating">9. Negotiating Requirements</a></li>
+    <li><a href="#validating">10. Validating Requirements</a></li>
+    <li><a href="#analysis-model">11. Analysis Modelling</a></li>
+    <li><a href="#elements">12. Elements of Analysis Model</a></li>
+    <li><a href="#building">13. Building the Analysis Model</a></li>
+    <li><a href="#data-modeling">14. Data Modeling</a></li>
+    <li><a href="#card-mod">15. Cardinality &amp; Modality</a></li>
+    <li><a href="#approaches">16. Analysis Modeling Approaches</a></li>
+    <li><a href="#ooa">17. Object-Oriented Analysis</a></li>
+    <li><a href="#scenario">18. Scenario-Based Modeling</a></li>
+    <li><a href="#flow">19. Flow-Oriented Modeling</a></li>
+    <li><a href="#class">20. Class-Based Modeling</a></li>
+    <li><a href="#srs">21. SRS</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 2: Requirement Engineering</h1>
+  <p>How requirements are gathered, analysed, modelled and written down in the SRS.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="re">
+  <h2><span class="num">1</span>Requirements Engineering</h2>
+  <div class="def"><strong>Requirements Engineering (RE)</strong> is the process of <strong>identifying, eliciting, analysing, specifying, validating and managing</strong> the needs and expectations of stakeholders for a software system.</div>
+  <ul>
+    <li>It establishes the <strong>services</strong> the customer needs from the system and the <strong>constraints</strong> under which it operates and is developed.</li>
+    <li>The <strong>requirements</strong> themselves are the descriptions of those services and constraints, produced during the RE process.</li>
+    <li>It is the bridge between what the customer wants and what the developers build.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="req">
+  <h2><span class="num">2</span>What is a Requirement?</h2>
+  <div class="def">A <strong>requirement</strong> is a <strong>description of a service</strong> a software system must provide, or a <strong>constraint</strong> under which it must operate. In IEEE terms, it is a condition or capability a user needs to solve a problem or achieve an objective.</div>
+  <ul>
+    <li>Requirements range from <strong>high-level abstract statements</strong> to <strong>detailed mathematical functional specifications</strong>.</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="user-sys">
+  <h2><span class="num">3</span>Types: User vs System Requirements</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>User Requirements</th><th>System Requirements</th></tr>
+    <tr><td>What the <strong>end user wants</strong> from the system.</td><td>The <strong>technical characteristics</strong> of the system, such as architecture and hardware.</td></tr>
+    <tr><td>Written in <strong>natural language plus diagrams</strong>.</td><td>A <strong>structured document</strong> with detailed descriptions of functions, services and constraints.</td></tr>
+    <tr><td>Written for <strong>customers</strong> and managers.</td><td>Written for <strong>developers</strong>. It may be part of the <strong>contract</strong> between client and contractor.</td></tr>
+    <tr><td>Abstract and high-level.</td><td>Detailed. Defines exactly what should be implemented.</td></tr>
+  </table></div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="fnf">
+  <h2><span class="num">4</span>Functional &amp; Non-functional Requirements</h2>
+  <h3>Functional requirements</h3>
+  <div class="def"><strong>Functional requirements</strong> describe the <strong>services or functions</strong> the system must provide: how it reacts to inputs and how it behaves in particular situations. They are the "<strong>whats</strong>" of the system.</div>
+  <ul>
+    <li>They depend on the type of software, the expected users and the type of system.</li>
+    <li>User-level ones are high-level. System-level ones describe services in detail.</li>
+    <li>They may also say what the system should <strong>not</strong> do.</li>
+    <li>Examples: authenticate the user at login · shut the system down during a cyber attack · send a verification email when a user registers.</li>
+  </ul>
+  <h3>Non-functional requirements</h3>
+  <div class="def"><strong>Non-functional requirements</strong> are the <strong>quality constraints</strong> the system must satisfy, such as reliability, response time, maintainability, scalability, portability and storage. They usually apply to the <strong>system as a whole</strong>.</div>
+  <ul>
+    <li>They include constraints like I/O device capability, timing, standards and the development process (e.g. a required IDE or language).</li>
+    <li>They can be <strong>more critical</strong> than functional ones. If they aren't met, the system may be useless.</li>
+    <li>Examples: each request must be processed within 10 seconds · the site must load in 3 seconds with more than 10,000 simultaneous users.</li>
+  </ul>
+  <h3>Comparison</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Functional</th><th>Non-functional</th></tr>
+    <tr><td><strong>What</strong> the system does</td><td><strong>How well</strong> it does it</td></tr>
+    <tr><td>Specific features or services</td><td>Quality attributes and constraints</td></tr>
+    <tr><td>Defined at component level</td><td>Applied to the whole system</td></tr>
+    <tr><td>E.g. "Load the page when the button is clicked"</td><td>E.g. "The page must load within 2 seconds"</td></tr>
+    <tr><td>Easy to test (it works or it doesn't)</td><td>Measured (speed, uptime %)</td></tr>
+  </table></div>
+  <div class="tip"><strong>Example:</strong> "Clicking a button loads a page" is functional. "How fast the page loads" is non-functional. A slow page gives a poor experience even though the functional requirement is met.</div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="re-process">
+  <h2><span class="num">5</span>Requirements Engineering Process: Main Activities</h2>
+<div class="tree">Elicitation → Specification → Verification &amp; Validation → Management
+     ▲              │
+     └──────────────┘ (specification may trigger more elicitation)</div>
+  <h3>1. Requirements elicitation</h3>
+  <ul>
+    <li>Gathering knowledge about the project domain and its requirements.</li>
+    <li><strong>Sources:</strong> customers, business manuals, existing software of the same type, standards, other stakeholders.</li>
+    <li><strong>Techniques:</strong> interviews, brainstorming, task analysis, the Delphi technique, prototyping.</li>
+    <li>It doesn't produce formal models. It widens the analyst's knowledge as input for the next stage.</li>
+  </ul>
+  <h3>2. Requirements specification</h3>
+  <ul>
+    <li>Produces <strong>formal requirement models</strong> covering all functional and non-functional requirements and constraints.</li>
+    <li><strong>Models used:</strong> ER diagrams, data flow diagrams (DFDs), function decomposition diagrams (FDDs), data dictionaries.</li>
+  </ul>
+  <h3>3. Requirements verification &amp; validation</h3>
+  <ul>
+    <li><strong>Verification:</strong> the software correctly implements a specific function ("Are we building the product <em>right</em>?").</li>
+    <li><strong>Validation:</strong> the software built is traceable to customer requirements ("Are we building the <em>right</em> product?").</li>
+    <li>If requirements aren't validated, errors spread to later stages and cause rework.</li>
+    <li><strong>Checks:</strong> requirements are consistent (no conflicts), complete and achievable. <strong>Methods:</strong> reviews, buddy checks, test cases.</li>
+  </ul>
+  <h3>4. Requirements management</h3>
+  <ul>
+    <li>Analysing, documenting, tracking, prioritising and agreeing on requirements, and controlling communication with stakeholders.</li>
+    <li>Handles the <strong>changing nature</strong> of requirements. The SRS should be as <strong>modifiable</strong> as possible.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="re-tasks">
+  <h2><span class="num">6</span>Requirements Engineering Tasks (Seven Tasks)</h2>
+<div class="tree">Inception → Elicitation → Elaboration → Negotiation → Specification → Validation → Requirements Management</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Task</th><th>Purpose</th></tr>
+    <tr><td><strong>Inception</strong></td><td>Establish a basic understanding of the problem and the nature of the solution.</td></tr>
+    <tr><td><strong>Elicitation</strong></td><td>Draw out the requirements from stakeholders.</td></tr>
+    <tr><td><strong>Elaboration</strong></td><td>Create an <strong>analysis model</strong> of the information, functional and behavioural aspects.</td></tr>
+    <tr><td><strong>Negotiation</strong></td><td>Agree on a deliverable system that is realistic for developers and customers.</td></tr>
+    <tr><td><strong>Specification</strong></td><td>Describe the requirements formally or informally (SRS).</td></tr>
+    <tr><td><strong>Validation</strong></td><td>Review the specification for errors, ambiguities, omissions and conflicts.</td></tr>
+    <tr><td><strong>Requirements management</strong></td><td>Manage changing requirements.</td></tr>
+  </table></div>
+  <ul>
+    <li>Some tasks can happen <strong>in parallel</strong>, and all are adapted to the project's needs.</li>
+    <li>All of them aim to define what the customer wants and to lay a solid foundation for design.</li>
+  </ul>
+  <div class="tip"><strong>Mnemonic:</strong> "I Eat Every Nice Sandwich Very Merrily": Inception, Elicitation, Elaboration, Negotiation, Specification, Validation, Management.</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="problems">
+  <h2><span class="num">7</span>Problems of Requirements Analysis</h2>
+  <ul>
+    <li>Stakeholders <strong>don't know what they really want</strong>.</li>
+    <li>Stakeholders express requirements <strong>in their own terms</strong>.</li>
+    <li>Different stakeholders may have <strong>conflicting</strong> requirements.</li>
+    <li><strong>Organisational and political</strong> factors may influence requirements.</li>
+    <li>Requirements <strong>change during analysis</strong>. New stakeholders may appear, and the business environment may change.</li>
+  </ul>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="analysis-process">
+  <h2><span class="num">8</span>Requirement Analysis Process</h2>
+  <p>The analysis process is a cycle of activities, repeated until the requirements are complete:</p>
+<div class="tree">Domain Understanding → Requirements Collection → Classification
+        ▲                                               │
+Requirements Checking ← Prioritisation ← Conflict Resolution</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Activity</th><th>Description</th></tr>
+    <tr><td><strong>Domain understanding</strong></td><td>Learn the application domain.</td></tr>
+    <tr><td><strong>Requirements collection</strong></td><td>Gather requirements from stakeholders.</td></tr>
+    <tr><td><strong>Classification</strong></td><td>Organise the requirements into related groups.</td></tr>
+    <tr><td><strong>Conflict resolution</strong></td><td>Resolve conflicting requirements.</td></tr>
+    <tr><td><strong>Prioritisation</strong></td><td>Identify the most important requirements.</td></tr>
+    <tr><td><strong>Requirements checking</strong></td><td>Check that requirements are complete, consistent and match what stakeholders want.</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="negotiating">
+  <h2><span class="num">9</span>Negotiating Requirements</h2>
+  <div class="def"><strong>Negotiation</strong> is the collaborative process of <strong>resolving conflicts and aligning stakeholder expectations</strong> to reach agreement on requirements, scope, budget, timeline and resources.</div>
+  <ul>
+    <li>It involves discussion, compromise and prioritisation.</li>
+    <li>Stakeholders balance functionality and performance against <strong>cost and time-to-market</strong>.</li>
+    <li>The goal is a <strong>"win-win" outcome</strong>: stakeholders get a system that meets most of their needs, and developers work within realistic budgets and schedules.</li>
+  </ul>
+  <h3>Boehm's negotiation activities (at the start of each iteration)</h3>
+  <ol>
+    <li>Identify the key <strong>stakeholders</strong>.</li>
+    <li>Determine each stakeholder's <strong>"win conditions"</strong>.</li>
+    <li><strong>Negotiate</strong> those win conditions into a set of win-win conditions for everyone.</li>
+  </ol>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="validating">
+  <h2><span class="num">10</span>Validating the Requirements Model</h2>
+  <p>As the model is built, each part is checked for <strong>consistency, omissions and ambiguity</strong>. Stakeholders prioritise the requirements and bundle them into packages for each software increment.</p>
+  <h3>Questions asked during validation</h3>
+  <ul>
+    <li>Is each requirement consistent with the overall system objectives?</li>
+    <li>Is each requirement at the right level of abstraction?</li>
+    <li>Is the requirement <strong>really necessary</strong>, or just an optional add-on?</li>
+    <li>Is each requirement <strong>bounded and unambiguous</strong>?</li>
+    <li>Is each requirement <strong>attributed</strong>, with a source noted?</li>
+    <li>Do any requirements <strong>conflict</strong> with others?</li>
+    <li>Is each requirement <strong>achievable</strong> in the technical environment?</li>
+    <li>Is each requirement <strong>testable</strong> once implemented?</li>
+  </ul>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="analysis-model">
+  <h2><span class="num">11</span>Analysis Modelling</h2>
+  <div class="def">An <strong>analysis model</strong> is a <strong>technical representation of the system</strong>. It links the <strong>system description</strong> to the <strong>design model</strong>. It defines the system's information, behaviour and functions, which are then translated into architecture, interface and component design.</div>
+<div class="tree">System Description ──▶ ANALYSIS MODEL ──▶ Design Model</div>
+  <h3>Objectives</h3>
+  <ul>
+    <li>Describe what the <strong>customer requires</strong>.</li>
+    <li>Establish a basis for creating the <strong>software design</strong>.</li>
+    <li>Define a set of requirements that can be <strong>validated</strong> once the software is built.</li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="elements">
+  <h2><span class="num">12</span>Elements of the Analysis Model (Structured Analysis)</h2>
+  <p>The classic structure has the <strong>Data Dictionary at the core</strong>, surrounded by three diagrams, each with its own specification:</p>
+<div class="tree">                  Data Object Description
+                            │
+                           ERD            (data model)
+                            │
+ PSPEC ── DFD ──── DATA DICTIONARY ──── STD ── CSPEC
+ (functional model)    (core)        (behavioural model)</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Element</th><th>Description</th></tr>
+    <tr><td><strong>Data Dictionary</strong></td><td>A <strong>central repository</strong> describing every data object used or produced by the software. It is the most crucial element.</td></tr>
+    <tr><td><strong>Entity Relationship Diagram (ERD)</strong></td><td>Shows the <strong>relationships between data objects</strong>. It is used for data modelling and is the basis for data design.</td></tr>
+    <tr><td><strong>Data Object Description</strong></td><td>Gives complete details of each data object in the ERD and all its attributes.</td></tr>
+    <tr><td><strong>Data Flow Diagram (DFD)</strong></td><td>Shows the <strong>functions that transform data</strong> as it moves from input to output. It is the basis for function modelling.</td></tr>
+    <tr><td><strong>Process Specification (PSPEC)</strong></td><td>Describes each function in the DFD: its input, the algorithm applied, its output, and any performance limits or constraints.</td></tr>
+    <tr><td><strong>State Transition Diagram (STD)</strong></td><td>Shows the system's <strong>states</strong> and the <strong>events</strong> that cause it to change state, plus the actions taken. It models behaviour.</td></tr>
+    <tr><td><strong>Control Specification (CSPEC)</strong></td><td>Extra information on <strong>control</strong>: how the software behaves when an event occurs, and which processes are invoked.</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="building">
+  <h2><span class="num">13</span>Building the Analysis Model</h2>
+  <div class="def"><strong>Building the analysis model</strong> means translating high-level user requirements into a <strong>technical representation</strong>, using diagrams and text to show the system's data, functions and behaviour.</div>
+  <h3>Steps</h3>
+  <ol>
+    <li><strong>Understand the requirements</strong> gathered from the customer.</li>
+    <li><strong>Choose an approach</strong>, such as class-based or flow-oriented.</li>
+    <li><strong>Identify the key models</strong> needed for data, functions and behaviour.</li>
+    <li><strong>Create the model</strong> with use cases, class diagrams, DFDs, state diagrams and so on.</li>
+    <li><strong>Iterate and refine</strong> as more information comes in.</li>
+  </ol>
+  <h3>Analysis rules of thumb</h3>
+  <ul>
+    <li>Focus on requirements visible in the <strong>business domain</strong>, at a high level of abstraction. Skip the details.</li>
+    <li>Every element should add to the understanding of the <strong>information, function and behaviour</strong>.</li>
+    <li><strong>Delay</strong> infrastructure and non-functional models until design. For example, a database is needed, but its classes and functions aren't modelled yet.</li>
+    <li>Keep <strong>coupling</strong> (interconnections between modules) to a minimum.</li>
+    <li>The model should give <strong>value to all stakeholders</strong>.</li>
+    <li>Keep the model <strong>as simple as possible</strong>.</li>
+  </ul>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="data-modeling">
+  <h2><span class="num">14</span>Data Modeling</h2>
+  <div class="def"><strong>Data modeling</strong> is where analysis modelling starts. The engineer defines all the <strong>data objects</strong> in the system, their <strong>attributes</strong> and the <strong>relationships</strong> between them, usually as an <strong>ERD</strong>.</div>
+  <h3>1. Data objects</h3>
+  <ul>
+    <li>A representation of <strong>composite information</strong>: something with several properties or attributes.</li>
+    <li>It can be an external entity, a thing, an occurrence, a role, an organisational unit, a place or a structure.</li>
+    <li>Example: <em>height</em> alone is a single value, so it is not a data object. <em>Dimensions</em> (height, width and depth) is a data object.</li>
+    <li>A data object holds <strong>data only</strong>. It has no reference to operations, which is unlike a class in OOP.</li>
+  </ul>
+  <h3>2. Attributes</h3>
+  <p>Attributes define the properties of a data object. They are used to:</p>
+  <ul>
+    <li><strong>Name</strong> an instance of the object.</li>
+    <li><strong>Describe</strong> the instance.</li>
+    <li><strong>Reference</strong> another instance in another table.</li>
+  </ul>
+  <p>One or more attributes must be the <strong>identifier</strong> (the key). Example: a <em>Car</em> has ID#, make, model, body type and colour.</p>
+  <h3>3. Relationships</h3>
+  <ul>
+    <li>Show how data objects are connected. Example: a <em>bookstore</em> orders, displays, stocks, sells and returns <em>books</em>.</li>
+    <li>Object/relationship pairs are <strong>bidirectional</strong>, so they can be read in either direction.</li>
+  </ul>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="card-mod">
+  <h2><span class="num">15</span>Cardinality &amp; Modality</h2>
+  <h3>Cardinality</h3>
+  <div class="def"><strong>Cardinality</strong> is the <strong>number of occurrences</strong> of one object that can be related to the number of occurrences of another. It's expressed as "one" or "many".</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><strong>One-to-one (1:1)</strong></td><td>One instance relates to one instance</td><td>One employee has one ID</td></tr>
+    <tr><td><strong>One-to-many (1:N)</strong></td><td>One instance relates to many</td><td>One college has many departments</td></tr>
+    <tr><td><strong>Many-to-many (M:N)</strong></td><td>Many relate to many</td><td>Many customers order many products</td></tr>
+  </table></div>
+  <h3>Modality</h3>
+  <div class="def"><strong>Modality</strong> says whether a relationship is <strong>optional or mandatory</strong>.</div>
+  <ul>
+    <li>Modality = <strong>0</strong>: the relationship is <strong>optional</strong>, shown by a circle (O) in the ERD.</li>
+    <li>Modality = <strong>1</strong>: the relationship is <strong>mandatory</strong>, shown by a bar (|) in the ERD.</li>
+  </ul>
+  <h3>Example: telephone company field service</h3>
+<div class="tree">CUSTOMER ──||──────── is provided with ────────O&lt;── REPAIR ACTION
+          one, mandatory                    zero or many (optional)</div>
+  <ul>
+    <li><strong>Cardinality (1:N):</strong> one customer can get zero or many repair actions (the "crow's foot" means many).</li>
+    <li><strong>Modality:</strong> the bar on the customer side means a customer <strong>must</strong> exist for a repair action. The circle on the repair side means there <strong>may be no</strong> repair action (a simple problem may not need one).</li>
+  </ul>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="approaches">
+  <h2><span class="num">16</span>Analysis Modeling Approaches (Elements)</h2>
+  <p>There are two broad schools: <strong>Structured Analysis</strong> (data and process kept separate) and <strong>Object-Oriented Analysis</strong> (data and process combined in objects). The analysis model has four kinds of elements:</p>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Element</th><th>What it shows</th><th>Diagrams</th></tr>
+    <tr><td><strong>Scenario-based</strong></td><td>The system from the <strong>user's point of view</strong></td><td>Use case text and diagrams, user stories, activity diagrams, swim-lane diagrams</td></tr>
+    <tr><td><strong>Class-based</strong></td><td>The <strong>objects</strong> the system manipulates: attributes, relationships, collaboration</td><td>Class diagrams, analysis packages, CRC models, collaboration diagrams</td></tr>
+    <tr><td><strong>Behavioural</strong></td><td>The system's <strong>states</strong> and how external events change them</td><td>State diagrams, sequence diagrams</td></tr>
+    <tr><td><strong>Flow-oriented</strong></td><td>How <strong>data objects are transformed</strong> as they flow through functions</td><td>Data flow diagrams, control flow diagrams, data structure diagrams, processing narratives</td></tr>
+  </table></div>
+  <div class="tip"><strong>Remember:</strong> scenario = user's view · class = objects · behavioural = states and events · flow = data transformation.</div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="ooa">
+  <h2><span class="num">17</span>Object-Oriented Analysis (OOA)</h2>
+  <div class="def"><strong>Object-Oriented Analysis</strong> investigates the problem and its requirements (not the solution), with an emphasis on <strong>finding and describing the objects or concepts in the problem domain</strong>.</div>
+  <h3>Purpose</h3>
+  <ul>
+    <li>How to characterise the system.</li>
+    <li>Which relevant objects exist and how they relate to each other.</li>
+    <li>How to model the problem so that an effective design can be created.</li>
+    <li>Examine the requirements and analyse their implications.</li>
+  </ul>
+  <h3>Intent</h3>
+  <p>Define all the <strong>classes</strong> relevant to the problem, with their operations, attributes, relationships and behaviour. The tasks are:</p>
+  <ol>
+    <li>Know the basic user requirements.</li>
+    <li>Identify the classes, with their attributes and methods.</li>
+    <li>Specify the class hierarchy.</li>
+    <li>Represent object-to-object relationships.</li>
+    <li>Model object behaviour.</li>
+    <li>Repeat tasks 1–5 until the model is complete.</li>
+  </ol>
+  <h3>Conventional (structured) vs OO analysis</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Structured Analysis</th><th>Object-Oriented Analysis</th></tr>
+    <tr><td>Treats <strong>processes and data separately</strong></td><td><strong>Combines data and process</strong> into objects</td></tr>
+    <tr><td>Uses DFD, ERD, STD, data dictionary</td><td>Uses use cases, class diagrams, CRC, sequence diagrams</td></tr>
+    <tr><td>Top-down functional decomposition</td><td>Identifies objects and classes</td></tr>
+    <tr><td>Harder to reuse</td><td>Encourages reuse (inheritance)</td></tr>
+  </table></div>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="scenario">
+  <h2><span class="num">18</span>Scenario-Based Modeling</h2>
+  <div class="def"><strong>Scenario-based modeling</strong> represents the system from the <strong>user's point of view</strong>, mainly with <strong>use cases</strong>. To start, list the functions or activities a specific <strong>actor</strong> performs.</div>
+  <ul>
+    <li><strong>Actor:</strong> anyone or anything outside the system that interacts with it (a user, another system or a device).</li>
+    <li><strong>Use case:</strong> a sequence of actions that gives the actor a useful result.</li>
+    <li>Sources: the list of required functions, and conversations with stakeholders.</li>
+  </ul>
+  <h3>Example: airline ticket booking</h3>
+<div class="tree">              ┌──────── Booking System ────────┐
+ Passenger ───┼── Search flights                │
+     │        ├── Book ticket ──(include)── Make payment
+     │        ├── Cancel ticket                 │
+     └────────┼── Check flight status           │
+ Admin ───────┼── Manage flights / schedules    │
+              └─────────────────────────────────┘</div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="flow">
+  <h2><span class="num">19</span>Flow-Oriented Modeling</h2>
+  <div class="def"><strong>Flow-oriented modeling</strong> shows how <strong>data objects are transformed</strong> as they move through the system: it <strong>accepts input</strong>, applies hardware, software or human elements to <strong>transform</strong> it, and <strong>produces output</strong>.</div>
+  <h3>Elements</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Element</th><th>Description</th></tr>
+    <tr><td><strong>Data Flow Diagram (DFD)</strong></td><td>A graphical technique for showing information flow. Data objects are <strong>labelled arrows</strong>, and transformations are <strong>circles (bubbles)</strong>. It's drawn as a <strong>hierarchy of levels</strong>: Level 0 is the <strong>context diagram</strong>, then Level 1, Level 2 and so on.</td></tr>
+    <tr><td><strong>Control Flow Model</strong></td><td>Needed for large, event-driven or real-time applications that produce control information rather than reports. An <strong>event</strong> is a boolean value (true/false, on/off, 1/0).</td></tr>
+    <tr><td><strong>Control Specification (CSPEC)</strong></td><td>Represents system <strong>behaviour</strong> using a state diagram (states, transitions, events, activities).</td></tr>
+    <tr><td><strong>Process Specification (PSPEC)</strong></td><td>Describes every process in the flow model, using narrative text, <strong>PDL</strong> (Program Design Language), equations, tables or UML activity diagrams.</td></tr>
+  </table></div>
+  <h3>DFD symbols<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>○ Circle / bubble</td><td>Process (transformation)</td></tr>
+    <tr><td>→ Arrow</td><td>Data flow</td></tr>
+    <tr><td>□ Rectangle</td><td>External entity (source or sink)</td></tr>
+    <tr><td>═ Open rectangle / two parallel lines</td><td>Data store</td></tr>
+  </table></div>
+<div class="tree">Level 0 (context):   [Customer] ──order──▶ ( Order System ) ──bill──▶ [Customer]
+
+Level 1:   [Customer] ──order──▶ (1.0 Validate) ──▶ (2.0 Process) ──▶ (3.0 Bill) ──▶ [Customer]
+                                       │                │
+                                   ═ Customers ═    ═ Inventory ═</div>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="class">
+  <h2><span class="num">20</span>Class-Based Modeling</h2>
+  <div class="def"><strong>Class-based modeling</strong> represents the <strong>objects</strong> the system manipulates, the <strong>operations</strong> applied to them, and the relationships and collaborations between them.</div>
+  <h3>Elements</h3>
+  <p>Classes and objects · attributes · operations · <strong>CRC models</strong> (Class-Responsibility-Collaborator) · collaboration diagrams · packages.</p>
+  <h3>Identifying classes</h3>
+  <p>Do a <strong>grammatical parse</strong>: underline each <strong>noun</strong> or noun phrase in the problem statement and list them in a table. The nouns are the candidate classes.</p>
+  <h3>Classes appear in these forms</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Form</th><th>Examples</th></tr>
+    <tr><td><strong>External entities</strong></td><td>Other systems, people or devices that produce information</td></tr>
+    <tr><td><strong>Things</strong></td><td>Reports, displays, letters, signals</td></tr>
+    <tr><td><strong>Occurrences or events</strong></td><td>A property transfer, completing a series of robot movements</td></tr>
+    <tr><td><strong>Roles</strong></td><td>Manager, engineer, salesperson</td></tr>
+    <tr><td><strong>Organisational units</strong></td><td>Division, group, team</td></tr>
+    <tr><td><strong>Places</strong></td><td>Manufacturing floor, loading dock</td></tr>
+    <tr><td><strong>Structures</strong></td><td>Sensors, computers, vehicles</td></tr>
+  </table></div>
+  <h3>CRC card<span class="tag add">not in slides</span></h3>
+<div class="tree">┌──────────── Class: Student ───────────┐
+│ Responsibilities    │ Collaborators   │
+├─────────────────────┼─────────────────┤
+│ Enroll in course    │ Course          │
+│ Pay fees            │ Account         │
+│ View marks          │ Result          │
+└─────────────────────┴─────────────────┘</div>
+  <div class="note">The slide writes "CRS models". The correct term is <strong>CRC</strong> (Class-Responsibility-Collaborator).</div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="srs">
+  <h2><span class="num">21</span>Software Requirement Specification (SRS)</h2>
+  <div class="def">The <strong>SRS</strong> is an <strong>official document</strong>, written by the analyst <strong>before development starts</strong>, that describes the expected system's requirements in a set format. It turns the customer's everyday-language requirements into <strong>technical language</strong> the development team can use.</div>
+  <h3>Description</h3>
+  <ul>
+    <li>Tells both the <strong>developer and the customer</strong> what will be implemented.</li>
+    <li>Especially useful when the software is built by an <strong>outside contractor</strong>.</li>
+    <li>Must include interfaces, functional capabilities, quality, reliability, privacy and so on.</li>
+    <li>Models used: ER diagrams, DFDs, function decomposition diagrams, data dictionaries.</li>
+  </ul>
+  <h3>Characteristics of a good SRS</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Characteristic</th><th>Meaning</th></tr>
+    <tr><td><strong>Complete</strong></td><td>Covers all requirements.</td></tr>
+    <tr><td><strong>Consistent</strong></td><td>No conflicting requirements.</td></tr>
+    <tr><td><strong>Modifiable</strong></td><td>Logically and hierarchically organised, so it's easy to change.</td></tr>
+    <tr><td><strong>Implementable</strong></td><td>Requirements are realistic to build.</td></tr>
+    <tr><td><strong>Traceable</strong></td><td>Each requirement is <strong>uniquely identified</strong>.</td></tr>
+    <tr><td><strong>Unambiguous</strong></td><td>Every statement has <strong>only one meaning</strong>.</td></tr>
+    <tr><td><strong>Valid / correct</strong></td><td>Every requirement is valid for the project.</td></tr>
+    <tr><td><strong>Verifiable</strong><span class="tag add">not in slides</span></td><td>Each requirement can be tested.</td></tr>
+  </table></div>
+  <h3>Typical SRS structure (IEEE 830)<span class="tag add">not in slides</span></h3>
+<div class="tree">1. Introduction       (purpose, scope, definitions, references, overview)
+2. Overall Description (product perspective, functions, user characteristics, constraints, assumptions)
+3. Specific Requirements (functional, non-functional, external interfaces, performance, design constraints)
+4. Appendices / Index</div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

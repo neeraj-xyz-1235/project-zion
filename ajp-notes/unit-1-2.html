@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swing Controls</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">AJP Notes</a></div>
+  <div class="sub">Unit 1 · Swing</div>
+  <div class="pages">
+    <a href="unit-1-1.html">1.1</a>
+    <a class="on" href="unit-1-2.html">1.2</a>
+    <a href="unit-2-1.html">2.1</a>
+    <a href="unit-2-2.html">2.2</a>
+    <a href="unit-2-3.html">2.3</a>
+    <a href="unit-3-1.html">3.1</a>
+    <a href="unit-3-2.html">3.2</a>
+  </div>
+  <ol>
+    <li><a href="#jbutton">1. JButton</a></li>
+    <li><a href="#jlabel">2. JLabel</a></li>
+    <li><a href="#jtextfield">3. JTextField</a></li>
+    <li><a href="#jtextarea">4. JTextArea</a></li>
+    <li><a href="#jcheckbox">5. JCheckBox</a></li>
+    <li><a href="#jradiobutton">6. JRadioButton</a></li>
+    <li><a href="#jcombobox">7. JComboBox</a></li>
+    <li><a href="#jtable">8. JTable</a></li>
+    <li><a href="#jlist">9. JList</a></li>
+    <li><a href="#jscrollbar">10. JScrollBar</a></li>
+    <li><a href="#jmenu">11. JMenuBar, JMenu, JMenuItem</a></li>
+    <li><a href="#jprogressbar">12. JProgressBar</a></li>
+    <li><a href="#jtabbedpane">13. JTabbedPane</a></li>
+    <li><a href="#jdialog">14. JDialog</a></li>
+    <li><a href="#jpanel">15. JPanel</a></li>
+    <li><a href="#jframe">16. JFrame</a></li>
+    <li><a href="#jscrollpane">17. JScrollPane</a></li>
+    <li><a href="#jcomponent">18. JComponent</a></li>
+    <li><a href="#jlayeredpane">19. JLayeredPane</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 1.2: Swing Controls</h1>
+  <p>Each control has a definition, its class declaration, its constructors, its methods and a small demo program you can run.</p>
+</header>
+
+<!-- 1 JButton -->
+<section class="topic" id="jbutton">
+  <h2><span class="num">1</span>JButton</h2>
+  <h3>Definition</h3>
+  <p><code>JButton</code> creates a <strong>labelled push button</strong> with a platform-independent implementation. Pushing the button triggers an action in the application.</p>
+  <ul>
+    <li>It inherits the <code>AbstractButton</code> class, which provides features shared by all Swing buttons.</li>
+    <li>It can show text, an icon, or both.</li>
+    <li>You handle clicks with an <code>ActionListener</code>.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JButton extends AbstractButton implements Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JButton()</td><td>Creates a button with no text and no icon.</td></tr>
+    <tr><td>JButton(String s)</td><td>Creates a button with the given text.</td></tr>
+    <tr><td>JButton(Icon i)</td><td>Creates a button with the given icon.</td></tr>
+    <tr><td>JButton(String s, Icon i)</td><td>Creates a button with both text and icon.</td></tr>
+  </table></div>
+  <h3>Methods (from AbstractButton)</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setText(String s)</td><td>Sets the text on the button.</td></tr>
+    <tr><td>String getText()</td><td>Returns the button's text.</td></tr>
+    <tr><td>void setEnabled(boolean b)</td><td>Enables or disables the button.</td></tr>
+    <tr><td>void setIcon(Icon b)</td><td>Sets the icon on the button.</td></tr>
+    <tr><td>Icon getIcon()</td><td>Returns the button's icon.</td></tr>
+    <tr><td>void setMnemonic(int a)</td><td>Sets a keyboard shortcut (Alt + key).</td></tr>
+    <tr><td>void addActionListener(ActionListener a)</td><td>Registers a listener that runs when the button is clicked.</td></tr>
+    <tr><td>void setSelected(boolean selected)</td><td>Sets the selected state (used for toggle buttons).</td></tr>
+    <tr><td>boolean isSelected()</td><td>Returns true if the button is selected.</td></tr>
+    <tr><td>void setToolTipText(String text)</td><td>Sets the tooltip shown on mouse hover.</td></tr>
+    <tr><td>String getToolTipText()</td><td>Returns the tooltip text.</td></tr>
+    <tr><td>void setBorder(Border border)</td><td>Sets the border.</td></tr>
+    <tr><td>Border getBorder()</td><td>Returns the border.</td></tr>
+    <tr><td>void setForeground(Color fg)</td><td>Sets the text colour.</td></tr>
+    <tr><td>Color getForeground()</td><td>Returns the text colour.</td></tr>
+    <tr><td>void setBackground(Color bg)</td><td>Sets the background colour.</td></tr>
+    <tr><td>Color getBackground()</td><td>Returns the background colour.</td></tr>
+    <tr><td>void setFont(Font font)</td><td>Sets the text font.</td></tr>
+    <tr><td>Font getFont()</td><td>Returns the text font.</td></tr>
+    <tr><td>void setFocusPainted(boolean painted)</td><td>Sets whether a focus outline is painted when the button has focus.</td></tr>
+    <tr><td>boolean isFocusPainted()</td><td>Returns true if the focus outline is painted.</td></tr>
+    <tr><td>void setHorizontalAlignment(int a)</td><td>Sets horizontal text alignment.</td></tr>
+    <tr><td>int getHorizontalAlignment()</td><td>Returns horizontal text alignment.</td></tr>
+    <tr><td>void setVerticalAlignment(int a)</td><td>Sets vertical text alignment.</td></tr>
+    <tr><td>int getVerticalAlignment()</td><td>Returns vertical text alignment.</td></tr>
+  </table></div>
+  <h3>Demo: click the button to change a label</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ButtonExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Button Example");
+        JLabel l = new JLabel("Not clicked yet");
+        l.setBounds(50, 50, 200, 30);
+
+        JButton b = new JButton("Click Here");
+        b.setBounds(50, 100, 120, 30);
+        b.setToolTipText("Press me");
+        b.addActionListener(e -> l.setText("Button clicked!"));
+
+        f.add(l); f.add(b);
+        f.setSize(300, 250);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 2 JLabel -->
+<section class="topic" id="jlabel">
+  <h2><span class="num">2</span>JLabel</h2>
+  <h3>Definition</h3>
+  <p><code>JLabel</code> places <strong>text or an image</strong> in a container. It displays a single line of <strong>read-only</strong> text: the program can change it, but the user can't edit it.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code>.</li>
+    <li>It's used to show static information or to caption other components (for example "Name:" beside a text field).</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JLabel extends JComponent implements SwingConstants, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JLabel()</td><td>Creates a label with no image and empty text.</td></tr>
+    <tr><td>JLabel(String s)</td><td>Creates a label with the given text.</td></tr>
+    <tr><td>JLabel(Icon i)</td><td>Creates a label with the given image.</td></tr>
+    <tr><td>JLabel(String s, Icon i, int horizontalAlignment)</td><td>Creates a label with text, image and horizontal alignment.</td></tr>
+    <tr><td>JLabel(String text, int horizontalAlignment)</td><td>Creates a label with text and horizontal alignment.</td></tr>
+    <tr><td>JLabel(Icon icon, int horizontalAlignment)</td><td>Creates a label with image and horizontal alignment.</td></tr>
+    <tr><td>JLabel(String text, Icon icon, int hAlign, boolean isHTML)<span class="tag warn">not in real Java</span></td><td>Text, image, alignment and HTML option.</td></tr>
+    <tr><td>JLabel(String text, int hAlign, boolean isHTML)<span class="tag warn">not in real Java</span></td><td>Text, alignment and HTML option.</td></tr>
+    <tr><td>JLabel(Icon icon, int hAlign, boolean isHTML)<span class="tag warn">not in real Java</span></td><td>Image, alignment and HTML option.</td></tr>
+  </table></div>
+  <div class="note">Real Java has no <code>isHTML</code> parameter. To render HTML in a label, start the text with <code>&lt;html&gt;</code>, for example <code>new JLabel("&lt;html&gt;&lt;b&gt;Bold&lt;/b&gt;&lt;/html&gt;")</code>.</div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>String getText()</td><td>Returns the label's text.</td></tr>
+    <tr><td>void setText(String text)</td><td>Sets the single line of text to display.</td></tr>
+    <tr><td>void setHorizontalAlignment(int a)</td><td>Sets the alignment of the contents along the X axis.</td></tr>
+    <tr><td>int getHorizontalAlignment()</td><td>Returns the X-axis alignment.</td></tr>
+    <tr><td>Icon getIcon()</td><td>Returns the image the label displays.</td></tr>
+    <tr><td>void setIconTextGap(int gap)</td><td>Sets the gap between text and image.</td></tr>
+    <tr><td>int getIconTextGap()</td><td>Returns the gap between text and image.</td></tr>
+    <tr><td>void setFont(Font font)</td><td>Sets the font.</td></tr>
+    <tr><td>Font getFont()</td><td>Returns the font.</td></tr>
+    <tr><td>void setForeground(Color fg)</td><td>Sets the text colour.</td></tr>
+    <tr><td>Color getForeground()</td><td>Returns the text colour.</td></tr>
+    <tr><td>void setBackground(Color bg)</td><td>Sets the background colour. It shows only when the label is opaque.</td></tr>
+    <tr><td>Color getBackground()</td><td>Returns the background colour.</td></tr>
+    <tr><td>void setOpaque(boolean isOpaque)</td><td>Sets whether the background is painted.</td></tr>
+    <tr><td>boolean isOpaque()</td><td>Returns whether the label is opaque.</td></tr>
+    <tr><td>void setToolTipText(String text)</td><td>Sets the hover tooltip.</td></tr>
+    <tr><td>String getToolTipText()</td><td>Returns the tooltip.</td></tr>
+    <tr><td>void setEnabled(boolean enabled)</td><td>Enables or disables (greys out) the label.</td></tr>
+    <tr><td>boolean isEnabled()</td><td>Returns whether the label is enabled.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class LabelExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Label Example");
+
+        JLabel l1 = new JLabel("First Label.");
+        l1.setBounds(50, 50, 150, 30);
+
+        JLabel l2 = new JLabel("Second Label.");
+        l2.setBounds(50, 100, 150, 30);
+        l2.setForeground(Color.WHITE);
+        l2.setBackground(Color.BLUE);
+        l2.setOpaque(true);              // needed for background to show
+        l2.setFont(new Font("Arial", Font.BOLD, 14));
+
+        f.add(l1); f.add(l2);
+        f.setSize(300, 300);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 3 JTextField -->
+<section class="topic" id="jtextfield">
+  <h2><span class="num">3</span>JTextField</h2>
+  <h3>Definition</h3>
+  <p><code>JTextField</code> is a text component that lets the user <strong>enter and edit a single line of text</strong>.</p>
+  <ul>
+    <li>It inherits <code>JTextComponent</code>.</li>
+    <li>It's used in forms to read names, numbers, passwords (via <code>JPasswordField</code>) and similar input.</li>
+    <li>Pressing <strong>Enter</strong> inside the field fires an <code>ActionEvent</code>.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JTextField extends JTextComponent implements SwingConstants</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JTextField()</td><td>Creates an empty text field.</td></tr>
+    <tr><td>JTextField(String text)</td><td>Creates a text field containing the given text.</td></tr>
+    <tr><td>JTextField(String text, int columns)</td><td>Creates a text field with the given text and width in columns.</td></tr>
+    <tr><td>JTextField(int columns)</td><td>Creates an empty text field with the given number of columns.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void addActionListener(ActionListener l)</td><td>Adds a listener that runs when Enter is pressed.</td></tr>
+    <tr><td>Action getAction()</td><td>Returns the Action set on this field, or null.</td></tr>
+    <tr><td>void setFont(Font f)</td><td>Sets the font.</td></tr>
+    <tr><td>void removeActionListener(ActionListener l)</td><td>Removes an action listener.</td></tr>
+    <tr><td>String getText()<span class="tag add">not in slides</span></td><td>Returns the typed text.</td></tr>
+    <tr><td>void setText(String t)<span class="tag add">not in slides</span></td><td>Sets the text.</td></tr>
+    <tr><td>void setEditable(boolean b)<span class="tag add">not in slides</span></td><td>Makes the field read-only or editable.</td></tr>
+  </table></div>
+  <h3>Demo: add two numbers</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class TextFieldExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("TextField Example");
+
+        JTextField t1 = new JTextField();
+        t1.setBounds(50, 50, 150, 25);
+        JTextField t2 = new JTextField();
+        t2.setBounds(50, 90, 150, 25);
+        JTextField result = new JTextField();
+        result.setBounds(50, 130, 150, 25);
+        result.setEditable(false);
+
+        JButton add = new JButton("+");
+        add.setBounds(50, 170, 60, 30);
+        add.addActionListener(e -> {
+            int a = Integer.parseInt(t1.getText());
+            int b = Integer.parseInt(t2.getText());
+            result.setText(String.valueOf(a + b));
+        });
+
+        f.add(t1); f.add(t2); f.add(result); f.add(add);
+        f.setSize(300, 280);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 4 JTextArea -->
+<section class="topic" id="jtextarea">
+  <h2><span class="num">4</span>JTextArea</h2>
+  <h3>Definition</h3>
+  <p><code>JTextArea</code> is a <strong>multi-line</strong> area that displays text and lets the user edit it.</p>
+  <ul>
+    <li>It inherits <code>JTextComponent</code>, so it gets the basic text-editing features, and adds features for multi-line text.</li>
+    <li>It's used in text editors, chat windows, comment boxes and address fields.</li>
+    <li>It doesn't scroll on its own. Put it inside a <code>JScrollPane</code> to get scroll bars.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JTextArea extends JTextComponent</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JTextArea()</td><td>Creates an empty text area.</td></tr>
+    <tr><td>JTextArea(String s)</td><td>Creates a text area showing the given text.</td></tr>
+    <tr><td>JTextArea(int row, int column)</td><td>Creates an empty text area with the given rows and columns.</td></tr>
+    <tr><td>JTextArea(String s, int row, int column)</td><td>Creates a text area with the given text, rows and columns.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setRows(int rows)</td><td>Sets the number of rows.</td></tr>
+    <tr><td>void setColumns(int cols)</td><td>Sets the number of columns.</td></tr>
+    <tr><td>int getRows()</td><td>Returns the number of rows.</td></tr>
+    <tr><td>int getColumns()</td><td>Returns the number of columns.</td></tr>
+    <tr><td>void setFont(Font f)</td><td>Sets the font.</td></tr>
+    <tr><td>Font getFont()</td><td>Returns the font.</td></tr>
+    <tr><td>void insert(String s, int position)</td><td>Inserts text at the given position.</td></tr>
+    <tr><td>void append(String s)</td><td>Adds text at the end.</td></tr>
+    <tr><td>void replaceRange(String s, int start, int end)</td><td>Replaces the text between start and end.</td></tr>
+    <tr><td>void setText(String text)</td><td>Replaces all the content.</td></tr>
+    <tr><td>String getText()</td><td>Returns all the content.</td></tr>
+    <tr><td>void setEditable(boolean b)</td><td>Makes the area editable or read-only.</td></tr>
+    <tr><td>void setLineWrap(boolean wrap)</td><td>Wraps long lines onto the next line.</td></tr>
+    <tr><td>void setWrapStyleWord(boolean w)</td><td>Wraps at word boundaries (whitespace) instead of mid-word.</td></tr>
+    <tr><td>void setForeground(Color fg)</td><td>Sets the text colour.</td></tr>
+    <tr><td>void setBackground(Color bg)</td><td>Sets the background colour.</td></tr>
+  </table></div>
+  <h3>Demo: word counter</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class TextAreaExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("TextArea Example");
+
+        JTextArea area = new JTextArea("Welcome to Swing");
+        area.setBounds(10, 30, 260, 150);
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+
+        JLabel count = new JLabel("Words: ?");
+        count.setBounds(10, 190, 150, 25);
+
+        JButton b = new JButton("Count");
+        b.setBounds(170, 190, 100, 25);
+        b.addActionListener(e -> {
+            String text = area.getText().trim();
+            int words = text.isEmpty() ? 0 : text.split("\\s+").length;
+            count.setText("Words: " + words);
+        });
+
+        f.add(area); f.add(count); f.add(b);
+        f.setSize(300, 280);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 5 JCheckBox -->
+<section class="topic" id="jcheckbox">
+  <h2><span class="num">5</span>JCheckBox</h2>
+  <h3>Definition</h3>
+  <p><code>JCheckBox</code> creates a checkbox that turns an option <strong>on (true) or off (false)</strong>. Each click switches its state.</p>
+  <ul>
+    <li>It inherits <code>JToggleButton</code>.</li>
+    <li>Checkboxes are independent of each other, so the user can tick <strong>several at once</strong>. Compare this with radio buttons.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JCheckBox extends JToggleButton implements Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JCheckBox()</td><td>Creates an unselected checkbox with no text and no icon.</td></tr>
+    <tr><td>JCheckBox(String s)</td><td>Creates an unselected checkbox with text.</td></tr>
+    <tr><td>JCheckBox(String text, boolean selected)</td><td>Creates a checkbox with text, initially selected or not.</td></tr>
+    <tr><td>JCheckBox(Action a)</td><td>Creates a checkbox whose properties come from the given Action.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>AccessibleContext getAccessibleContext()</td><td>Returns the AccessibleContext of this checkbox.</td></tr>
+    <tr><td>protected String paramString()</td><td>Returns a string representation of this checkbox.</td></tr>
+    <tr><td>boolean isSelected()<span class="tag add">not in slides</span></td><td>Returns true if the box is ticked.</td></tr>
+    <tr><td>void setSelected(boolean b)<span class="tag add">not in slides</span></td><td>Ticks or unticks the box.</td></tr>
+    <tr><td>void addItemListener(ItemListener l)<span class="tag add">not in slides</span></td><td>Runs code whenever the box is ticked or unticked.</td></tr>
+  </table></div>
+  <h3>Demo: food order</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class CheckBoxExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("CheckBox Example");
+
+        JCheckBox pizza = new JCheckBox("Pizza @ 100");
+        pizza.setBounds(50, 50, 150, 25);
+        JCheckBox burger = new JCheckBox("Burger @ 30", true);
+        burger.setBounds(50, 80, 150, 25);
+
+        JLabel total = new JLabel();
+        total.setBounds(50, 150, 200, 25);
+
+        JButton b = new JButton("Order");
+        b.setBounds(50, 115, 100, 25);
+        b.addActionListener(e -> {
+            int amount = 0;
+            if (pizza.isSelected())  amount += 100;
+            if (burger.isSelected()) amount += 30;
+            total.setText("Total: " + amount);
+        });
+
+        f.add(pizza); f.add(burger); f.add(b); f.add(total);
+        f.setSize(300, 250);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 6 JRadioButton -->
+<section class="topic" id="jradiobutton">
+  <h2><span class="num">6</span>JRadioButton</h2>
+  <h3>Definition</h3>
+  <p><code>JRadioButton</code> creates a radio button, used to <strong>choose exactly one option</strong> from several.</p>
+  <ul>
+    <li>It inherits <code>JToggleButton</code>.</li>
+    <li>It's widely used in quizzes, exam systems and gender or category selection.</li>
+    <li>The buttons <strong>must be added to a <code>ButtonGroup</code></strong> so only one can be selected at a time.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JRadioButton extends JToggleButton implements Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JRadioButton()</td><td>Creates an unselected radio button with no text.</td></tr>
+    <tr><td>JRadioButton(String s)</td><td>Creates an unselected radio button with the given text.</td></tr>
+    <tr><td>JRadioButton(String s, boolean selected)</td><td>Creates a radio button with text and a selected state.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setText(String s)</td><td>Sets the text.</td></tr>
+    <tr><td>String getText()</td><td>Returns the text.</td></tr>
+    <tr><td>void setEnabled(boolean b)</td><td>Enables or disables the button.</td></tr>
+    <tr><td>void setIcon(Icon b)</td><td>Sets an icon.</td></tr>
+    <tr><td>Icon getIcon()</td><td>Returns the icon.</td></tr>
+    <tr><td>void setMnemonic(int a)</td><td>Sets a keyboard shortcut.</td></tr>
+    <tr><td>void addActionListener(ActionListener a)</td><td>Adds an action listener.</td></tr>
+    <tr><td>boolean isSelected()<span class="tag add">not in slides</span></td><td>Returns true if this option is chosen.</td></tr>
+  </table></div>
+  <h3>Demo: pick one</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class RadioButtonExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("RadioButton Example");
+
+        JRadioButton r1 = new JRadioButton("Male");
+        r1.setBounds(50, 50, 100, 25);
+        JRadioButton r2 = new JRadioButton("Female");
+        r2.setBounds(50, 80, 100, 25);
+
+        ButtonGroup bg = new ButtonGroup();   // only one can be selected
+        bg.add(r1);
+        bg.add(r2);
+
+        JButton b = new JButton("Submit");
+        b.setBounds(50, 120, 100, 25);
+        b.addActionListener(e -> {
+            if (r1.isSelected()) JOptionPane.showMessageDialog(f, "You are Male");
+            if (r2.isSelected()) JOptionPane.showMessageDialog(f, "You are Female");
+        });
+
+        f.add(r1); f.add(r2); f.add(b);
+        f.setSize(300, 250);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 7 JComboBox -->
+<section class="topic" id="jcombobox">
+  <h2><span class="num">7</span>JComboBox</h2>
+  <h3>Definition</h3>
+  <p><code>JComboBox</code> shows a <strong>drop-down (popup) list of choices</strong>. The selected choice appears at the top. It's the Swing version of AWT's <code>Choice</code>.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code>.</li>
+    <li>It saves space compared with a list or a set of radio buttons. It can also be made editable so the user can type a value.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JComboBox extends JComponent
+        implements ItemSelectable, ListDataListener, ActionListener, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JComboBox()</td><td>Creates a combo box with a default (empty) data model.</td></tr>
+    <tr><td>JComboBox(Object[] items)</td><td>Creates a combo box containing the elements of the array.</td></tr>
+    <tr><td>JComboBox(Vector&lt;?&gt; items)</td><td>Creates a combo box containing the elements of the Vector.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void addItem(Object anObject)</td><td>Adds an item to the list.</td></tr>
+    <tr><td>void removeItem(Object anObject)</td><td>Removes an item from the list.</td></tr>
+    <tr><td>void removeAllItems()</td><td>Removes all items.</td></tr>
+    <tr><td>void setEditable(boolean b)</td><td>Sets whether the user can type their own value.</td></tr>
+    <tr><td>void addActionListener(ActionListener a)</td><td>Adds an ActionListener.</td></tr>
+    <tr><td>void addItemListener(ItemListener i)</td><td>Adds an ItemListener.</td></tr>
+    <tr><td>Object getSelectedItem()<span class="tag add">not in slides</span></td><td>Returns the chosen item.</td></tr>
+    <tr><td>int getSelectedIndex()<span class="tag add">not in slides</span></td><td>Returns the index of the chosen item.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ComboBoxExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("ComboBox Example");
+
+        String[] country = {"India", "Aus", "U.S.A", "England", "Newzealand"};
+        JComboBox cb = new JComboBox(country);
+        cb.setBounds(50, 50, 120, 25);
+
+        JLabel l = new JLabel();
+        l.setBounds(50, 130, 250, 25);
+
+        JButton b = new JButton("Show");
+        b.setBounds(190, 50, 80, 25);
+        b.addActionListener(e -> l.setText("Selected: " + cb.getSelectedItem()));
+
+        f.add(cb); f.add(b); f.add(l);
+        f.setSize(350, 250);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 8 JTable -->
+<section class="topic" id="jtable">
+  <h2><span class="num">8</span>JTable</h2>
+  <h3>Definition</h3>
+  <p><code>JTable</code> displays data in <strong>tabular form</strong>, made of rows and columns.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code>.</li>
+    <li>Cells are editable by default.</li>
+    <li>Put the table in a <code>JScrollPane</code> so the column headers show and the table can scroll.</li>
+  </ul>
+  <h3>Class declaration<span class="tag add">not in slides</span></h3>
+  <div class="decl">public class JTable extends JComponent implements TableModelListener, Scrollable, ...</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JTable()</td><td>Creates a table with empty cells.</td></tr>
+    <tr><td>JTable(Object[][] rows, Object[] columns)</td><td>Creates a table with the given data and column names.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>int getRowCount()</td><td>Returns the number of rows.</td></tr>
+    <tr><td>int getColumnCount()</td><td>Returns the number of columns.</td></tr>
+    <tr><td>Object getValueAt(int row, int col)</td><td>Returns the value in a cell.</td></tr>
+    <tr><td>void setValueAt(Object v, int row, int col)</td><td>Changes the value in a cell.</td></tr>
+    <tr><td>int getSelectedRow()</td><td>Returns the index of the selected row (-1 if none).</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class TableExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Table Example");
+
+        String[][] data = {
+            {"101", "Amit",  "670000"},
+            {"102", "Jai",   "780000"},
+            {"103", "Sachin","700000"}
+        };
+        String[] column = {"ID", "NAME", "SALARY"};
+
+        JTable jt = new JTable(data, column);
+        JScrollPane sp = new JScrollPane(jt);   // shows header + scroll
+
+        f.add(sp);
+        f.setSize(300, 200);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 9 JList -->
+<section class="topic" id="jlist">
+  <h2><span class="num">9</span>JList</h2>
+  <h3>Definition</h3>
+  <p><code>JList</code> shows a <strong>list of text items</strong>. You can set it so the user chooses <strong>one item or several</strong>.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code>.</li>
+    <li>Unlike a combo box, all items are visible at once (scrolling if there are many).</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JList extends JComponent implements Scrollable, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JList()</td><td>Creates a JList with an empty, read-only model.</td></tr>
+    <tr><td>JList(Object[] listData)</td><td>Creates a JList showing the elements of the array.</td></tr>
+    <tr><td>JList(ListModel&lt;E&gt; dataModel)</td><td>Creates a JList showing elements from the given model.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void addListSelectionListener(ListSelectionListener l)</td><td>Adds a listener that is notified whenever the selection changes.</td></tr>
+    <tr><td>int getSelectedIndex()</td><td>Returns the smallest selected index.</td></tr>
+    <tr><td>ListModel getModel()</td><td>Returns the data model that holds the items.</td></tr>
+    <tr><td>void setListData(Object[] listData)</td><td>Replaces the items with a new array.</td></tr>
+    <tr><td>Object getSelectedValue()<span class="tag add">not in slides</span></td><td>Returns the selected item.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ListExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("List Example");
+
+        String[] langs = {"C", "C++", "Java", "Python", "PHP"};
+        JList&lt;String&gt; list = new JList&lt;&gt;(langs);
+        list.setBounds(50, 30, 100, 100);
+
+        JLabel l = new JLabel("Pick a language");
+        l.setBounds(50, 150, 200, 25);
+
+        list.addListSelectionListener(e -> l.setText("You chose: " + list.getSelectedValue()));
+
+        f.add(list); f.add(l);
+        f.setSize(300, 250);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 10 JScrollBar -->
+<section class="topic" id="jscrollbar">
+  <h2><span class="num">10</span>JScrollBar</h2>
+  <h3>Definition</h3>
+  <p><code>JScrollBar</code> adds a standalone <strong>horizontal or vertical scrollbar</strong>. The user drags it to pick a value within a range.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code> and implements <code>Adjustable</code>.</li>
+    <li>Orientation is <code>JScrollBar.HORIZONTAL</code> or <code>JScrollBar.VERTICAL</code> (the default).</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JScrollBar extends JComponent implements Adjustable, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JScrollBar()</td><td>Creates a vertical scrollbar with default values.</td></tr>
+    <tr><td>JScrollBar(int orientation)</td><td>Creates a scrollbar with the given orientation.</td></tr>
+    <tr><td>JScrollBar(int orientation, int value, int extent, int min, int max)</td><td>Creates a scrollbar with the given orientation, start value, extent (thumb size), minimum and maximum.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>int getValue()</td><td>Returns the current value.</td></tr>
+    <tr><td>void setValue(int v)</td><td>Sets the current value.</td></tr>
+    <tr><td>int getMinimum() / getMaximum()</td><td>Returns the range limits.</td></tr>
+    <tr><td>void addAdjustmentListener(AdjustmentListener l)</td><td>Runs code whenever the scrollbar moves.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ScrollBarExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Scrollbar Example");
+
+        JLabel l = new JLabel("Value: 0");
+        l.setBounds(50, 20, 150, 25);
+
+        JScrollBar s = new JScrollBar(JScrollBar.HORIZONTAL, 0, 10, 0, 110);
+        s.setBounds(50, 60, 200, 20);
+        s.addAdjustmentListener(e -> l.setText("Value: " + s.getValue()));
+
+        f.add(l); f.add(s);
+        f.setSize(320, 180);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 11 Menus -->
+<section class="topic" id="jmenu">
+  <h2><span class="num">11</span>JMenuBar, JMenu and JMenuItem</h2>
+  <h3>Definition</h3>
+  <ul>
+    <li><strong>JMenuBar</strong> displays a menu bar at the top of a window or frame. It can hold several menus.</li>
+    <li><strong>JMenu</strong> is a <strong>pull-down menu</strong> shown from the menu bar (such as File or Edit). It inherits <code>JMenuItem</code>, so a menu can sit inside another menu as a submenu.</li>
+    <li><strong>JMenuItem</strong> is a simple labelled item inside a menu (such as Open or Save). Every item in a menu must be a JMenuItem or one of its subclasses.</li>
+  </ul>
+  <p><strong>Structure:</strong> JFrame → JMenuBar → JMenu → JMenuItem</p>
+  <h3>Class declarations<span class="tag add">not in slides</span></h3>
+  <div class="decl">public class JMenuBar  extends JComponent implements Accessible, MenuElement
+public class JMenu     extends JMenuItem  implements Accessible, MenuElement
+public class JMenuItem extends AbstractButton implements Accessible, MenuElement</div>
+  <h3>Constructors<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JMenuBar()</td><td>Creates an empty menu bar.</td></tr>
+    <tr><td>JMenu()</td><td>Creates a menu with no text.</td></tr>
+    <tr><td>JMenu(String s)</td><td>Creates a menu with the given title.</td></tr>
+    <tr><td>JMenuItem()</td><td>Creates an item with no text or icon.</td></tr>
+    <tr><td>JMenuItem(String text)</td><td>Creates an item with text.</td></tr>
+    <tr><td>JMenuItem(Icon icon)</td><td>Creates an item with an icon.</td></tr>
+    <tr><td>JMenuItem(String text, Icon icon)</td><td>Creates an item with text and an icon.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>JMenu JMenuBar.add(JMenu m)</td><td>Adds a menu to the menu bar.</td></tr>
+    <tr><td>JMenuItem JMenu.add(JMenuItem i)</td><td>Adds an item (or a submenu) to a menu.</td></tr>
+    <tr><td>void JMenu.addSeparator()</td><td>Adds a dividing line between items.</td></tr>
+    <tr><td>void JFrame.setJMenuBar(JMenuBar mb)</td><td>Attaches the menu bar to the frame.</td></tr>
+    <tr><td>void JMenuItem.addActionListener(ActionListener l)</td><td>Runs code when the item is clicked.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class MenuExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Menu Example");
+
+        JMenuBar mb = new JMenuBar();
+        JMenu file = new JMenu("File");
+        JMenu edit = new JMenu("Edit");
+        JMenu submenu = new JMenu("Recent");
+
+        JMenuItem open = new JMenuItem("Open");
+        JMenuItem save = new JMenuItem("Save");
+        JMenuItem exit = new JMenuItem("Exit");
+        exit.addActionListener(e -> System.exit(0));
+
+        submenu.add(new JMenuItem("notes.txt"));
+
+        file.add(open);
+        file.add(save);
+        file.add(submenu);        // menu inside a menu
+        file.addSeparator();
+        file.add(exit);
+
+        mb.add(file);
+        mb.add(edit);
+        f.setJMenuBar(mb);
+
+        f.setSize(400, 300);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 12 JProgressBar -->
+<section class="topic" id="jprogressbar">
+  <h2><span class="num">12</span>JProgressBar</h2>
+  <h3>Definition</h3>
+  <p><code>JProgressBar</code> displays the <strong>progress of a task</strong> (such as a download or file copy) as a bar that fills between a minimum and a maximum value.</p>
+  <ul><li>It inherits <code>JComponent</code>.</li></ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JProgressBar extends JComponent implements SwingConstants, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JProgressBar()</td><td>Creates a horizontal progress bar with no string text.</td></tr>
+    <tr><td>JProgressBar(int min, int max)</td><td>Creates a horizontal bar with the given minimum and maximum.</td></tr>
+    <tr><td>JProgressBar(int orient)</td><td>Creates a bar with the given orientation (<code>SwingConstants.VERTICAL</code> or <code>HORIZONTAL</code>).</td></tr>
+    <tr><td>JProgressBar(int orient, int min, int max)</td><td>Creates a bar with the given orientation, minimum and maximum.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setStringPainted(boolean b)</td><td>Sets whether the percentage text is shown on the bar.</td></tr>
+    <tr><td>void setString(String s)</td><td>Sets custom text to show on the bar.</td></tr>
+    <tr><td>void setOrientation(int orientation)</td><td>Sets VERTICAL or HORIZONTAL.</td></tr>
+    <tr><td>void setValue(int value)</td><td>Sets the current progress value.</td></tr>
+    <tr><td>int getValue()<span class="tag add">not in slides</span></td><td>Returns the current progress value.</td></tr>
+  </table></div>
+  <h3>Demo: fills up automatically</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class ProgressBarExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("ProgressBar Example");
+
+        JProgressBar pb = new JProgressBar(0, 100);
+        pb.setBounds(40, 40, 200, 30);
+        pb.setValue(0);
+        pb.setStringPainted(true);   // shows "45%"
+
+        f.add(pb);
+        f.setSize(300, 150);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+
+        // increase by 5 every 100 ms
+        Timer t = new Timer(100, e -> {
+            pb.setValue(pb.getValue() + 5);
+            if (pb.getValue() == 100) ((Timer) e.getSource()).stop();
+        });
+        t.start();
+    }
+}
+</pre></div>
+</section>
+
+<!-- 13 JTabbedPane -->
+<section class="topic" id="jtabbedpane">
+  <h2><span class="num">13</span>JTabbedPane</h2>
+  <h3>Definition</h3>
+  <p><code>JTabbedPane</code> lets the user <strong>switch between groups of components by clicking tabs</strong> that have a title or icon. Only one tab's content is visible at a time.</p>
+  <ul><li>It inherits <code>JComponent</code>. Tabs can be placed at the TOP (default), BOTTOM, LEFT or RIGHT.</li></ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JTabbedPane extends JComponent implements Serializable, Accessible, SwingConstants</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JTabbedPane()</td><td>Creates an empty tabbed pane with tabs at the top (<code>JTabbedPane.TOP</code>).</td></tr>
+    <tr><td>JTabbedPane(int tabPlacement)</td><td>Creates an empty tabbed pane with tabs at TOP, BOTTOM, LEFT or RIGHT.</td></tr>
+    <tr><td>JTabbedPane(int tabPlacement, int tabLayoutPolicy)</td><td>Also sets what happens when tabs don't fit: <code>WRAP_TAB_LAYOUT</code> or <code>SCROLL_TAB_LAYOUT</code>.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void addTab(String title, Component c)</td><td>Adds a tab with the given title and content.</td></tr>
+    <tr><td>void addTab(String title, Icon icon, Component c)</td><td>Adds a tab with a title, icon and content.</td></tr>
+    <tr><td>int getSelectedIndex()</td><td>Returns the index of the open tab.</td></tr>
+    <tr><td>void setSelectedIndex(int i)</td><td>Opens the tab at index i.</td></tr>
+    <tr><td>void removeTabAt(int i)</td><td>Removes a tab.</td></tr>
+    <tr><td>int getTabCount()</td><td>Returns the number of tabs.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+
+public class TabbedPaneExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("TabbedPane Example");
+
+        JPanel main = new JPanel();
+        main.add(new JTextArea(5, 20));
+        JPanel visit = new JPanel();
+        visit.add(new JLabel("Visit page"));
+        JPanel help = new JPanel();
+        help.add(new JLabel("Help page"));
+
+        JTabbedPane tp = new JTabbedPane();
+        tp.setBounds(30, 30, 260, 180);
+        tp.addTab("main", main);
+        tp.addTab("visit", visit);
+        tp.addTab("help", help);
+
+        f.add(tp);
+        f.setSize(340, 280);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 14 JDialog -->
+<section class="topic" id="jdialog">
+  <h2><span class="num">14</span>JDialog</h2>
+  <h3>Definition</h3>
+  <p><code>JDialog</code> is a <strong>top-level window with a border and title</strong>, used to show a message or take input from the user.</p>
+  <ul>
+    <li>It inherits AWT's <code>Dialog</code> class.</li>
+    <li>Unlike JFrame, it has <strong>no maximize or minimize buttons</strong>.</li>
+    <li><strong>Modal</strong> dialogs block the parent window until they close. <strong>Modeless</strong> dialogs don't.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JDialog extends Dialog implements WindowConstants, Accessible, RootPaneContainer</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JDialog()</td><td>Creates a modeless dialog with no title and no owner frame.</td></tr>
+    <tr><td>JDialog(Frame owner)</td><td>Creates a modeless dialog owned by the given frame, with an empty title.</td></tr>
+    <tr><td>JDialog(Frame owner, String title, boolean modal)</td><td>Creates a dialog with the given owner, title and modality.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setTitle(String t)</td><td>Sets the dialog's title.</td></tr>
+    <tr><td>void setModal(boolean b)</td><td>Makes the dialog modal or modeless.</td></tr>
+    <tr><td>void setSize(int w, int h)</td><td>Sets the dialog's size.</td></tr>
+    <tr><td>void setVisible(boolean b)</td><td>Shows or hides the dialog.</td></tr>
+    <tr><td>void dispose()</td><td>Closes the dialog and frees its resources.</td></tr>
+  </table></div>
+  <h3>Demo: button opens a modal dialog</h3>
+<div class="code"><pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class DialogExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Main Window");
+        JButton open = new JButton("Open Dialog");
+        open.setBounds(80, 60, 140, 30);
+
+        open.addActionListener(e -> {
+            JDialog d = new JDialog(f, "Dialog Example", true);   // modal
+            d.setLayout(new FlowLayout());
+            JButton ok = new JButton("OK");
+            ok.addActionListener(ev -> d.dispose());
+            d.add(new JLabel("Click OK to continue."));
+            d.add(ok);
+            d.setSize(250, 120);
+            d.setVisible(true);
+        });
+
+        f.add(open);
+        f.setSize(300, 200);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 15 JPanel -->
+<section class="topic" id="jpanel">
+  <h2><span class="num">15</span>JPanel</h2>
+  <h3>Definition</h3>
+  <p><code>JPanel</code> is the <strong>simplest lightweight container</strong>. It provides space where an application can attach and group other components.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code> and has <strong>no title bar</strong> or decorations, unlike JFrame.</li>
+    <li>It can't be shown on its own. It's added inside a JFrame or another JPanel.</li>
+    <li>It's used to build complex layouts by grouping related components and giving each group its own layout manager (FlowLayout, GridLayout, BorderLayout).</li>
+    <li>Its default layout is <strong>FlowLayout</strong>.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JPanel extends JComponent implements Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JPanel()</td><td>Creates a panel with double buffering and FlowLayout.</td></tr>
+    <tr><td>JPanel(boolean isDoubleBuffered)</td><td>Creates a panel with FlowLayout and the given buffering strategy.</td></tr>
+    <tr><td>JPanel(LayoutManager layout)</td><td>Creates a panel with the given layout manager.</td></tr>
+    <tr><td>JPanel(LayoutManager layout, boolean isDoubleBuffered)</td><td>Creates a panel with the given layout and buffering.</td></tr>
+    <tr><td>JPanel(ComponentOrientation o, boolean isDoubleBuffered)<span class="tag warn">not in real Java</span></td><td>Orientation and buffering.</td></tr>
+  </table></div>
+  <h3>Methods<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>Component add(Component c)</td><td>Adds a component to the panel.</td></tr>
+    <tr><td>void setLayout(LayoutManager m)</td><td>Changes the layout manager.</td></tr>
+    <tr><td>void setBackground(Color c)</td><td>Sets the panel's background colour.</td></tr>
+    <tr><td>void setBorder(Border b)</td><td>Adds a border (e.g. <code>BorderFactory.createTitledBorder("Login")</code>).</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class PanelExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Panel Example");
+
+        JPanel panel = new JPanel();
+        panel.setBounds(40, 80, 200, 200);
+        panel.setBackground(Color.GRAY);
+
+        JButton b1 = new JButton("Button 1");
+        b1.setBackground(Color.YELLOW);
+        JButton b2 = new JButton("Button 2");
+        b2.setBackground(Color.GREEN);
+
+        panel.add(b1);       // buttons go into the panel
+        panel.add(b2);
+        f.add(panel);        // panel goes into the frame
+
+        f.setSize(400, 400);
+        f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 16 JFrame -->
+<section class="topic" id="jframe">
+  <h2><span class="num">16</span>JFrame</h2>
+  <h3>Definition</h3>
+  <p><code>javax.swing.JFrame</code> is a <strong>top-level container</strong> that inherits <code>java.awt.Frame</code>. It is the <strong>main window</strong> of a GUI, the one you add labels, buttons and text fields to.</p>
+  <ul>
+    <li>Unlike AWT's Frame, JFrame can hide or close itself with <code>setDefaultCloseOperation(int)</code>. This is what sets it apart from Frame.</li>
+  </ul>
+  <h3>Advantages and uses</h3>
+  <ul>
+    <li><strong>Desktop applications:</strong> provides the window framework for desktop apps.</li>
+    <li><strong>GUIs:</strong> the main window that holds buttons, labels, fields and panels.</li>
+    <li><strong>Application windows:</strong> shows menus, toolbars, status bars and other controls.</li>
+    <li><strong>Dialog boxes and pop-ups:</strong> used to show alerts and messages or to ask for input.</li>
+    <li><strong>Data visualization:</strong> displays charts, graphs, plots and diagrams.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JFrame extends Frame implements WindowConstants, Accessible, RootPaneContainer</div>
+  <h3>Nested class and fields</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Modifier / Type</th><th>Name</th><th>Description</th></tr>
+    <tr><td>protected class</td><td><code>JFrame.AccessibleJFrame</code></td><td>Accessibility support for JFrame.</td></tr>
+    <tr><td>protected AccessibleContext</td><td><code>accessibleContext</code></td><td>The accessible context property.</td></tr>
+    <tr><td>static int</td><td><code>EXIT_ON_CLOSE</code></td><td>Exits the application when the window is closed.</td></tr>
+    <tr><td>protected JRootPane</td><td><code>rootPane</code></td><td>Manages the contentPane, optional menuBar and glassPane.</td></tr>
+    <tr><td>protected boolean</td><td><code>rootPaneCheckingEnabled</code></td><td>If true, calls to add() and setLayout() are forwarded to the contentPane.</td></tr>
+  </table></div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JFrame()</td><td>Creates a new frame that is initially invisible.</td></tr>
+    <tr><td>JFrame(String title)</td><td>Creates an invisible frame with the given title.</td></tr>
+    <tr><td>JFrame(GraphicsConfiguration gc)</td><td>Creates a frame on the given screen device, with a blank title.</td></tr>
+    <tr><td>JFrame(String title, GraphicsConfiguration gc)</td><td>Creates a frame with a title on the given screen device.</td></tr>
+    <tr><td>JFrame(Frame owner)<span class="tag warn">not in real Java</span></td><td>Frame with an owner frame.</td></tr>
+    <tr><td>JFrame(String title, Frame owner)<span class="tag warn">not in real Java</span></td><td>Frame with a title and owner.</td></tr>
+    <tr><td>JFrame(String title, boolean resizable)<span class="tag warn">not in real Java</span></td><td>Title and resizable.</td></tr>
+    <tr><td>JFrame(String, boolean resizable, boolean closeable)<span class="tag warn">not in real Java</span></td><td>Also closeable.</td></tr>
+    <tr><td>JFrame(String, boolean, boolean, boolean maximizable)<span class="tag warn">not in real Java</span></td><td>Also maximizable.</td></tr>
+    <tr><td>JFrame(String, boolean, boolean, boolean, boolean iconifiable)<span class="tag warn">not in real Java</span></td><td>Also iconifiable.</td></tr>
+  </table></div>
+  <div class="note">The constructors with resizable, closeable, maximizable and iconifiable belong to <code>JInternalFrame</code>, not JFrame. On a JFrame, use <code>setResizable(false)</code> instead.</div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>protected void addImpl(Component c, Object constraints, int index)</td><td>Adds the given child component.</td></tr>
+    <tr><td>protected JRootPane createRootPane()</td><td>Called by the constructors to create the default rootPane.</td></tr>
+    <tr><td>protected void frameInit()</td><td>Called by the constructors to initialise the JFrame.</td></tr>
+    <tr><td>void setContentPane(Container c)</td><td>Sets the contentPane, where GUI components are added.</td></tr>
+    <tr><td>static void setDefaultLookAndFeelDecorated(boolean b)</td><td>Hints whether new JFrames should get their borders and title bar from the current look and feel.</td></tr>
+    <tr><td>void setIconImage(Image image)</td><td>Sets the window icon.</td></tr>
+    <tr><td>void setJMenuBar(JMenuBar menubar)</td><td>Sets the menu bar.</td></tr>
+    <tr><td>void setLayeredPane(JLayeredPane lp)</td><td>Sets the layeredPane property.</td></tr>
+    <tr><td>JRootPane getRootPane()</td><td>Returns the rootPane object.</td></tr>
+    <tr><td>void setDefaultCloseOperation(int op)<span class="tag add">not in slides</span></td><td>Sets what happens when X is clicked: <code>EXIT_ON_CLOSE</code>, <code>DISPOSE_ON_CLOSE</code>, <code>HIDE_ON_CLOSE</code> or <code>DO_NOTHING_ON_CLOSE</code>.</td></tr>
+    <tr><td>void setLocationRelativeTo(Component c)<span class="tag add">not in slides</span></td><td>Passing <code>null</code> centres the window on screen.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.awt.FlowLayout;
+import javax.swing.*;
+
+public class JFrameExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("JFrame Example");
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        JLabel label = new JLabel("JFrame By Example");
+        JButton button = new JButton();
+        button.setText("Button");
+        panel.add(label);
+        panel.add(button);
+
+        frame.add(panel);
+        frame.setSize(200, 300);
+        frame.setLocationRelativeTo(null);                       // centre on screen
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // exit on X
+        frame.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 17 JScrollPane -->
+<section class="topic" id="jscrollpane">
+  <h2><span class="num">17</span>JScrollPane</h2>
+  <h3>Definition</h3>
+  <p><code>JScrollPane</code> provides a <strong>scrollable view of another component</strong>, usually a JTextArea, JTable or JList. When the content is bigger than the visible area, scroll bars appear so the user can see all of it.</p>
+  <ul>
+    <li>Scroll bar policies: <code>AS_NEEDED</code> (default), <code>ALWAYS</code> or <code>NEVER</code>.</li>
+  </ul>
+  <h3>Class declaration<span class="tag add">not in slides</span></h3>
+  <div class="decl">public class JScrollPane extends JComponent implements ScrollPaneConstants, Accessible</div>
+  <h3>Constructors</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JScrollPane()</td><td>Creates an empty scroll pane. Both scroll bars appear when needed.</td></tr>
+    <tr><td>JScrollPane(Component view)</td><td>Creates a scroll pane showing the given component, with scroll bars when its content overflows.</td></tr>
+    <tr><td>JScrollPane(int vsbPolicy, int hsbPolicy)</td><td>Creates an empty scroll pane with the given vertical and horizontal scroll bar policies.</td></tr>
+    <tr><td>JScrollPane(Component view, int vsbPolicy, int hsbPolicy)</td><td>Shows the given component with the given policies.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setColumnHeaderView(Component c)</td><td>Sets a component as the column header.</td></tr>
+    <tr><td>void setRowHeaderView(Component c)</td><td>Sets a component as the row header.</td></tr>
+    <tr><td>void setCorner(String key, Component c)</td><td>Puts a component in one of the corners.</td></tr>
+    <tr><td>Component getCorner(String key)</td><td>Returns the component in the given corner.</td></tr>
+    <tr><td>void setViewportView(Component c)</td><td>Sets the component to be scrolled.</td></tr>
+    <tr><td>void setHorizontalScrollBarPolicy(int p)<span class="tag add">not in slides</span></td><td>Sets when the horizontal bar appears.</td></tr>
+    <tr><td>void setVerticalScrollBarPolicy(int p)<span class="tag add">not in slides</span></td><td>Sets when the vertical bar appears.</td></tr>
+  </table></div>
+  <h3>Demo</h3>
+<div class="code"><pre>
+import java.awt.FlowLayout;
+import javax.swing.*;
+
+public class JScrollPaneExample {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Scroll Pane Example");
+        frame.setLayout(new FlowLayout());
+
+        JTextArea textArea = new JTextArea(10, 20);
+        JScrollPane scroll = new JScrollPane(textArea);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        frame.add(scroll);
+        frame.setSize(350, 280);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
+</pre></div>
+  <div class="note">The slide's code imports <code>javax.swing.JtextArea</code> with a lowercase t. That won't compile. The correct name is <code>JTextArea</code>.</div>
+</section>
+
+<!-- 18 JComponent -->
+<section class="topic" id="jcomponent">
+  <h2><span class="num">18</span>JComponent</h2>
+  <h3>Definition</h3>
+  <p><code>JComponent</code> is the <strong>base class of all Swing components except the top-level containers</strong>.</p>
+  <ul>
+    <li>Swing components whose names start with "J" descend from JComponent, for example JButton, JScrollPane, JPanel and JTable.</li>
+    <li><strong>JFrame and JDialog do not</strong> inherit JComponent, because they are top-level containers. They extend AWT's Frame and Dialog.</li>
+    <li>JComponent extends <code>Container</code>, which extends <code>Component</code>. That's why every Swing component can hold other components.</li>
+    <li>It's an <strong>abstract</strong> class. You extend it to make your own custom component.</li>
+  </ul>
+  <h3>Class declaration<span class="tag add">not in slides</span></h3>
+  <div class="decl">public abstract class JComponent extends Container implements Serializable, ...</div>
+  <h3>Fields</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Modifier / Type</th><th>Field</th><th>Description</th></tr>
+    <tr><td>protected AccessibleContext</td><td><code>accessibleContext</code></td><td>The AccessibleContext of this component.</td></tr>
+    <tr><td>protected EventListenerList</td><td><code>listenerList</code></td><td>A list of event listeners for this component.</td></tr>
+    <tr><td>static String</td><td><code>TOOL_TIP_TEXT_KEY</code></td><td>Key for the tooltip text shown when the cursor is over the component.</td></tr>
+    <tr><td>protected ComponentUI</td><td><code>ui</code></td><td>The look-and-feel (UI delegate) for this component.</td></tr>
+    <tr><td>static int</td><td><code>UNDEFINED_CONDITION</code></td><td>Constant meaning no condition is defined.</td></tr>
+    <tr><td>static int</td><td><code>WHEN_ANCESTOR_OF_FOCUSED_COMPONENT</code></td><td>Key action fires when this component or one of its children has focus.</td></tr>
+    <tr><td>static int</td><td><code>WHEN_FOCUSED</code></td><td>Key action fires when this component has focus.</td></tr>
+    <tr><td>static int</td><td><code>WHEN_IN_FOCUSED_WINDOW</code></td><td>Key action fires when this component is in the focused window.</td></tr>
+  </table></div>
+  <h3>Constructor</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JComponent()</td><td>Default constructor.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>void setActionMap(ActionMap am)</td><td>Sets the ActionMap.</td></tr>
+    <tr><td>void setBackground(Color bg)</td><td>Sets the background colour.</td></tr>
+    <tr><td>void setForeground(Color fg)</td><td>Sets the foreground (text) colour.</td></tr>
+    <tr><td>void setFont(Font font)</td><td>Sets the font.</td></tr>
+    <tr><td>void setMaximumSize(Dimension d)</td><td>Sets the maximum size.</td></tr>
+    <tr><td>void setMinimumSize(Dimension d)</td><td>Sets the minimum size.</td></tr>
+    <tr><td>protected void setUI(ComponentUI newUI)</td><td>Sets the look-and-feel delegate.</td></tr>
+    <tr><td>void setVisible(boolean aFlag)</td><td>Shows or hides the component.</td></tr>
+    <tr><td>String getToolTipText(MouseEvent e)</td><td>Returns the tooltip text for a mouse event.</td></tr>
+    <tr><td>Container getTopLevelAncestor()</td><td>Returns the top-level window containing this component, or null.</td></tr>
+    <tr><td>TransferHandler getTransferHandler()</td><td>Returns the drag-and-drop transfer handler.</td></tr>
+    <tr><td>protected void paintComponent(Graphics g)<span class="tag add">not in slides</span></td><td>Override this to draw your own component.</td></tr>
+  </table></div>
+  <h3>Demo: a custom component</h3>
+<div class="code"><pre>
+import javax.swing.*;
+import java.awt.*;
+
+class MyCircle extends JComponent {
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.ORANGE);
+        g.fillOval(20, 20, 120, 120);
+        g.setColor(Color.BLACK);
+        g.drawString("JComponent", 45, 85);
+    }
+}
+
+public class JComponentExample {
+    public static void main(String[] args) {
+        JFrame f = new JFrame("JComponent Example");
+        MyCircle c = new MyCircle();
+        c.setToolTipText("I am a custom JComponent");
+        f.add(c);
+        f.setSize(200, 200);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setVisible(true);
+    }
+}
+</pre></div>
+</section>
+
+<!-- 19 JLayeredPane -->
+<section class="topic" id="jlayeredpane">
+  <h2><span class="num">19</span>JLayeredPane</h2>
+  <h3>Definition</h3>
+  <p><code>JLayeredPane</code> adds <strong>depth</strong> to a Swing container. It gives components a <strong>third dimension (z-order)</strong> and divides that depth into separate layers, so components on higher layers are drawn on top of lower ones.</p>
+  <ul>
+    <li>It inherits <code>JComponent</code>.</li>
+    <li>Built-in layers, from bottom to top: <code>DEFAULT_LAYER</code>, <code>PALETTE_LAYER</code>, <code>MODAL_LAYER</code>, <code>POPUP_LAYER</code>, <code>DRAG_LAYER</code>.</li>
+    <li>Every JFrame already contains one, reachable with <code>getLayeredPane()</code>.</li>
+  </ul>
+  <h3>Class declaration</h3>
+  <div class="decl">public class JLayeredPane extends JComponent implements Accessible</div>
+  <h3>Constructor</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Constructor</th><th>Description</th></tr>
+    <tr><td>JLayeredPane()</td><td>Creates a new JLayeredPane.</td></tr>
+  </table></div>
+  <h3>Methods</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td>int getIndexOf(Component c)</td><td>Returns the index of the component.</td></tr>
+    <tr><td>int getLayer(Component c)</td><td>Returns the layer the component is on.</td></tr>
+    <tr><td>int getPosition(Component c)</td><td>Returns the component's position within its layer.</td></tr>
+    <tr><td>void setLayer(Component c, int layer)<span class="tag add">not in slides</span></td><td>Moves a component to another layer.</td></tr>
+  </table></div>
+  <h3>Demo: three overlapping buttons</h3>
+<div class="code"><pre>
+import javax.swing.*;
+import java.awt.*;
+
+public class LayeredPaneExample extends JFrame {
+    public LayeredPaneExample() {
+        super("LayeredPane Example");
+        setSize(220, 220);
+        JLayeredPane pane = getLayeredPane();
+
+        JButton top = new JButton("Top");
+        top.setBackground(Color.WHITE);
+        top.setBounds(20, 20, 100, 100);
+
+        JButton middle = new JButton("Middle");
+        middle.setBackground(Color.RED);
+        middle.setBounds(40, 40, 100, 100);
+
+        JButton bottom = new JButton("Bottom");
+        bottom.setBackground(Color.CYAN);
+        bottom.setBounds(60, 60, 100, 100);
+
+        pane.add(bottom, Integer.valueOf(1));   // lowest layer
+        pane.add(middle, Integer.valueOf(2));
+        pane.add(top,    Integer.valueOf(3));   // drawn on top
+
+        System.out.println("Layer of top: " + pane.getLayer(top));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new LayeredPaneExample();
+    }
+}
+</pre></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
