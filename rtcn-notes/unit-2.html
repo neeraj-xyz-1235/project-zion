@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Routing Protocols</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">RTCN Notes</a></div>
+  <div class="sub">Unit 2 · Routing Fundamentals &amp; Protocols</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a class="on" href="unit-2.html">Unit 2</a>
+    <a href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#router">1. Router</a></li>
+    <li><a href="#hub-switch-router">2. Hub vs Switch vs Router</a></li>
+    <li><a href="#role">3. Role of Routers</a></li>
+    <li><a href="#architecture">4. Router Architecture</a></li>
+    <li><a href="#routing">5. Routing</a></li>
+    <li><a href="#working">6. How Routers Work</a></li>
+    <li><a href="#table">7. Routing Table</a></li>
+    <li><a href="#static-dynamic">8. Static vs Dynamic Routing</a></li>
+    <li><a href="#algorithms">9. Routing Algorithms</a></li>
+    <li><a href="#protocols">10. Routing Protocols</a></li>
+    <li><a href="#rip">11. RIP</a></li>
+    <li><a href="#ospf">12. OSPF</a></li>
+    <li><a href="#eigrp">13. EIGRP</a></li>
+    <li><a href="#bgp">14. BGP</a></li>
+    <li><a href="#compare">15. Comparison &amp; Applications</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 2: Routing Fundamentals and Protocols</h1>
+  <p>What routers do and how they're built, routing tables, the families of routing algorithms, and the four main protocols: RIP, OSPF, EIGRP and BGP.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="router">
+  <h2><span class="num">1</span>Router</h2>
+  <div class="def">A <strong>router</strong> is a specialised network device that <strong>forwards data packets between different networks</strong>, based on the <strong>destination IP address</strong> in each packet. It works at the <strong>Network Layer (Layer 3)</strong> of the OSI model.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Connects <strong>multiple distinct networks</strong> (e.g. a home network to the Internet, or offices in different cities). Switches and hubs work only inside one LAN.</li>
+    <li>Reads the packet header and checks its <strong>routing table</strong> to choose the <strong>next hop</strong>.</li>
+    <li>Picks the most efficient path for each packet.</li>
+    <li>Also handles <strong>fragmentation</strong>, <strong>error detection</strong>, and security such as <strong>ACLs</strong> (access control lists) and traffic filtering.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="hub-switch-router">
+  <h2><span class="num">2</span>Router vs Switch vs Hub</h2>
+  <ul>
+    <li><strong>Hub (Layer 1):</strong> a repeater that <strong>broadcasts</strong> every signal to all devices, with no filtering. This causes collisions, so hubs are now obsolete.</li>
+    <li><strong>Switch (Layer 2):</strong> forwards frames <strong>only to the destination</strong> device using <strong>MAC addresses</strong>. Each port is its own collision domain.</li>
+    <li><strong>Router (Layer 3):</strong> routes packets <strong>between networks</strong> using <strong>IP addresses</strong> and routing protocols. It often also provides firewall, NAT and DHCP.</li>
+  </ul>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Parameter</th><th>Hub</th><th>Switch</th><th>Router</th></tr>
+    <tr><td>OSI layer</td><td>Physical (L1)</td><td>Data link (L2)</td><td>Network (L3)</td></tr>
+    <tr><td>Addressing</td><td>None (broadcast)</td><td>MAC address</td><td>IP address</td></tr>
+    <tr><td>Traffic handling</td><td>Broadcasts all frames</td><td>Forwards frames selectively</td><td>Routes packets between networks</td></tr>
+    <tr><td>Collision domains</td><td>One</td><td>One per port</td><td>One per interface</td></tr>
+    <tr><td>Broadcast domains</td><td>One</td><td>One</td><td>Many (it segments them)</td></tr>
+    <tr><td>Intelligence</td><td>None</td><td>Low (MAC learning)</td><td>High (routing algorithms)</td></tr>
+    <tr><td>Security</td><td>None</td><td>Basic (VLANs)</td><td>Advanced (ACLs, NAT, firewall)</td></tr>
+    <tr><td>Typical use</td><td>Legacy, small networks</td><td>LANs</td><td>WANs, internetworks</td></tr>
+  </table></div>
+  <div class="tip"><strong>Remember:</strong> Hub = 1 (shouts to all) · Switch = 2 (knows MACs) · Router = 3 (knows IPs and networks).</div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="role">
+  <h2><span class="num">3</span>Role of Routers in Networks</h2>
+  <ul>
+    <li><strong>Traffic director:</strong> like a traffic police officer at each network boundary, sending every packet the right way.</li>
+    <li><strong>Maintains routing tables</strong> and picks the best route using metrics such as hop count, bandwidth, delay or policy.</li>
+    <li><strong>Fault tolerance:</strong> can choose new routes dynamically when a link fails.</li>
+    <li><strong>Segmentation and security:</strong> isolates broadcast domains and applies traffic policies.</li>
+    <li>Supports <strong>VPNs</strong> and <strong>QoS</strong> (Quality of Service) in enterprises.</li>
+  </ul>
+  <h3>Example: router in a computer lab</h3>
+<div class="tree">Internet
+   │ ISP link
+ISP Modem
+   │ WAN port
+Router ──── File Server PC
+   │   └─── Printer
+   │ LAN port
+Lab-1 Switch
+   ├── PC 1
+   └── PC 2</div>
+  <ul>
+    <li><strong>ISP modem:</strong> modulates and demodulates signals. It's the gateway to the ISP.</li>
+    <li><strong>Router:</strong> its WAN port goes to the modem, and its LAN port goes to the switch. It routes between the Internet and the lab, and manages IP addresses.</li>
+    <li><strong>Lab-1 switch:</strong> connects the PCs. PC-to-PC traffic stays on the switch and never reaches the router.</li>
+    <li><strong>Traffic flow:</strong> inbound goes Internet → modem → router WAN → router LAN → switch → PC. Outbound is the reverse.</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="architecture">
+  <h2><span class="num">4</span>Router Architecture</h2>
+  <div class="def">A router's functions are split into two parts: the <strong>Control Plane</strong> (the "brain", which decides routes) and the <strong>Data Plane</strong> (the "muscle", which moves packets).</div>
+<div class="tree">                 CONTROL PLANE
+              ┌──────────────────┐
+              │ Routing Processor│  runs routing protocols,
+              │ (routing decisions)│  builds the routing table
+              └────────┬─────────┘
+                       │ forwarding table
+   DATA PLANE          ▼
+ Input ports ──▶ Switching fabric ──▶ Output ports
+ (receive, check     (internal         (queue, schedule,
+  header)             highway)          send out)</div>
+  <h3>Data plane components</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Component</th><th>Job</th><th>Post office analogy</th></tr>
+    <tr><td><strong>Input ports</strong></td><td>Receive packets and check headers to make sure the data is intact</td><td>Where mail arrives</td></tr>
+    <tr><td><strong>Switching fabric</strong></td><td>Moves packets from input ports to the right output ports, fast</td><td>The conveyor belt</td></tr>
+    <tr><td><strong>Output ports</strong></td><td>Queue and schedule packets on the way out</td><td>Delivery bins</td></tr>
+  </table></div>
+  <h3>Control plane</h3>
+  <ul>
+    <li>The <strong>routing processor</strong> runs routing protocols, updates routing tables, and lets administrators configure and monitor the router.</li>
+    <li>Analogy: the <strong>supervisor</strong> who decides which route each letter takes.</li>
+  </ul>
+  <p><strong>Working together:</strong> the control plane works out the best routes once. The data plane then forwards each packet quickly using that result, without deciding again every time. This split lets routers handle very high data rates.</p>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="routing">
+  <h2><span class="num">5</span>Routing</h2>
+  <div class="def"><strong>Routing</strong> is the process by which routers <strong>determine the path</strong> that packets take from source to destination across interconnected networks. It has two functions: <strong>path determination</strong> (finding the best route) and <strong>packet forwarding</strong> (sending the packet along it).</div>
+  <ul>
+    <li>It lets devices on different networks communicate as if they were on the same network, by relaying packets through intermediate routers.</li>
+    <li>Small networks can use <strong>fixed paths</strong>. Large networks need routes that <strong>adapt</strong> to congestion and failures.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="working">
+  <h2><span class="num">6</span>How Do Routers Work?</h2>
+<div class="tree">Source device → creates packet (adds IP header) → Router
+   → reads destination IP → consults routing table → selects best path
+   → forwards packet → next router or destination</div>
+  <ol>
+    <li><strong>Receive the packet:</strong> data is split into packets. Each has a source IP, destination IP, payload and other header fields.</li>
+    <li><strong>Examine the destination address</strong> in the header.</li>
+    <li><strong>Consult the routing table</strong>, which holds directly connected networks, routes learned from other routers, and metrics (cost or distance).</li>
+    <li><strong>Make a routing decision:</strong> choose the next hop, which may be a local device, another router, or the destination itself. Distance vector or link state algorithms help with this.</li>
+    <li><strong>Forward the packet</strong> out of the right interface.</li>
+    <li><strong>Handle special cases:</strong>
+      <ul>
+        <li><strong>Fragmentation:</strong> split packets that are too large for the next network.</li>
+        <li><strong>NAT:</strong> change private IPs to a public IP for the Internet.</li>
+        <li><strong>Firewall rules:</strong> block unauthorised or harmful traffic.</li>
+      </ul>
+    </li>
+    <li><strong>Reach the destination:</strong> this repeats hop by hop, and the receiver reassembles the packets.</li>
+  </ol>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="table">
+  <h2><span class="num">7</span>Routing Table</h2>
+  <div class="def">A <strong>routing table</strong> is a data structure stored in a router that lists <strong>destination networks and how to reach them</strong>. The router uses it to choose the next hop for every packet. It can be built <strong>manually (static)</strong> or <strong>by routing protocols (dynamic)</strong>.</div>
+  <h3>Structure (fields of each entry)</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Field</th><th>Meaning</th></tr>
+    <tr><td><strong>Destination network</strong></td><td>Network or subnet the route covers, e.g. 192.168.10.0/24</td></tr>
+    <tr><td><strong>Next hop</strong></td><td>IP address of the next router to send to</td></tr>
+    <tr><td><strong>Interface</strong></td><td>Outgoing port, e.g. GigabitEthernet0/1</td></tr>
+    <tr><td><strong>Metric</strong></td><td>Cost of the route (hop count, delay, bandwidth). Lower is better.</td></tr>
+    <tr><td><strong>Route source</strong></td><td>How it was learned: static, connected, OSPF, BGP …</td></tr>
+  </table></div>
+  <h3>Example routing table</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Destination</th><th>Next hop</th><th>Interface</th><th>Metric</th><th>Source</th></tr>
+    <tr><td>192.168.1.0/24</td><td>192.168.10.2</td><td>Gi0/0</td><td>1</td><td>Static</td></tr>
+    <tr><td>192.168.2.0/24</td><td>192.168.20.1</td><td>Gi0/1</td><td>2</td><td>OSPF</td></tr>
+    <tr><td>10.0.0.0/8</td><td>10.10.10.1</td><td>Gi0/2</td><td>3</td><td>BGP</td></tr>
+    <tr><td>172.16.0.0/16</td><td>Directly connected</td><td>Gi0/3</td><td>0</td><td>Connected</td></tr>
+    <tr><td>0.0.0.0/0</td><td>192.168.1.1</td><td>Gi0/0</td><td>5</td><td>Default</td></tr>
+  </table></div>
+  <h3>Example lookup: packet to 192.168.2.45</h3>
+  <ol>
+    <li>Extract the destination IP <code>192.168.2.45</code>.</li>
+    <li>Find the <strong>longest prefix match</strong>: <code>192.168.2.0/24</code>.</li>
+    <li>Next hop = <code>192.168.20.1</code>.</li>
+    <li>Forward out of <code>Gi0/1</code>.</li>
+  </ol>
+  <p>This is called <strong>IP forwarding</strong> or <strong>route lookup</strong>. <code>0.0.0.0/0</code> is the <strong>default route</strong>, used when nothing else matches.</p>
+  <div class="tip"><strong>Longest prefix match:</strong> if several entries match, the one with the longest prefix (the most specific route) wins.</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="static-dynamic">
+  <h2><span class="num">8</span>Static vs Dynamic Routing</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Static Routing</th><th>Dynamic Routing</th></tr>
+    <tr><td>Routes <strong>configured manually</strong> by the administrator</td><td>Routes <strong>learned automatically</strong> through routing protocols</td></tr>
+    <tr><td>Doesn't adapt to failures or changes</td><td>Adapts to topology changes</td></tr>
+    <tr><td>Low overhead (no protocol traffic)</td><td>More CPU, memory and bandwidth</td></tr>
+    <tr><td>Good for small, stable networks</td><td>Good for large or changing networks</td></tr>
+    <tr><td>More secure (nothing advertised)</td><td>Examples: RIP (distance vector), OSPF (link state), BGP (path vector)</td></tr>
+  </table></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="algorithms">
+  <h2><span class="num">9</span>Routing Algorithms</h2>
+  <div class="def"><strong>Routing algorithms</strong> are techniques for finding the <strong>best path</strong> for packets from source to destination, by criteria such as shortest distance, lowest cost or minimum delay. They are the basis of routing protocols.</div>
+  <h3>Key concepts</h3>
+  <ul>
+    <li><strong>Path:</strong> the sequence of nodes a packet passes through.</li>
+    <li><strong>Metric:</strong> the value used to judge the best path (distance, cost, delay).</li>
+    <li><strong>Convergence:</strong> the state when all routers have <strong>consistent</strong> routing information.</li>
+  </ul>
+  <h3>Types</h3>
+<div class="tree">Routing algorithms
+├── Static (manual)
+└── Dynamic (adaptive)
+    ├── Distance Vector  → RIP
+    ├── Link State       → OSPF
+    ├── Path Vector      → BGP
+    └── Hybrid           → EIGRP
+Others: Flooding, Hierarchical routing</div>
+  <h3>a) Distance vector routing</h3>
+  <ul>
+    <li>Each router keeps a table of <strong>distances to every destination</strong>.</li>
+    <li>It shares its table <strong>only with immediate neighbours</strong>, <strong>periodically</strong>.</li>
+    <li>It picks the route with the smallest distance (Bellman-Ford).</li>
+    <li>Example: <strong>RIP</strong>. Simple, but converges slowly and can form loops (<strong>count-to-infinity</strong>).</li>
+  </ul>
+  <h3>b) Link state routing</h3>
+  <ul>
+    <li>Each router keeps a <strong>complete map (topology)</strong> of the network.</li>
+    <li>It shares <strong>link state information with all routers</strong> (flooding).</li>
+    <li>Computes routes with <strong>Dijkstra's shortest path algorithm</strong>.</li>
+    <li>Example: <strong>OSPF</strong>. Converges fast and is reliable, but needs more memory and CPU.</li>
+  </ul>
+  <h3>c) Path vector routing</h3>
+  <ul>
+    <li>Keeps the <strong>full path</strong> (the list of ASes) to each destination, so loops can be spotted and avoided.</li>
+    <li>Used <strong>between autonomous systems</strong> (inter-domain).</li>
+    <li>Example: <strong>BGP</strong>. Scalable and loop-free, but complex and slower to update.</li>
+  </ul>
+  <h3>Other types</h3>
+  <ul>
+    <li><strong>Flooding:</strong> sends each packet out of every link except the one it came in on. Simple and guarantees delivery, but very redundant and causes congestion.</li>
+    <li><strong>Hierarchical routing:</strong> divides the network into regions or levels, which cuts routing table size and complexity.</li>
+    <li><strong>Hybrid routing:</strong> combines distance vector and link state. Example: <strong>EIGRP</strong>.</li>
+  </ul>
+  <h3>Summary</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Key feature</th><th>Example</th><th>Pro</th><th>Con</th></tr>
+    <tr><td>Static</td><td>Manual routes</td><td>-</td><td>Simple, low overhead</td><td>Doesn't adapt</td></tr>
+    <tr><td>Distance vector</td><td>Shares distances with neighbours</td><td>RIP</td><td>Easy to implement</td><td>Slow convergence, loops</td></tr>
+    <tr><td>Link state</td><td>Shares link info with all routers</td><td>OSPF</td><td>Fast, reliable</td><td>High memory and CPU</td></tr>
+    <tr><td>Path vector</td><td>Shares the full path</td><td>BGP</td><td>Scalable, loop-free</td><td>Complex, slow updates</td></tr>
+    <tr><td>Flooding</td><td>Sends on all links</td><td>-</td><td>Guaranteed delivery</td><td>Redundancy, congestion</td></tr>
+    <tr><td>Hierarchical</td><td>Regions and levels</td><td>-</td><td>Smaller tables</td><td>Complex setup</td></tr>
+    <tr><td>Hybrid</td><td>DV + LS</td><td>EIGRP</td><td>Efficient, scalable</td><td>More complex</td></tr>
+  </table></div>
+  <h3>Distance vector vs link state<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Distance Vector</th><th>Link State</th></tr>
+    <tr><td>Knows only distance and direction ("routing by rumour")</td><td>Knows the whole topology</td></tr>
+    <tr><td>Shares its whole table with neighbours</td><td>Shares link info (LSAs) with all routers</td></tr>
+    <tr><td>Periodic updates</td><td>Updates only when something changes</td></tr>
+    <tr><td>Bellman-Ford</td><td>Dijkstra</td></tr>
+    <tr><td>Slow convergence, count-to-infinity</td><td>Fast convergence, no loops</td></tr>
+  </table></div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="protocols">
+  <h2><span class="num">10</span>Routing Protocols</h2>
+  <div class="def"><strong>Routing protocols</strong> are the rules routers use to <strong>dynamically discover destinations and exchange routing information</strong>, so they can pick the best, loop-free path.</div>
+  <h3>Categories</h3>
+  <ul>
+    <li>By algorithm: <strong>distance vector</strong>, <strong>link state</strong>, <strong>hybrid</strong> (and path vector).</li>
+    <li>By scope:
+      <ul>
+        <li><strong>IGP (Interior Gateway Protocol):</strong> routing <strong>inside</strong> one autonomous system (AS). Examples: RIP, OSPF, EIGRP.</li>
+        <li><strong>EGP (Exterior Gateway Protocol):</strong> routing <strong>between</strong> ASes. Example: BGP.</li>
+      </ul>
+    </li>
+  </ul>
+  <p>An <strong>Autonomous System (AS)</strong> is a group of networks and routers under one administration, such as one ISP or a large company.</p>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="rip">
+  <h2><span class="num">11</span>Routing Information Protocol (RIP)</h2>
+  <div class="def"><strong>RIP</strong> is one of the earliest and simplest <strong>distance vector</strong> routing protocols. It uses <strong>hop count</strong> as its metric to find the shortest path, and is based on the <strong>Bellman-Ford algorithm</strong>.</div>
+  <h3>Key features</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>Value</th></tr>
+    <tr><td>Type</td><td>Distance vector (IGP)</td></tr>
+    <tr><td>Metric</td><td>Hop count</td></tr>
+    <tr><td>Maximum hops</td><td><strong>15</strong> (16 = unreachable, "infinity")</td></tr>
+    <tr><td>Update interval</td><td>Every <strong>30 seconds</strong>, with the whole table</td></tr>
+    <tr><td>Transport</td><td><strong>UDP port 520</strong></td></tr>
+    <tr><td>Algorithm</td><td>Bellman-Ford</td></tr>
+  </table></div>
+  <h3>Working steps</h3>
+  <ol>
+    <li>Each router starts with its <strong>directly connected networks</strong> (hop count 0).</li>
+    <li>Every <strong>30 s</strong>, each router sends its whole routing table to its neighbours.</li>
+    <li>When a router receives a neighbour's table, it <strong>adds 1</strong> to every hop count, compares with its own entries, and <strong>keeps the shorter path</strong>.</li>
+    <li>This repeats until all tables are consistent (<strong>convergence</strong>).</li>
+    <li>An unreachable route is marked with hop count <strong>16</strong>.</li>
+  </ol>
+  <h3>Example</h3>
+<div class="tree">Net A ── R1 ── R2 ── R3 ── Net C
+                │
+                R4 ── Net D</div>
+  <p><strong>Step 1 (initial):</strong> each router knows only its own network. R1: Net A, direct, 0.</p>
+  <p><strong>Step 2 (exchange):</strong> R1, R3 and R4 send their tables to R2. R2 learns Net A via R1 (1), Net C via R3 (1) and Net D via R4 (1).</p>
+  <p><strong>Step 3 (propagation):</strong> R2 advertises to everyone. R1 learns Net C and Net D via R2 (2 hops). R3 and R4 likewise.</p>
+  <div class="table-wrap"><table>
+    <tr><th>R1 final table</th><th>Next hop</th><th>Hops</th></tr>
+    <tr><td>Net A</td><td>Direct</td><td>0</td></tr>
+    <tr><td>Net C</td><td>R2</td><td>2</td></tr>
+    <tr><td>Net D</td><td>R2</td><td>2</td></tr>
+  </table></div>
+  <h3>Variants</h3>
+  <ul>
+    <li><strong>RIP v1:</strong> classful, with no subnet masks. Updates are broadcast.</li>
+    <li><strong>RIP v2:</strong> classless (supports CIDR and VLSM) and supports authentication. Updates are multicast to 224.0.0.9.</li>
+    <li><strong>RIPng:</strong> RIP for IPv6.</li>
+  </ul>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Simple to configure and manage</li>
+      <li>Suitable for small networks</li>
+      <li>Updates routes automatically</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>15-hop limit restricts network size</li>
+      <li>Slow convergence (periodic updates)</li>
+      <li>Routing loops and count-to-infinity</li>
+      <li>Inefficient for large or dynamic networks</li>
+    </ul></div>
+  </div>
+  <p><strong>Applications:</strong> small enterprise networks, teaching labs, early-stage LANs where simplicity matters more than scale.</p>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="ospf">
+  <h2><span class="num">12</span>Open Shortest Path First (OSPF)</h2>
+  <div class="def"><strong>OSPF</strong> is a <strong>link state</strong> routing protocol that builds a full map of the network and uses <strong>Dijkstra's shortest path algorithm</strong>. It is designed for <strong>large, hierarchical networks</strong> and supports <strong>VLSM and CIDR</strong>.</div>
+  <h3>Working principle</h3>
+  <ol>
+    <li>Each router collects information about its <strong>directly connected links and neighbours</strong>.</li>
+    <li>It builds <strong>Link State Advertisements (LSAs)</strong> describing those links.</li>
+    <li>It <strong>floods LSAs</strong> to every router in the area.</li>
+    <li>Each router runs <strong>Dijkstra</strong> on the complete map to find the shortest path to every destination.</li>
+  </ol>
+  <h3>Areas</h3>
+<div class="tree">        ┌──────── Area 0 (backbone) ────────┐
+        │   R1 ─────── R2 ─────── R3        │
+        └──────────────┼────────────────────┘
+                       │  R2 = Area Border Router (ABR)
+        ┌──────────────┼───── Area 1 ───────┐
+        │              R4                   │
+        └───────────────────────────────────┘</div>
+  <ul>
+    <li>Routers are grouped into <strong>areas</strong> to reduce routing overhead. LSAs are flooded only within an area.</li>
+    <li><strong>Area 0</strong> is the <strong>backbone</strong>, and all other areas must connect to it.</li>
+    <li>An <strong>Area Border Router (ABR)</strong> connects an area to the backbone.</li>
+  </ul>
+  <h3>Features</h3>
+  <ul>
+    <li>Dijkstra's shortest path algorithm.</li>
+    <li>Hierarchical design through areas.</li>
+    <li>Metric = <strong>cost</strong>, based on <strong>bandwidth</strong>.</li>
+    <li>Fast convergence through LSA flooding.</li>
+    <li>Supports authentication and CIDR.</li>
+  </ul>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Efficient for large, complex networks</li>
+      <li>Rapid convergence</li>
+      <li>No routing loops</li>
+      <li>Load balancing</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>More complex to configure than RIP</li>
+      <li>High memory and CPU use</li>
+    </ul></div>
+  </div>
+  <p><strong>Applications:</strong> large enterprise and service-provider networks, campus and multi-area networks.</p>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="eigrp">
+  <h2><span class="num">13</span>Enhanced Interior Gateway Routing Protocol (EIGRP)</h2>
+  <div class="def"><strong>EIGRP</strong> is a <strong>hybrid</strong> routing protocol developed by <strong>Cisco</strong>. It combines features of distance vector and link state protocols, and uses <strong>DUAL (Diffusing Update Algorithm)</strong> for fast, loop-free routing.</div>
+  <h3>Three tables</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Table</th><th>Contents</th></tr>
+    <tr><td><strong>Neighbor table</strong></td><td>Directly connected EIGRP routers</td></tr>
+    <tr><td><strong>Topology table</strong></td><td>All learned routes with their metrics</td></tr>
+    <tr><td><strong>Routing table</strong></td><td>The best paths chosen from the topology table</td></tr>
+  </table></div>
+  <ul>
+    <li>Sends <strong>partial, incremental updates</strong> only when something changes, which saves bandwidth.</li>
+    <li>DUAL keeps a backup route (the feasible successor) ready, so failover is almost instant.</li>
+  </ul>
+  <h3>Metric</h3>
+  <p><strong>Composite metric = f(Bandwidth, Delay, Reliability, Load)</strong>. Bandwidth and delay are the main factors.</p>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Converges faster than RIP and OSPF</li>
+      <li>Supports VLSM and CIDR</li>
+      <li>Incremental updates</li>
+      <li>Loop-free through DUAL</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>Cisco-proprietary (later partly opened)</li>
+      <li>More complex metric calculation</li>
+    </ul></div>
+  </div>
+  <p><strong>Applications:</strong> Cisco-based enterprise networks; medium to large organisations that need stability.</p>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="bgp">
+  <h2><span class="num">14</span>Border Gateway Protocol (BGP)</h2>
+  <div class="def"><strong>BGP</strong> is the <strong>path vector</strong> routing protocol used to exchange routing information <strong>between Autonomous Systems (ASes)</strong>. It is the protocol that runs the <strong>global Internet</strong>.</div>
+  <h3>Working principle</h3>
+  <ul>
+    <li>Each BGP router (a <strong>BGP speaker</strong>) keeps a table of networks and the <strong>paths</strong> to reach them.</li>
+    <li>It uses <strong>policy-based routing</strong> on <strong>path attributes</strong> rather than simple metrics like hop count.</li>
+    <li><strong>iBGP (internal BGP):</strong> between routers in the <strong>same AS</strong>.</li>
+    <li><strong>eBGP (external BGP):</strong> between routers in <strong>different ASes</strong>.</li>
+    <li>It exchanges <strong>reachability</strong> information, not the full topology. It runs over <strong>TCP port 179</strong>.<span class="tag add">not in slides</span></li>
+  </ul>
+<div class="tree">┌──── AS 100 ────┐               ┌──── AS 200 ────┐
+│ R1 ──iBGP── R2 │ ════eBGP════  │ R3 ──iBGP── R4 │
+└────────────────┘               └────────────────┘</div>
+  <h3>Path attributes</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Attribute</th><th>Meaning</th></tr>
+    <tr><td><strong>AS Path</strong></td><td>The list of AS numbers the route passes through. Also used to <strong>detect loops</strong>: a router rejects a route that already contains its own AS.</td></tr>
+    <tr><td><strong>Next Hop</strong></td><td>IP address of the next router</td></tr>
+    <tr><td><strong>Local Preference</strong></td><td>Picks the preferred <strong>exit</strong> point from an AS</td></tr>
+    <tr><td><strong>MED</strong> (Multi-Exit Discriminator)</td><td>Suggests the preferred <strong>entry</strong> point into an AS</td></tr>
+  </table></div>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Scalable and reliable for inter-domain routing</li>
+      <li>Policy-based route control</li>
+      <li>Multiple policies and redundancy</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>Slower convergence than OSPF or EIGRP</li>
+      <li>Complex to configure and maintain</li>
+    </ul></div>
+  </div>
+  <p><strong>Applications:</strong> ISPs and Internet backbone providers; connecting large enterprises to the Internet.</p>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="compare">
+  <h2><span class="num">15</span>Comparison of RIP, OSPF, EIGRP and BGP</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>RIP</th><th>OSPF</th><th>EIGRP</th><th>BGP</th></tr>
+    <tr><td>Type</td><td>Distance vector</td><td>Link state</td><td>Hybrid</td><td>Path vector</td></tr>
+    <tr><td>Algorithm</td><td>Bellman-Ford</td><td>Dijkstra</td><td>DUAL</td><td>Policy-based</td></tr>
+    <tr><td>Metric</td><td>Hop count</td><td>Cost (bandwidth)</td><td>Composite</td><td>Path attributes</td></tr>
+    <tr><td>Convergence</td><td>Slow</td><td>Fast</td><td>Very fast</td><td>Moderate</td></tr>
+    <tr><td>Scalability</td><td>Low</td><td>High</td><td>Medium-high</td><td>Very high</td></tr>
+    <tr><td>Scope</td><td>IGP</td><td>IGP</td><td>IGP</td><td>EGP</td></tr>
+    <tr><td>Use case</td><td>Small LANs</td><td>Enterprise LANs</td><td>Cisco networks</td><td>Internet backbone</td></tr>
+  </table></div>
+  <h3>Evolution</h3>
+  <ul>
+    <li><strong>RIP</strong> brought simplicity and basic route discovery.</li>
+    <li><strong>OSPF</strong> brought scalability and structure (link state, areas).</li>
+    <li><strong>EIGRP</strong> brought rapid convergence and smarter metrics.</li>
+    <li><strong>BGP</strong> made global, policy-based Internet routing possible.</li>
+  </ul>
+  <h3>Applications of routing</h3>
+  <ul>
+    <li><strong>Internet backbone:</strong> delivering packets across the globe.</li>
+    <li><strong>Enterprise networks:</strong> connecting branches and data centres.</li>
+    <li><strong>Wireless networks:</strong> supporting mobile users and changing topologies.</li>
+    <li><strong>Traffic engineering:</strong> managing resources for performance.</li>
+  </ul>
+  <div class="tip"><strong>One-liners:</strong> RIP = hops, max 15, every 30 s · OSPF = Dijkstra, areas, cost · EIGRP = Cisco, DUAL, 3 tables · BGP = between ASes, AS path, the Internet.</div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

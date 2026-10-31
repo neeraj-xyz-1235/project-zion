@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RTCN Study Notes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main style="margin: 0 auto;">
+  <header class="page">
+    <h1>RTCN: Notes</h1>
+    <p>Built from the RTCN unit PDFs. Each topic has a definition, an explanation (characteristics and sub-components), and extras such as header diagrams, worked examples, comparisons and memory tips.</p>
+  </header>
+
+  <div class="cards">
+    <a class="card" href="unit-1.html">
+      <h2>Unit 1 · Internet &amp; IP Addressing</h2>
+      <p>Structure of the Internet, intranet, ISP, ICANN, IPv4 and IPv6 headers, classful and classless addressing, subnetting, masking, supernetting, ARP, RARP.</p>
+    </a>
+    <a class="card" href="unit-2.html">
+      <h2>Unit 2 · Routing</h2>
+      <p>Routers, hub vs switch vs router, router architecture, routing tables, static vs dynamic routing, routing algorithms, RIP, OSPF, EIGRP, BGP.</p>
+    </a>
+    <a class="card" href="unit-3.html">
+      <h2>Unit 3 · Transport Layer &amp; SCTP</h2>
+      <p>Ports and sockets, multiplexing, TCP header and handshakes, flow and congestion control, UDP, DCCP and QUIC, and SCTP's services, features, packet format and chunks.</p>
+    </a>
+  </div>
+
+  <h3 style="margin-top:32px;font-size:15px;">How each topic is laid out</h3>
+  <div class="def" style="margin-bottom:10px;">The highlighted box is the <strong>definition</strong>. Learn it as written for exam answers.</div>
+  <div class="tip" style="margin-bottom:10px;"><strong>Green boxes</strong> are memory tips.</div>
+  <p><span class="tag add">not in slides</span> means something was added because it's commonly asked in exams but isn't in the PDFs.</p>
+  <p>Yellow notes point out mistakes in the PDFs, such as the wrong worked answer in the address-mask example, with the correct version alongside.</p>
+  <button class="theme-btn">Toggle theme</button>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

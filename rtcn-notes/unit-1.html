@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Internet and IP Addressing</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">RTCN Notes</a></div>
+  <div class="sub">Unit 1 · Internet &amp; IP Addressing</div>
+  <div class="pages">
+    <a class="on" href="unit-1.html">Unit 1</a>
+    <a href="unit-2.html">Unit 2</a>
+    <a href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#basics">1. Network &amp; Internet</a></li>
+    <li><a href="#structure">2. Structure of the Internet</a></li>
+    <li><a href="#isp">3. Role of ISP</a></li>
+    <li><a href="#intranet">4. Intranet</a></li>
+    <li><a href="#icann">5. Role of ICANN</a></li>
+    <li><a href="#ip">6. Internet Protocol (IP)</a></li>
+    <li><a href="#ipv4-header">7. IPv4 Header Format</a></li>
+    <li><a href="#ipv4-addr">8. IPv4 Addressing</a></li>
+    <li><a href="#classful">9. Classful Addressing</a></li>
+    <li><a href="#ipv6">10. IPv6</a></li>
+    <li><a href="#ipv6-header">11. IPv6 Header Format</a></li>
+    <li><a href="#v4-v6">12. IPv4 vs IPv6</a></li>
+    <li><a href="#classless">13. Classless Addressing (CIDR)</a></li>
+    <li><a href="#subnet">14. Subnetting</a></li>
+    <li><a href="#mask">15. Address Masking</a></li>
+    <li><a href="#supernet">16. Supernetting</a></li>
+    <li><a href="#arp">17. ARP</a></li>
+    <li><a href="#rarp">18. RARP</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 1: Internet, IP and Addressing</h1>
+  <p>How the Internet is structured, who runs it, the IPv4 and IPv6 headers, subnetting and supernetting, and how ARP and RARP map addresses.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="basics">
+  <h2><span class="num">1</span>Network, Computer Network &amp; Internet</h2>
+  <div class="def">A <strong>network</strong> is a collection of two or more devices connected by communication links to <strong>share data and resources</strong>.</div>
+  <div class="def">A <strong>computer network</strong> is a collection of <strong>autonomous, interconnected computers and devices</strong> that share resources and exchange data.</div>
+  <div class="def">The <strong>Internet</strong> is a <strong>global network</strong> connecting millions of computers and devices worldwide so they can communicate and share information. Example: browsing Google or watching YouTube.</div>
+  <div class="tip"><strong>internet vs Internet:</strong> an internet (small i) is any two or more networks that can talk to each other. The Internet (capital I) is the one worldwide internet made of thousands of interconnected networks.</div>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="structure">
+  <h2><span class="num">2</span>Structure of the Internet</h2>
+  <div class="def">The Internet has a <strong>three-level hierarchy</strong>: <strong>backbone networks</strong> at the top, <strong>provider networks</strong> in the middle and <strong>customer networks</strong> at the edge.</div>
+<div class="tree">        Backbone ═══ peering point ═══ Backbone        ← Level 1 (international ISPs)
+        ╱      ╲                         ╱     ╲
+  Provider    Provider            Provider    Provider  ← Level 2 (national / regional ISPs)
+   ╱    ╲        │                    │         ╲
+Customer Customer Customer        Customer    Customer  ← Level 3 (homes, schools, businesses)</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Level</th><th>Description</th><th>Examples</th></tr>
+    <tr><td><strong>1. Backbone networks</strong></td><td>Large networks owned by major communication companies. Connected to each other through complex switching systems called <strong>peering points</strong>. Also called <strong>international ISPs</strong>.</td><td>Sprint, Verizon (MCI), AT&amp;T, NTT</td></tr>
+    <tr><td><strong>2. Provider networks</strong></td><td>Smaller networks that <strong>pay backbones</strong> for Internet service. They connect to backbones and sometimes to other providers. Also called <strong>national or regional ISPs</strong>.</td><td>Regional ISPs</td></tr>
+    <tr><td><strong>3. Customer networks</strong></td><td>Networks at the <strong>edge</strong> of the Internet that use its services. They <strong>pay provider networks</strong> for access.</td><td>Home, business and school networks</td></tr>
+  </table></div>
+  <p>Both backbone and provider networks are called <strong>Internet Service Providers (ISPs)</strong>.</p>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="isp">
+  <h2><span class="num">3</span>Role of the Internet Service Provider (ISP)</h2>
+  <div class="def">An <strong>ISP</strong> is an organisation that <strong>supplies Internet access</strong> to individuals and businesses. It is the <strong>bridge between the user's device and the Internet backbone</strong>. Without ISPs, end users would have no way to reach the Internet.</div>
+  <h3>Functions of an ISP</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Function</th><th>Description</th></tr>
+    <tr><td><strong>Internet connectivity</strong></td><td>Provides broadband, fibre-optic or wireless connections.</td></tr>
+    <tr><td><strong>IP address allocation</strong></td><td>Assigns each device a unique IP address, dynamically or statically.</td></tr>
+    <tr><td><strong>DNS service</strong></td><td>Runs DNS servers that convert domain names into IP addresses.</td></tr>
+    <tr><td><strong>Email and hosting</strong></td><td>Many ISPs offer web hosting and email.</td></tr>
+    <tr><td><strong>Network management</strong></td><td>Maintains routers, switches and servers for uninterrupted connectivity.</td></tr>
+  </table></div>
+  <h3>How a request reaches a website</h3>
+<div class="tree">User device → Modem / Router → ISP → Internet backbone (gateway routers) → Web server / cloud
+(PC, phone)   (converts signal,   (gives IP, DNS,   (high-speed routes    (Google, YouTube,
+               shares via Wi-Fi)   routes traffic)   between ISPs)          Amazon)</div>
+  <ul>
+    <li><strong>Modem</strong> converts local digital data into signals for phone lines, fibre or cable. The <strong>router</strong> shares the connection over Wi-Fi or Ethernet.</li>
+    <li>The <strong>ISP</strong> gives an IP address, connects the local network to the Internet, manages DNS, routes data and handles bandwidth.</li>
+    <li>The <strong>backbone</strong> connects ISPs across countries and continents.</li>
+  </ul>
+  <h3>Types of ISP connection</h3>
+  <p>DSL · Wi-Fi broadband · Mobile broadband · Fibre-optic broadband · Cable broadband</p>
+  <h3>Examples</h3>
+  <p>Reliance Jio, Vodafone Idea, Airtel, BSNL, Hathway, ACT</p>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Customer doesn't handle the technical or financial side of connectivity</li>
+      <li>High-speed Internet</li>
+      <li>High reliability and availability</li>
+      <li>Security: protection against viruses, up-to-date patches</li>
+      <li>No need to run your own web server</li>
+      <li>Uptime guarantees</li>
+    </ul></div>
+    <div class="cons"><h4>Disadvantages</h4><ul>
+      <li>Some ISPs inflate prices or lose data. The customer depends fully on the ISP.</li>
+      <li>Overloaded shared servers cause slow speeds</li>
+      <li>You must trust the ISP for uptime and security</li>
+      <li>If the ISP gets blacklisted, the user is affected</li>
+    </ul></div>
+  </div>
+  <h3>ISP-related applications</h3>
+  <p>Router management apps · data usage apps · speed test apps · customer support apps · billing apps</p>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="intranet">
+  <h2><span class="num">4</span>Intranet</h2>
+  <div class="def">An <strong>intranet</strong> is a <strong>private network used within an organisation</strong> to securely share information, resources and services among its employees.</div>
+  <h3>Uses</h3>
+  <ul>
+    <li><strong>Collaboration:</strong> easier sharing of information so employees can work together.</li>
+    <li><strong>Communication:</strong> employee directories, company news and organisation charts.</li>
+    <li><strong>Easy access to information:</strong> policies, benefits and updates.</li>
+    <li><strong>Automation:</strong> automates repeatable everyday tasks.</li>
+  </ul>
+  <h3>How an intranet works</h3>
+  <ul>
+    <li>A <strong>web server</strong> handles requests for data and delivers files to users. A <strong>content management system</strong> controls the content.</li>
+    <li>It may be many interlinked <strong>LANs</strong> plus leased lines to WAN resources. It uses <strong>TCP/IP and HTTP</strong>, like the Internet.</li>
+    <li>Employees need a <strong>network password</strong> and a connection to the company LAN. Remote employees use a <strong>VPN</strong>.</li>
+    <li>A <strong>firewall</strong> sits between the Internet and the intranet. It checks all packets and blocks unauthorised requests and malware.</li>
+  </ul>
+<div class="tree">Employees ── LAN ── Web server + CMS ── Firewall ── Internet
+                                            ▲
+Remote employee ─────── VPN ────────────────┘</div>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Better communication, information sharing and collaboration</li>
+      <li>Simpler records management</li>
+      <li>Streamlined tracking of requests</li>
+      <li>A test environment for ideas before they go on the public website</li>
+      <li>A better corporate culture</li>
+      <li>Good return on investment (low cost)</li>
+    </ul></div>
+    <div class="cons"><h4>Disadvantages</h4><ul>
+      <li>Low participation means too little content</li>
+      <li>High staff cost leads to poor support</li>
+      <li>Needs regular maintenance and inspection</li>
+      <li>Unclear ownership complicates management</li>
+      <li>Weak mobile and remote support</li>
+    </ul></div>
+  </div>
+  <h3>Internet vs Intranet<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Internet</th><th>Intranet</th></tr>
+    <tr><td>Public, global network</td><td>Private network inside one organisation</td></tr>
+    <tr><td>Anyone can access it</td><td>Only authorised employees</td></tr>
+    <tr><td>Less secure</td><td>More secure (firewall, passwords, VPN)</td></tr>
+    <tr><td>Unlimited users</td><td>Limited users</td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="icann">
+  <h2><span class="num">5</span>Role of ICANN</h2>
+  <div class="def"><strong>ICANN (Internet Corporation for Assigned Names and Numbers)</strong> is a <strong>global non-profit organisation founded in 1998</strong> that coordinates the databases for the Internet's <strong>names (domains) and numbers (IP addresses)</strong>.</div>
+  <h3>Functions</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Function</th><th>Description</th></tr>
+    <tr><td><strong>DNS management</strong></td><td>Oversees top-level domains such as .com, .org, .in and .edu.</td></tr>
+    <tr><td><strong>IP address allocation</strong></td><td>Allocates IP address blocks to <strong>Regional Internet Registries</strong> (APNIC, ARIN, RIPE NCC).</td></tr>
+    <tr><td><strong>Registrar accreditation</strong></td><td>Authorises companies such as GoDaddy and Namecheap to sell domain names.</td></tr>
+    <tr><td><strong>Global coordination</strong></td><td>Makes sure each domain name and IP address stays <strong>unique and globally resolvable</strong>.</td></tr>
+  </table></div>
+<div class="tree">ICANN ──▶ Regional registries (APNIC, ARIN, RIPE NCC) ──▶ ISPs ──▶ Users   (IP addresses)
+ICANN ──▶ Accredited registrars (GoDaddy, Namecheap)   ──▶ Domain owners      (domain names)</div>
+  <h3>Example</h3>
+  <p>When someone registers <code>www.cwit.edu</code>, ICANN's system makes sure it maps to a unique IP address and is routed correctly, so there are no duplicate or conflicting names.</p>
+  <h3>Importance</h3>
+  <p>Without ICANN there would be <strong>chaos</strong>: overlapping addresses, duplicate domain names and unreliable access to websites.</p>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="ip">
+  <h2><span class="num">6</span>Internet Protocol (IP)</h2>
+  <div class="def"><strong>IP</strong> is an <strong>unreliable, connectionless datagram protocol</strong> that gives a <strong>best-effort delivery</strong> service. It does its best to deliver each packet but gives no guarantee, and does no error checking or tracking.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li><strong>Best effort:</strong> no error checking or tracking. If reliability matters, IP is paired with <strong>TCP</strong>.</li>
+    <li><strong>Connectionless:</strong> no call setup and no virtual circuits. Each <strong>datagram</strong> is sent separately.</li>
+    <li>Datagrams can take <strong>different routes</strong>, and can arrive <strong>out of order or duplicated</strong>. IP doesn't reorder them.</li>
+    <li>This limited functionality is a strength: applications add only the reliability they need, which keeps things efficient.</li>
+  </ul>
+  <h3>Post office analogy</h3>
+  <ul>
+    <li><strong>IP</strong> is like ordinary post. The post office tries to deliver the letter, but if it's lost, nobody tells the sender.</li>
+    <li><strong>IP + TCP</strong> is like adding a self-addressed postcard. The receiver mails it back to confirm delivery. If it never comes back, the sender sends another copy.</li>
+  </ul>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="ipv4-header">
+  <h2><span class="num">7</span>IPv4 Datagram Header Format</h2>
+  <div class="def">An <strong>IP datagram</strong> is a variable-length packet with a <strong>header</strong> and <strong>data</strong>. The header is <strong>20 to 60 bytes</strong> and holds the information needed for routing and delivery.</div>
+<div class="tree">0        4        8               16      19                     31
+┌────────┬────────┬───────────────┬───────────────────────────────┐
+│Version │  HLEN  │ Service type  │         Total length          │
+├────────┴────────┴───────────────┼───────┬───────────────────────┤
+│         Identification          │ Flags │  Fragmentation offset │
+├─────────────────┬───────────────┼───────┴───────────────────────┤
+│  Time to live   │   Protocol    │        Header checksum        │
+├─────────────────┴───────────────┴───────────────────────────────┤
+│                     Source IP address (32)                      │
+├─────────────────────────────────────────────────────────────────┤
+│                   Destination IP address (32)                   │
+├─────────────────────────────────────────────────────────────────┤
+│                     Options (0 – 40 bytes)                      │
+└─────────────────────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table>
+    <tr><th>Field (bits)</th><th>Purpose</th></tr>
+    <tr><td>Version (4)</td><td>IP version. For IPv4 it is <code>0100</code> (4).</td></tr>
+    <tr><td>HLEN (4)</td><td>Header length in <strong>4-byte words</strong>. Max 15 × 4 = <strong>60 bytes</strong>.</td></tr>
+    <tr><td>Service type (8)</td><td>How to handle the datagram: priority, and the throughput, reliability and delay wanted.</td></tr>
+    <tr><td>Total length (16)</td><td>Length of the whole datagram (header + data), up to <strong>65,535 bytes</strong>.</td></tr>
+    <tr><td>Identification (16)</td><td>Used in <strong>fragmentation</strong>. All fragments of one datagram carry the same number.</td></tr>
+    <tr><td>Flags (3)</td><td>Fragmentation control: may it be fragmented, and is this the last fragment?</td></tr>
+    <tr><td>Fragmentation offset (13)</td><td>Position of this fragment's data in the original datagram.</td></tr>
+    <tr><td>Time to live (8)</td><td>Maximum number of <strong>hops</strong>. Each router subtracts 1, and at 0 the datagram is discarded. This stops packets looping forever.</td></tr>
+    <tr><td>Protocol (8)</td><td>The upper-layer protocol inside (e.g. TCP = 6, UDP = 17).</td></tr>
+    <tr><td>Header checksum (16)</td><td>Checks the integrity of the <strong>header only</strong>, not the data.</td></tr>
+    <tr><td>Source address (32)</td><td>IP address of the original sender.</td></tr>
+    <tr><td>Destination address (32)</td><td>IP address of the final receiver.</td></tr>
+    <tr><td>Options (variable)</td><td>Extra functions: routing, timing, management, alignment.</td></tr>
+  </table></div>
+  <div class="tip"><strong>Remember:</strong> header = 20 bytes minimum, 60 maximum. TTL counts hops, not seconds, in practice. The checksum covers the header only.</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="ipv4-addr">
+  <h2><span class="num">8</span>IPv4 Addressing</h2>
+  <div class="def"><strong>IPv4 (Internet Protocol version 4)</strong> is the <strong>delivery mechanism of the TCP/IP suite</strong>. It works at the <strong>network layer</strong> and gives every device a unique <strong>32-bit logical address</strong>.</div>
+  <h3>Position in TCP/IP</h3>
+<div class="tree">Application layer  │ HTTP, FTP, DNS, SMTP
+Transport layer    │ TCP, UDP, SCTP
+Network layer      │ IPv4  + ICMP, IGMP, ARP, RARP
+Data link layer    │ Ethernet, Wi-Fi …
+Physical layer     │ cables, signals</div>
+  <h3>Parts of an IPv4 address</h3>
+  <ul>
+    <li><strong>Network part:</strong> identifies the network (and, in classful addressing, its class).</li>
+    <li><strong>Host part:</strong> identifies the machine on that network. Same network part, different host part for each device.</li>
+    <li><strong>Subnet number:</strong> large networks are divided into subnets, each with its own number.</li>
+  </ul>
+  <h3>Address space</h3>
+  <p>A protocol using <em>b</em> bits has an address space of 2<sup>b</sup>. IPv4 uses 32 bits, so 2<sup>32</sup> = <strong>4,294,967,296</strong> addresses (more than 4 billion).</p>
+  <h3>Notations</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Notation</th><th>Example (same address)</th></tr>
+    <tr><td>Binary (base 2)</td><td><code>10000000 00001011 00000011 00011111</code></td></tr>
+    <tr><td>Dotted-decimal (base 256)</td><td><code>128.11.3.31</code>. Each byte (octet) is 0–255.</td></tr>
+    <tr><td>Hexadecimal (base 16)</td><td><code>0x800B031F</code>. 8 hex digits; used in programming.</td></tr>
+  </table></div>
+  <div class="pc">
+    <div class="pros"><h4>Advantages of IPv4</h4><ul>
+      <li>Simplicity</li><li>Wide compatibility</li><li>Mature support and development</li>
+    </ul></div>
+    <div class="cons"><h4>Disadvantages of IPv4</h4><ul>
+      <li>Limited address space</li><li>Hard to scale to today's network size</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="classful">
+  <h2><span class="num">9</span>Classful Addressing</h2>
+  <div class="def"><strong>Classful addressing</strong> is the original, now obsolete, IPv4 scheme. It divides the address space into <strong>five fixed classes: A, B, C, D and E</strong>, identified by the first few bits (or the first byte in decimal).</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Class</th><th>Leading bits</th><th>First byte</th><th>Net ID / Host ID</th><th>Networks</th><th>Hosts per network</th><th>Default mask</th><th>Use</th></tr>
+    <tr><td><strong>A</strong></td><td>0</td><td>0 – 127</td><td>8 / 24</td><td>2<sup>7</sup> = 128</td><td>2<sup>24</sup> − 2 = 16,777,214</td><td>255.0.0.0</td><td>Very large networks</td></tr>
+    <tr><td><strong>B</strong></td><td>10</td><td>128 – 191</td><td>16 / 16</td><td>2<sup>14</sup> = 16,384</td><td>2<sup>16</sup> − 2 = 65,534</td><td>255.255.0.0</td><td>Medium to large</td></tr>
+    <tr><td><strong>C</strong></td><td>110</td><td>192 – 223</td><td>24 / 8</td><td>2<sup>21</sup> = 2,097,152</td><td>2<sup>8</sup> − 2 = 254</td><td>255.255.255.0</td><td>Small networks</td></tr>
+    <tr><td><strong>D</strong></td><td>1110</td><td>224 – 239</td><td>-</td><td>-</td><td>-</td><td>None</td><td>Multicasting</td></tr>
+    <tr><td><strong>E</strong></td><td>1111</td><td>240 – 255</td><td>-</td><td>-</td><td>-</td><td>None</td><td>Experimental / research</td></tr>
+  </table></div>
+  <p>"−2" in the host count is because the all-0s host (network address) and all-1s host (broadcast address) can't be given to devices.</p>
+  <h3>Special addresses</h3>
+  <ul>
+    <li><code>127.0.0.0 – 127.255.255.255</code>: loopback (e.g. 127.0.0.1 = this machine).</li>
+    <li><code>169.254.0.0 – 169.254.255.255</code>: link-local (auto-assigned when DHCP fails).</li>
+    <li><code>0.0.0.0 – 0.255.255.255</code>: "this network", used within the current network.</li>
+  </ul>
+  <div class="note">The slide gives link-local as "169.254.0.0 – 169.254.0.16" and this-network as "0.0.0.0 – 0.0.0.8". Those are the prefix lengths (/16 and /8) written as if they were addresses. The correct ranges are shown above.</div>
+  <h3>Limitations of classful addressing</h3>
+  <ul>
+    <li>A class A block is <strong>too large</strong> for almost any organisation, so most addresses were wasted.</li>
+    <li>A class B block is also too large for many organisations.</li>
+    <li>A class C block is <strong>too small</strong> for many organisations.</li>
+    <li>Class D was planned for 268 million multicast groups that never appeared, so those were wasted too.</li>
+    <li>Class E was reserved, and only a few addresses were used.</li>
+  </ul>
+  <div class="tip"><strong>Quick class check:</strong> look at the first number. 0–127 A · 128–191 B · 192–223 C · 224–239 D · 240–255 E.</div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="ipv6">
+  <h2><span class="num">10</span>IPv6</h2>
+  <div class="def"><strong>IPv6 (Internet Protocol version 6)</strong> is the successor to IPv4, designed to fix its shortcomings, mainly <strong>address exhaustion</strong>. It uses <strong>128-bit addresses</strong>.</div>
+  <h3>Features</h3>
+  <ul>
+    <li><strong>128-bit addresses</strong> instead of 32, giving a vastly larger address space.</li>
+    <li><strong>Simpler, more flexible header</strong> (base header + extension headers), which speeds up routing.</li>
+    <li><strong>Resource allocation</strong> support (flow label), which IPv4 lacked.</li>
+    <li>Room for new and future protocol options.</li>
+    <li>Built-in <strong>security</strong>: encryption and authentication (IPSec).</li>
+    <li><strong>Fragmentation only at the source</strong>.</li>
+  </ul>
+  <h3>Address notation: hexadecimal colon</h3>
+  <ul>
+    <li>Divided into <strong>8 sections</strong>, each <strong>2 bytes (4 hex digits)</strong>, separated by colons.</li>
+    <li><strong>Abbreviation:</strong> leading zeros in a section can be dropped (but not trailing zeros).</li>
+    <li>One run of consecutive all-zero sections can be replaced with <code>::</code>, once per address.<span class="tag add">not in slides</span></li>
+  </ul>
+<div class="tree">Full:          FDEC:0074:0000:0000:0000:B0FF:0000:FFF0
+Drop leading:  FDEC:74:0:0:0:B0FF:0:FFF0
+Zero compress: FDEC:74::B0FF:0:FFF0</div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="ipv6-header">
+  <h2><span class="num">11</span>IPv6 Datagram Header Format</h2>
+  <div class="def">An IPv6 datagram has a <strong>fixed 40-byte base header</strong>, followed by optional <strong>extension headers</strong> and data (payload up to 65,535 bytes).</div>
+<div class="tree">0       4             12                                   31
+┌───────┬──────────────┬─────────────────────────────────────┐
+│Version│ Traffic class│             Flow label              │
+├───────┴──────────────┴─────────┬────────────┬──────────────┤
+│        Payload length          │ Next header│  Hop limit   │
+├────────────────────────────────┴────────────┴──────────────┤
+│                 Source address (128 bits)                  │
+├────────────────────────────────────────────────────────────┤
+│               Destination address (128 bits)               │
+└────────────────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Purpose</th></tr>
+    <tr><td>Version (4)</td><td>Value 6.</td></tr>
+    <tr><td>Priority / Traffic class</td><td>Priority for real-time delivery needs. Replaces IPv4's service type (TOS).</td></tr>
+    <tr><td>Flow label</td><td>Lets source and destination set up a <strong>pseudo-connection</strong> for special handling of a flow.</td></tr>
+    <tr><td>Payload length (16)</td><td>Length of everything after the base header. Like IPv4's total length.</td></tr>
+    <tr><td>Next header (8)</td><td>Type of the header that follows: an extension header or the upper-layer protocol (TCP/UDP).</td></tr>
+    <tr><td>Hop limit (8)</td><td>Same job as IPv4's TTL.</td></tr>
+    <tr><td>Source / Destination (128 each)</td><td>16-byte IPv6 addresses.</td></tr>
+  </table></div>
+  <div class="note">The slides use the original IPv6 spec: a 4-bit priority and a 24-bit flow label. The current standard (RFC 8200) uses an <strong>8-bit traffic class</strong> and a <strong>20-bit flow label</strong>. Either version adds up to the same 32 bits with the 4-bit version field.</div>
+  <h3>Fragmentation</h3>
+  <p>Only the <strong>source</strong> can fragment. It finds the path MTU using <strong>MTU discovery</strong>, or uses the minimum MTU of 576 bytes as given in the slides.</p>
+  <h3>Extension headers</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Header</th><th>Purpose</th></tr>
+    <tr><td>Hop-by-hop options</td><td>Information every router must check</td></tr>
+    <tr><td>Destination options</td><td>Information for the destination only</td></tr>
+    <tr><td>Routing</td><td>A loose list of routers to visit</td></tr>
+    <tr><td>Fragmentation</td><td>Manages fragments</td></tr>
+    <tr><td>Authentication</td><td>Verifies the sender's identity</td></tr>
+    <tr><td>Encrypted security payload</td><td>Information about encrypted contents</td></tr>
+  </table></div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="v4-v6">
+  <h2><span class="num">12</span>IPv4 vs IPv6</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>IPv4</th><th>IPv6</th></tr>
+    <tr><td>32-bit addresses</td><td>128-bit addresses</td></tr>
+    <tr><td>Written in dotted decimal</td><td>Written in hexadecimal with colons</td></tr>
+    <tr><td>Header 20–60 bytes</td><td>Fixed 40-byte base header</td></tr>
+    <tr><td>IPSec optional</td><td>IPSec built in</td></tr>
+    <tr><td>Fragmentation by sender and routers</td><td>Fragmentation by sender only</td></tr>
+    <tr><td>No flow identification</td><td>Flow label field</td></tr>
+    <tr><td>Has a header checksum</td><td>No checksum</td></tr>
+    <tr><td>Has options in the header</td><td>Uses extension headers instead</td></tr>
+    <tr><td>ARP maps IP to MAC</td><td>Neighbor Discovery Protocol (NDP) does it</td></tr>
+    <tr><td>IGMP manages multicast groups</td><td>Multicast Listener Discovery (MLD)</td></tr>
+    <tr><td>Has broadcast</td><td>No broadcast; uses the all-nodes multicast <code>FF02::1</code></td></tr>
+    <tr><td>Manual or DHCP configuration</td><td>Auto-configuration available</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="classless">
+  <h2><span class="num">13</span>Classless Addressing (CIDR)</h2>
+  <div class="def"><strong>Classless addressing</strong> has <strong>no classes</strong>. Each organisation gets a <strong>block of addresses</strong> sized to its needs, with a <strong>variable-length network prefix</strong>. It was introduced to stop address depletion.</div>
+  <ul>
+    <li>A household may get 2 addresses, a big organisation thousands, and an ISP hundreds of thousands.</li>
+  </ul>
+  <h3>Three rules for a block</h3>
+  <ol>
+    <li>Addresses must be <strong>contiguous</strong> (one after another).</li>
+    <li>The number of addresses must be a <strong>power of 2</strong> (1, 2, 4, 8 …).</li>
+    <li>The <strong>first address must be evenly divisible</strong> by the number of addresses.</li>
+  </ol>
+  <h3>Slash notation (CIDR)</h3>
+  <p>The prefix length <em>n</em> isn't built into the address, so it's written after a slash: <code>a.b.c.d/n</code>. This is formally called <strong>Classless Inter-Domain Routing (CIDR)</strong>, pronounced "cider".</p>
+  <h3>Extracting information from an address</h3>
+  <ol>
+    <li><strong>Number of addresses:</strong> N = 2<sup>32 − n</sup></li>
+    <li><strong>First address:</strong> keep the n leftmost bits, set the rest to <strong>0</strong>.</li>
+    <li><strong>Last address:</strong> keep the n leftmost bits, set the rest to <strong>1</strong>.</li>
+  </ol>
+  <h3>Worked example: 167.199.170.82/27</h3>
+<div class="tree">n = 27, so N = 2^(32−27) = 2^5 = 32 addresses
+Last byte 82 = 010 10010   (first 3 bits belong to the prefix)
+First: 010 00000 = 64   →  167.199.170.64
+Last:  010 11111 = 95   →  167.199.170.95</div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="subnet">
+  <h2><span class="num">14</span>Subnetting</h2>
+  <div class="def"><strong>Subnetting</strong> is <strong>dividing one large network into several smaller networks (subnets)</strong>. Each subnet has a <strong>longer prefix</strong> than the original network.</div>
+  <ul>
+    <li>Done to use addresses efficiently, manage allocation, and improve security and organisation.</li>
+    <li>An address is split into a <strong>network portion</strong> (which subnet) and a <strong>host portion</strong> (which device).</li>
+    <li>A <strong>subnet mask</strong> marks the split: a 32-bit value with <strong>1s for the network part</strong> and <strong>0s for the host part</strong>.</li>
+  </ul>
+  <h3>Example<span class="tag add">not in slides</span></h3>
+<div class="tree">Network 192.168.1.0/24 (256 addresses) split into 4 subnets → /26 (64 each)
+Subnet 1: 192.168.1.0   – 192.168.1.63
+Subnet 2: 192.168.1.64  – 192.168.1.127
+Subnet 3: 192.168.1.128 – 192.168.1.191
+Subnet 4: 192.168.1.192 – 192.168.1.255
+Mask /26 = 255.255.255.192</div>
+  <h3>Advantages</h3>
+  <ol>
+    <li><strong>Efficient IP use:</strong> less wastage.</li>
+    <li><strong>Better performance:</strong> broadcast traffic stays inside each subnet.</li>
+    <li><strong>Better security:</strong> parts of the network are isolated.</li>
+    <li><strong>Flexible and scalable:</strong> add subnets without changing the whole scheme.</li>
+    <li><strong>Simpler management:</strong> smaller segments are easier to troubleshoot.</li>
+  </ol>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="mask">
+  <h2><span class="num">15</span>Address Masking</h2>
+  <div class="def">An <strong>address mask</strong> is a <strong>32-bit number with the n leftmost bits set to 1</strong> and the remaining (32 − n) bits set to 0. A program uses it with bitwise <strong>NOT, AND and OR</strong> to get information about a block.</div>
+  <h3>Formulas</h3>
+  <ol>
+    <li>Number of addresses: <strong>N = NOT(mask) + 1</strong></li>
+    <li>First address: <strong>(any address in the block) AND (mask)</strong></li>
+    <li>Last address: <strong>(any address in the block) OR (NOT mask)</strong></li>
+  </ol>
+  <h3>Example: 167.199.170.82/27</h3>
+<div class="tree">Mask (/27)  = 255.255.255.224
+NOT mask    = 0.0.0.31
+N           = 0.0.0.31 + 1 = 32 addresses
+First       = 167.199.170.82 AND 255.255.255.224 = 167.199.170.64
+Last        = 167.199.170.82 OR  0.0.0.31        = 167.199.170.95</div>
+  <div class="note">The slide's version of this example has errors: it writes the mask as "256.256.256.224" (it's <strong>255</strong>.255.255.224), and gives first = .82 and last = .255. The correct answers are <strong>.64</strong> and <strong>.95</strong>, as worked out above and in topic 13.</div>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="supernet">
+  <h2><span class="num">16</span>Supernetting</h2>
+  <div class="def"><strong>Supernetting</strong> is the <strong>opposite of subnetting</strong>: it <strong>combines several smaller contiguous networks into one larger network (supernet)</strong>. This is also called <strong>route summarisation</strong> or aggregation.</div>
+  <h3>Benefits</h3>
+  <ul>
+    <li>Saves space in <strong>routing tables</strong>.</li>
+    <li>Reduces the number of routing updates.</li>
+    <li>Simplifies routing decisions.</li>
+    <li>Controls routing-table growth as the Internet expands.</li>
+  </ul>
+  <h3>Rules</h3>
+  <ul>
+    <li>All networks must be <strong>contiguous</strong>.</li>
+    <li>All blocks must be the <strong>same size</strong>, and the count must be a <strong>power of 2</strong>.</li>
+    <li>The <strong>first network ID must be divisible</strong> by the total size of the supernet.</li>
+  </ul>
+  <h3>Example<span class="tag add">not in slides</span></h3>
+<div class="tree">200.1.0.0/24, 200.1.1.0/24, 200.1.2.0/24, 200.1.3.0/24   (4 contiguous /24s)
+        ↓ combine (4 = 2^2, so the prefix shrinks by 2)
+200.1.0.0/22   → one routing entry instead of four</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Subnetting</th><th>Supernetting</th></tr>
+    <tr><td>Splits one network into many</td><td>Joins many networks into one</td></tr>
+    <tr><td>Prefix gets longer (more 1s in the mask)</td><td>Prefix gets shorter (fewer 1s)</td></tr>
+    <tr><td>Used inside an organisation</td><td>Used by routers and ISPs to shrink routing tables</td></tr>
+  </table></div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="arp">
+  <h2><span class="num">17</span>Address Resolution Protocol (ARP)</h2>
+  <div class="def"><strong>ARP</strong> maps a <strong>logical (IP) address to a physical (MAC) address</strong>. It is used to find a node's physical address when its IP address is known.</div>
+  <h3>Why it's needed</h3>
+  <ul>
+    <li>The Internet works with <strong>IP addresses</strong>, but the data link layer (Ethernet etc.) delivers frames using <strong>MAC addresses</strong>.</li>
+    <li>Physical addresses have local scope and can't be changed, so a mapping is needed for every delivery on a local network.</li>
+  </ul>
+  <h3>How ARP works</h3>
+<div class="tree">1. Host A wants to send to IP 130.23.43.25 but doesn't know its MAC.
+2. A BROADCASTS an ARP request: "Who has 130.23.43.25? Tell me your MAC."
+3. Every host on the LAN receives it; only the owner of that IP responds.
+4. The owner UNICASTS an ARP reply with its MAC address.
+5. A stores the IP→MAC pair in its ARP cache and sends the datagram.</div>
+  <ul>
+    <li><strong>Request = broadcast</strong>, <strong>reply = unicast</strong>.</li>
+    <li>The <strong>ARP cache</strong> saves the answer, so the next packets don't need a new request.</li>
+  </ul>
+  <h3>ARP packet format</h3>
+<div class="tree">┌─────────────────────────┬─────────────────────────┐
+│ Hardware type (16)      │ Protocol type (16)      │
+├────────────┬────────────┼─────────────────────────┤
+│ HW len (8) │ PR len (8) │ Operation (16)          │
+├────────────┴────────────┴─────────────────────────┤
+│ Sender hardware address (6 bytes for Ethernet)    │
+│ Sender protocol address (4 bytes for IPv4)        │
+│ Target hardware address (all 0s in a request)     │
+│ Target protocol address                           │
+└───────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>Hardware type (16)</td><td>Network type ARP is running on (Ethernet = 1).</td></tr>
+    <tr><td>Protocol type (16)</td><td>The protocol being mapped. IPv4 = <code>0x0800</code>.</td></tr>
+    <tr><td>Hardware length (8)</td><td>Length of the physical address in bytes (Ethernet = 6).</td></tr>
+    <tr><td>Protocol length (8)</td><td>Length of the logical address in bytes (IPv4 = 4).</td></tr>
+    <tr><td>Operation (16)<span class="tag add">not in slides</span></td><td>1 = request, 2 = reply.</td></tr>
+    <tr><td>Sender / target addresses<span class="tag add">not in slides</span></td><td>Sender MAC and IP, then target MAC and IP. Target MAC is all 0s in a request, since that's what's being asked.</td></tr>
+  </table></div>
+  <h3>Encapsulation</h3>
+  <p>An ARP packet is carried <strong>directly inside an Ethernet frame</strong> (not inside an IP datagram), with type field <code>0x0806</code>.</p>
+<div class="tree">Preamble+SFD │ Dest MAC │ Source MAC │ Type 0x0806 │ ARP packet (28 bytes) │ CRC</div>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="rarp">
+  <h2><span class="num">18</span>Reverse Address Resolution Protocol (RARP)</h2>
+  <div class="def"><strong>RARP</strong> finds the <strong>logical (IP) address</strong> of a machine that <strong>only knows its physical (MAC) address</strong>.</div>
+  <h3>Why it's needed</h3>
+  <ul>
+    <li>A host normally stores its IP address on disk. But a <strong>diskless computer</strong>, or a computer joining the network for the <strong>first time</strong>, doesn't know its IP address.</li>
+  </ul>
+  <h3>How RARP works</h3>
+<div class="tree">1. Host broadcasts a RARP request containing its own MAC address.
+2. Every host on the physical network receives it.
+3. A RARP server recognises the request, looks up the MAC in its table,
+   and unicasts a RARP reply containing the host's IP address.</div>
+  <ul>
+    <li><strong>Request = broadcast</strong>, <strong>reply = unicast</strong>, the same as ARP.</li>
+    <li>The packet format is the same as ARP, with operation 3 (request) or 4 (reply).</li>
+    <li>RARP has been replaced by <strong>BOOTP</strong> and then <strong>DHCP</strong>.<span class="tag add">not in slides</span></li>
+  </ul>
+  <h3>ARP vs RARP</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>ARP</th><th>RARP</th></tr>
+    <tr><td>IP → MAC (logical to physical)</td><td>MAC → IP (physical to logical)</td></tr>
+    <tr><td>Used by a host that knows the destination's IP</td><td>Used by a host that doesn't know its own IP</td></tr>
+    <tr><td>Any host on the LAN can reply (the owner of the IP)</td><td>Needs a RARP server</td></tr>
+    <tr><td>Still used in IPv4</td><td>Obsolete (replaced by DHCP)</td></tr>
+  </table></div>
+  <div class="tip"><strong>Remember:</strong> ARP asks "what's your MAC?" and RARP asks "what's my IP?".</div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

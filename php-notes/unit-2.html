@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHP Control Flow and Functions</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">PHP Notes</a></div>
+  <div class="sub">Unit 2 · Control, Functions &amp; Arrays</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a class="on" href="unit-2.html">Unit 2</a>
+    <a href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#decision">1. Decision Making</a></li>
+    <li><a href="#if">2. if</a></li>
+    <li><a href="#ifelse">3. if-else</a></li>
+    <li><a href="#elseif">4. if-elseif-else</a></li>
+    <li><a href="#nested-if">5. Nested if</a></li>
+    <li><a href="#switch">6. switch</a></li>
+    <li><a href="#for">7. for Loop</a></li>
+    <li><a href="#nested-for">8. Nested for Loop</a></li>
+    <li><a href="#foreach">9. foreach Loop</a></li>
+    <li><a href="#while">10. while Loop</a></li>
+    <li><a href="#dowhile">11. do-while Loop</a></li>
+    <li><a href="#loops-compare">12. Loop Comparison</a></li>
+    <li><a href="#break">13. break</a></li>
+    <li><a href="#continue">14. continue</a></li>
+    <li><a href="#functions">15. Functions</a></li>
+    <li><a href="#user-fn">16. User-defined Functions</a></li>
+    <li><a href="#params">17. Parameters, Arguments &amp; Return</a></li>
+    <li><a href="#mismatch">18. Type Mismatch in Arguments</a></li>
+    <li><a href="#default">19. Default Argument Values</a></li>
+    <li><a href="#variadic">20. Variable Length Arguments</a></li>
+    <li><a href="#recursion">21. Recursive Functions</a></li>
+    <li><a href="#by-ref">22. Pass by Value vs Reference</a></li>
+    <li><a href="#arrays">23. Arrays</a></li>
+    <li><a href="#indexed">24. Indexed Arrays</a></li>
+    <li><a href="#assoc">25. Associative Arrays</a></li>
+    <li><a href="#multi">26. Multidimensional Arrays</a></li>
+    <li><a href="#array-fn">27. Array Functions</a></li>
+    <li><a href="#string-fn">28. String Functions</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 2: Control Structures, Functions and Arrays</h1>
+  <p>Decision making, loops, break and continue, user-defined functions with all their argument styles, recursion, arrays and common array and string functions.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="decision">
+  <h2><span class="num">1</span>Decision Making in PHP</h2>
+  <div class="def">PHP makes decisions with the <strong>if, elseif and else</strong> keywords (language constructs). They run different code depending on whether a condition is true or false.</div>
+  <h3>Forms of the if statement</h3>
+  <ol>
+    <li><strong>if</strong>: run code only if a condition is true.</li>
+    <li><strong>if-else</strong>: one block if true, another if false.</li>
+    <li><strong>if-elseif-else</strong>: check several conditions in turn.</li>
+    <li><strong>nested if</strong>: an if inside another if.</li>
+  </ol>
+  <p>Plus <strong>switch</strong>, which checks one variable against many values.</p>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="if">
+  <h2><span class="num">2</span>if Statement</h2>
+  <div class="def">The <strong>if</strong> statement runs its block <strong>only if the condition is true</strong>.</div>
+  <div class="decl">if (condition) {
+    // code to be executed
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+$num = 12;
+if ($num < 100) {
+    echo "$num is less than 100";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">12 is less than 100</div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="ifelse">
+  <h2><span class="num">3</span>if-else Statement</h2>
+  <div class="def">The <strong>if-else</strong> statement runs <strong>one block if the condition is true</strong> and <strong>another block if it's false</strong>.</div>
+  <div class="decl">if (condition) {
+    // code if true
+} else {
+    // code if false
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+$num = 12;
+if ($num % 2 == 0) {
+    echo "$num is even number";
+} else {
+    echo "$num is odd number";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">12 is even number</div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="elseif">
+  <h2><span class="num">4</span>if-elseif-else Statement</h2>
+  <div class="def">The <strong>if-elseif-else</strong> ladder combines several if-else statements to <strong>check multiple conditions one after another</strong>. The first true condition's block runs, and if none are true, the else block runs.</div>
+  <div class="decl">if (condition1) {
+    // if condition1 is true
+} elseif (condition2) {
+    // if condition2 is true
+} else {
+    // if all conditions are false
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+$marks = 69;
+if ($marks < 33) {
+    echo "Fail";
+} elseif ($marks < 50) {
+    echo "D grade";
+} elseif ($marks < 65) {
+    echo "C grade";
+} elseif ($marks < 80) {
+    echo "B grade";
+} elseif ($marks < 90) {
+    echo "A grade";
+} elseif ($marks <= 100) {
+    echo "A+ grade";
+} else {
+    echo "Invalid input";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">B grade</div>
+  <div class="note">The slide's version checks <code>$marks &lt; 33</code> then <code>$marks &gt;= 34</code>, so marks of exactly <strong>33</strong> fall through to "Invalid input". It also uses <code>&lt; 100</code>, so <strong>100</strong> is "Invalid" too. The version above fixes both by letting each check follow on from the one before.</div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="nested-if">
+  <h2><span class="num">5</span>Nested if Statement</h2>
+  <div class="def">A <strong>nested if</strong> is an if block <strong>inside another if block</strong>. The inner if runs only when the outer condition is true.</div>
+  <div class="decl">if (condition1) {
+    if (condition2) {
+        // runs only if both are true
+    }
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+$age = 23;
+$nationality = "Indian";
+if ($nationality == "Indian") {
+    if ($age >= 18) {
+        echo "Eligible to give vote";
+    } else {
+        echo "Not eligible to give vote";
+    }
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Eligible to give vote</div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="switch">
+  <h2><span class="num">6</span>switch Statement</h2>
+  <div class="def">The <strong>switch</strong> statement tests <strong>one variable or expression against many values (cases)</strong>. It replaces a long if-else chain and makes code easier to read.</div>
+  <div class="decl">switch (expression) {
+    case value1:
+        // code
+        break;
+    case value2:
+        // code
+        break;
+    default:
+        // code if no case matches
+}</div>
+  <h3>Rules</h3>
+  <ul>
+    <li><strong>default</strong> is optional, and there can be only <strong>one</strong>. More than one gives a fatal error. It's usually written last.</li>
+    <li><strong>break</strong> ends a case. Without it, execution <strong>falls through</strong> into the following cases.</li>
+    <li>The expression can be a number, character, string or function call.</li>
+    <li>Switches can be nested, but that makes code harder to read.</li>
+    <li>A semicolon (;) can be used instead of the colon (:) after a case.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+$num = 20;
+switch ($num) {
+    case 10:
+        echo "Number is equal to 10";
+        break;
+    case 20:
+        echo "Number is equal to 20";
+        break;
+    case 30:
+        echo "Number is equal to 30";
+        break;
+    default:
+        echo "Number is not 10, 20 or 30";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Number is equal to 20</div>
+  <h3>switch vs if-else<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>switch</th><th>if-else</th></tr>
+    <tr><td>Checks one expression for equality with fixed values</td><td>Can check any condition (ranges, &amp;&amp;, ||)</td></tr>
+    <tr><td>Cleaner when there are many fixed values</td><td>Better for complex conditions</td></tr>
+    <tr><td>Needs break to stop fall-through</td><td>No fall-through</td></tr>
+  </table></div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="for">
+  <h2><span class="num">7</span>for Loop</h2>
+  <div class="def">The <strong>for loop</strong> repeats a block a <strong>fixed number of times</strong>. Use it when you <strong>know how many iterations</strong> you need. Initialisation, condition and update are all written in one place.</div>
+  <div class="decl">for (initialization; condition; increment/decrement) {
+    // code to be executed
+}</div>
+  <ul>
+    <li><strong>Initialisation:</strong> sets the counter. It runs <strong>only once</strong>, and is optional.</li>
+    <li><strong>Condition:</strong> checked before every iteration. The loop continues while it's TRUE.</li>
+    <li><strong>Increment/decrement:</strong> updates the counter after each iteration.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+// Print 1 to 10
+for ($n = 1; $n <= 10; $n++) {
+    echo "$n<br>";
+}
+?>
+</script></div>
+  <h3>Programs</h3>
+<div class="code"><script type="text/plain">
+<?php
+// Even numbers from 1 to 50
+for ($i = 1; $i <= 50; $i++) {
+    if ($i % 2 == 0) {
+        echo $i . " ";
+    }
+}
+
+// Factorial of 5
+$num = 5;
+$factorial = 1;
+for ($i = 1; $i <= $num; $i++) {
+    $factorial *= $i;
+}
+echo "<br>Factorial of $num is: $factorial";   // 120
+?>
+</script></div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="nested-for">
+  <h2><span class="num">8</span>Nested for Loop</h2>
+  <div class="def">A <strong>nested for loop</strong> is a for loop <strong>inside another for loop</strong>. The inner loop runs <strong>completely</strong> for every single iteration of the outer loop.</div>
+  <p>If the outer loop runs 3 times and the inner loop 3 times, the inner body runs <strong>3 × 3 = 9</strong> times.</p>
+<div class="code"><script type="text/plain">
+<?php
+// Multiplication table (5 x 5)
+for ($i = 1; $i <= 5; $i++) {
+    for ($j = 1; $j <= 5; $j++) {
+        echo $i * $j . " ";
+    }
+    echo "<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">1 2 3 4 5
+2 4 6 8 10
+3 6 9 12 15
+4 8 12 16 20
+5 10 15 20 25</div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="foreach">
+  <h2><span class="num">9</span>foreach Loop</h2>
+  <div class="def">The <strong>foreach loop</strong> is the easiest way to <strong>go through every element of an array</strong> (or object). It needs no counter or increment.</div>
+  <ul>
+    <li>Works <strong>only on arrays and objects</strong>. Any other type gives an error.</li>
+  </ul>
+  <div class="decl">foreach ($array as $value) {
+    // code
+}
+
+foreach ($array as $key => $value) {
+    // code (key and value)
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+$season = array("summer", "winter", "spring", "autumn");
+foreach ($season as $arr) {
+    echo "Season is: $arr<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Season is: summer
+Season is: winter
+Season is: spring
+Season is: autumn</div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="while">
+  <h2><span class="num">10</span>while Loop</h2>
+  <div class="def">The <strong>while loop</strong> repeats a block <strong>as long as the condition is TRUE</strong>. Use it when the <strong>number of iterations isn't known</strong> in advance.</div>
+  <ul>
+    <li>It's an <strong>entry-controlled loop</strong>: the condition is checked <strong>before</strong> the body runs. If it starts false, the body never runs.</li>
+  </ul>
+  <div class="decl">while (condition) {
+    // code
+}
+
+// alternative syntax
+while (condition):
+    // code
+endwhile;</div>
+<div class="code"><script type="text/plain">
+<?php
+$n = 1;
+while ($n <= 10) {
+    echo "$n<br>";
+    $n++;
+}
+?>
+</script></div>
+  <h3>Program: palindrome check</h3>
+<div class="code"><script type="text/plain">
+<?php
+$number = 12321;
+$original = $number;
+$reversed = 0;
+while ($number > 0) {
+    $remainder = $number % 10;
+    $reversed = ($reversed * 10) + $remainder;
+    $number = (int)($number / 10);
+}
+if ($original == $reversed) {
+    echo "$original is a palindrome.";
+} else {
+    echo "$original is not a palindrome.";
+}
+?>
+</script></div>
+  <h3>Program: Fibonacci series (10 terms)</h3>
+<div class="code"><script type="text/plain">
+<?php
+$terms = 10;
+$count = 0;
+$first = 0;
+$second = 1;
+while ($count < $terms) {
+    echo $first . " ";
+    $next = $first + $second;
+    $first = $second;
+    $second = $next;
+    $count++;
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">0 1 1 2 3 5 8 13 21 34</div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="dowhile">
+  <h2><span class="num">11</span>do-while Loop</h2>
+  <div class="def">The <strong>do-while loop</strong> runs the body <strong>first</strong> and checks the condition <strong>afterwards</strong>, so the body is <strong>guaranteed to run at least once</strong>. It's an <strong>exit-controlled loop</strong>.</div>
+  <div class="decl">do {
+    // code
+} while (condition);</div>
+<div class="code"><script type="text/plain">
+<?php
+$sum = 0;
+$num = 1;
+do {
+    $sum += $num;
+    $num++;
+} while ($num <= 4);
+echo "Total sum: $sum";    // 10
+?>
+</script></div>
+  <h3>Program: sum of digits</h3>
+<div class="code"><script type="text/plain">
+<?php
+$num = 1234;
+$sum = 0;
+do {
+    $digit = $num % 10;          // last digit
+    $sum += $digit;
+    $num = (int)($num / 10);     // remove last digit
+} while ($num > 0);
+echo "Sum of digits: $sum";      // 10
+?>
+</script></div>
+  <h3>Program: reverse a number</h3>
+<div class="code"><script type="text/plain">
+<?php
+$num = 1234;
+$reverse = 0;
+do {
+    $digit = $num % 10;
+    $reverse = ($reverse * 10) + $digit;
+    $num = (int)($num / 10);
+} while ($num > 0);
+echo "Reversed number: $reverse";   // 4321
+?>
+</script></div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="loops-compare">
+  <h2><span class="num">12</span>Loop Comparison</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Loop</th><th>Condition checked</th><th>Minimum runs</th><th>Best for</th></tr>
+    <tr><td>for</td><td>Before each iteration</td><td>0</td><td>A known number of iterations</td></tr>
+    <tr><td>while</td><td>Before (entry-controlled)</td><td>0</td><td>An unknown number of iterations</td></tr>
+    <tr><td>do-while</td><td>After (exit-controlled)</td><td><strong>1</strong></td><td>When the body must run at least once (e.g. menus)</td></tr>
+    <tr><td>foreach</td><td>Automatic, per element</td><td>0</td><td>Arrays and objects</td></tr>
+  </table></div>
+  <div class="tip"><strong>while vs do-while:</strong> while checks at the start, do-while checks at the end. A do-while always runs at least once.</div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="break">
+  <h2><span class="num">13</span>break Statement</h2>
+  <div class="def"><strong>break</strong> <strong>immediately ends</strong> the current loop (for, while, do-while, foreach) or switch. Control moves to the first statement after it.</div>
+  <ul>
+    <li>Inside a nested loop, break ends <strong>only the inner loop</strong>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+for ($i = 1; $i <= 10; $i++) {
+    if ($i == 5) {
+        echo "Reached $i, breaking the loop.<br>";
+        break;                 // exit the loop
+    }
+    echo "Number: $i<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Number: 1
+Number: 2
+Number: 3
+Number: 4
+Reached 5, breaking the loop.</div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="continue">
+  <h2><span class="num">14</span>continue Statement</h2>
+  <div class="def"><strong>continue</strong> <strong>skips the rest of the current iteration</strong> and jumps straight to the <strong>next</strong> one. The loop itself keeps running.</div>
+  <ul>
+    <li>Works with for, while, do-while and foreach.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+for ($i = 0; $i < 5; $i++) {
+    if ($i == 3) {
+        continue;      // skip 3
+    }
+    echo $i . "<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">0
+1
+2
+4</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>break</th><th>continue</th></tr>
+    <tr><td>Ends the whole loop</td><td>Skips only the current iteration</td></tr>
+    <tr><td>Control goes outside the loop</td><td>Control goes to the next iteration</td></tr>
+    <tr><td>Used in loops and switch</td><td>Used in loops</td></tr>
+  </table></div>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="functions">
+  <h2><span class="num">15</span>Functions</h2>
+  <div class="def">A <strong>function</strong> is a <strong>self-contained block of code that performs a specific task</strong>. It can take inputs (parameters), run statements and optionally return a value.</div>
+  <h3>Types</h3>
+  <ul>
+    <li><strong>Built-in (library) functions:</strong> already provided by PHP, e.g. <code>var_dump()</code>, <code>fopen()</code>, <code>print_r()</code>, <code>gettype()</code>, <code>strlen()</code>.</li>
+    <li><strong>User-defined functions:</strong> written by the programmer.</li>
+  </ul>
+  <h3>Advantages</h3>
+  <ul>
+    <li><strong>Code reusability:</strong> define once, call many times.</li>
+    <li><strong>Less code:</strong> the logic isn't repeated.</li>
+    <li><strong>Easy to understand:</strong> the program is split into logical pieces.</li>
+  </ul>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="user-fn">
+  <h2><span class="num">16</span>User-defined Functions</h2>
+  <div class="def">A <strong>user-defined function</strong> is created with the <strong><code>function</code></strong> keyword, followed by a name and parentheses.</div>
+  <div class="decl">function functionName() {
+    // code to be executed
+}</div>
+  <h3>Rules</h3>
+  <ul>
+    <li>Start with the keyword <code>function</code>.</li>
+    <li>The name must start with a <strong>letter or underscore</strong>, <strong>not a number</strong>.</li>
+    <li>Call it by writing its name and parentheses: <code>functionName();</code></li>
+    <li>Function names are <strong>not</strong> case-sensitive.<span class="tag add">not in slides</span></li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+function sayHello() {
+    echo "Hello PHP Function";
+}
+sayHello();       // calling the function
+?>
+</script></div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="params">
+  <h2><span class="num">17</span>Parameters, Arguments &amp; Return Values</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Parameter</th><th>Argument</th></tr>
+    <tr><td>The variable in the <strong>function definition</strong>, a placeholder</td><td>The <strong>actual value</strong> passed when calling</td></tr>
+    <tr><td><code>function greet($name)</code></td><td><code>greet("Sonoo")</code></td></tr>
+  </table></div>
+  <h3>Parameterised functions</h3>
+  <p>A function can take any number of parameters, separated by commas. A parameter can be a scalar (number, string, boolean), an array, an object or even a function.</p>
+<div class="code"><script type="text/plain">
+<?php
+function sayHello($name) {
+    echo "Hello $name<br>";
+}
+sayHello("Sonoo");
+sayHello("Vimal");
+
+function add($x, $y) {
+    echo "Sum = " . ($x + $y) . "<br>";
+}
+add(467, 943);        // Sum = 1410
+?>
+</script></div>
+  <h3>Returning values</h3>
+  <p>The <strong><code>return</code></strong> keyword sends a value back to the caller and <strong>ends the function</strong>. Any type can be returned, including arrays and objects.</p>
+<div class="code"><script type="text/plain">
+<?php
+function sumNumbers($a, $b, $c) {
+    $sum = $a + $b + $c;
+    return $sum;
+}
+$result = sumNumbers(4, 7, 9);
+echo "The sum is $result";     // The sum is 20
+?>
+</script></div>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="mismatch">
+  <h2><span class="num">18</span>Type Mismatch in Arguments</h2>
+  <p>PHP converts types automatically, but some combinations fail.</p>
+  <h3>Case 1: adding two non-numeric strings causes an error</h3>
+<div class="code"><script type="text/plain">
+<?php
+function addition($first, $second) {
+    $result = $first + $second;   // TypeError in PHP 8
+    echo "Addition: $result";
+}
+addition("Hello", "World");
+?>
+</script></div>
+  <p>Result: <strong>TypeError: Unsupported operand types: string + string</strong>, because PHP can't add text numerically.</p>
+  <h3>Case 2: concatenating a string and a number works</h3>
+<div class="code"><script type="text/plain">
+<?php
+function concatenate($str, $num) {
+    $result = $str . $num;    // the number becomes a string
+    echo "Concatenated result: $result";
+}
+concatenate("Hello", 2024);   // Hello2024
+?>
+</script></div>
+  <div class="tip"><strong>Remember:</strong> <code>+</code> means numeric addition and <code>.</code> means string joining. PHP converts numbers to strings automatically when concatenating.</div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="default">
+  <h2><span class="num">19</span>Default Argument Values</h2>
+  <div class="def">A parameter can have a <strong>default value</strong>, set with <code>=</code>. If no argument is passed for it, the default is used. This cuts down on conditional checks and makes functions more flexible.</div>
+  <div class="decl">function functionName($param1 = defaultValue, $param2 = anotherValue) {
+    // body
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+function getMessage($message = "Hello World!") {
+    return $message;
+}
+echo getMessage();               // Hello World!   (default used)
+echo "<br>";
+echo getMessage("Hi there!");    // Hi there!      (default overridden)
+?>
+</script></div>
+  <h3>Rules</h3>
+  <ol>
+    <li><strong>Defaults must be constant expressions</strong> (a string, number, array). Variables and function calls aren't allowed.</li>
+    <li><strong>Default parameters come after non-default ones.</strong></li>
+  </ol>
+<div class="code"><script type="text/plain">
+<?php
+function greetUser($name, $greeting = "Hello") {   // non-default first
+    return "$greeting, $name!";
+}
+echo greetUser("John");           // Hello, John!
+
+function calculateDiscount($discount = 5) {
+    $price = 100;
+    $final = $price - ($price * $discount / 100);
+    echo "Discount: $discount% | Final price: $final <br>";
+}
+calculateDiscount();      // uses default 5%  → 95
+calculateDiscount(20);    // overrides default → 80
+?>
+</script></div>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="variadic">
+  <h2><span class="num">20</span>Variable Length Argument Functions</h2>
+  <div class="def">A <strong>variable-length argument</strong> (variadic) function accepts <strong>0, 1 or any number of arguments</strong>. Put <strong>three dots (<code>...</code>)</strong>, the <strong>spread operator</strong>, before the parameter name. It's available since <strong>PHP 5.6</strong>.</div>
+  <ul>
+    <li>All the extra arguments are packed into an <strong>array</strong> inside the function.</li>
+    <li>Useful when the number of inputs isn't known in advance.</li>
+  </ul>
+  <div class="decl">function functionName(...$arguments) {
+    // $arguments is an array
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+function sum(...$numbers) {
+    $total = 0;
+    foreach ($numbers as $num) {
+        $total += $num;
+    }
+    return $total;
+}
+echo sum(1, 2) . "<br>";           // 3
+echo sum(5, 10, 15, 20) . "<br>";  // 50
+?>
+</script></div>
+  <h3>Mixing fixed and variable arguments</h3>
+<div class="code"><script type="text/plain">
+<?php
+function greet($greeting, ...$names) {   // variadic must be last
+    foreach ($names as $name) {
+        echo "$greeting, $name!<br>";
+    }
+}
+greet("Hello", "Alice", "Bob", "Charlie");
+?>
+</script></div>
+  <h3>Spreading an array into arguments</h3>
+<div class="code"><script type="text/plain">
+<?php
+function multiply(...$nums) {
+    $product = 1;
+    foreach ($nums as $n) {
+        $product *= $n;
+    }
+    return $product;
+}
+$arr = [2, 3, 4];
+echo "Product is: " . multiply(...$arr);   // Product is: 24
+?>
+</script></div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="recursion">
+  <h2><span class="num">21</span>Recursive Functions</h2>
+  <div class="def"><strong>Recursion</strong> is when a <strong>function calls itself</strong>. Every recursive function needs a <strong>base case</strong>, a condition that stops the recursion. Without one it calls itself forever, until memory runs out.</div>
+  <h3>How it works</h3>
+  <ol>
+    <li>The calling code calls the recursive function.</li>
+    <li>The function does some processing.</li>
+    <li>If the base case <strong>isn't</strong> reached, it calls itself again, creating a new instance.</li>
+    <li>When the base case <strong>is</strong> reached, it returns, and the calls unwind back to the caller.</li>
+  </ol>
+<div class="code"><script type="text/plain">
+<?php
+function factorial($n) {
+    if ($n == 0 || $n == 1) {
+        return 1;                       // base case
+    } else {
+        return $n * factorial($n - 1);  // recursive call
+    }
+}
+echo factorial(5);    // 120
+?>
+</script></div>
+  <h3>Trace</h3>
+<div class="tree">factorial(5)
+= 5 * factorial(4)
+= 5 * (4 * factorial(3))
+= 5 * (4 * (3 * factorial(2)))
+= 5 * (4 * (3 * (2 * factorial(1))))
+= 5 * 4 * 3 * 2 * 1 = 120</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Recursion</th><th>Iteration (loops)</th></tr>
+    <tr><td>Function calls itself</td><td>Repeats with a loop</td></tr>
+    <tr><td>Needs a base case</td><td>Needs a loop condition</td></tr>
+    <tr><td>Uses more memory (call stack)</td><td>Uses less memory</td></tr>
+    <tr><td>Natural for trees and factorials</td><td>Simpler for straightforward repetition</td></tr>
+  </table></div>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="by-ref">
+  <h2><span class="num">22</span>Pass by Value vs Pass by Reference</h2>
+  <h3>Pass by value (default)</h3>
+  <div class="def">A <strong>copy</strong> of the variable is passed. Changes inside the function <strong>don't affect</strong> the original variable.</div>
+<div class="code"><script type="text/plain">
+<?php
+function addByValue($x, $y) {
+    $x = $x + $y;      // changes only the local copy
+}
+$a = 5;
+addByValue($a, 3);
+echo $a;    // 5 (unchanged)
+?>
+</script></div>
+  <h3>Pass by reference (&amp;)</h3>
+  <div class="def">Put an <strong>ampersand (&amp;)</strong> before the parameter. The function works on the <strong>original variable</strong>, so changes inside <strong>do affect</strong> it outside.</div>
+<div class="code"><script type="text/plain">
+<?php
+function addByRef(&$x, $y) {
+    $x = $x + $y;      // changes the original
+}
+$a = 5;
+addByRef($a, 3);
+echo $a;    // 8
+?>
+</script></div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Pass by value</th><th>Pass by reference</th></tr>
+    <tr><td>A copy is passed</td><td>The original variable is passed (<code>&amp;$x</code>)</td></tr>
+    <tr><td>The original stays unchanged</td><td>The original is modified</td></tr>
+    <tr><td>Safer, and the default</td><td>Useful when the function must update the caller's variable</td></tr>
+  </table></div>
+</section>
+
+<!-- 23 -->
+<section class="topic" id="arrays">
+  <h2><span class="num">23</span>Arrays</h2>
+  <div class="def">An <strong>array</strong> is a data structure that <strong>stores multiple values in a single variable</strong>. Each value is identified by a <strong>key (index)</strong> used to access, change or process it.</div>
+  <h3>Uses</h3>
+  <ul>
+    <li><strong>Data storage:</strong> related data in one place.</li>
+    <li><strong>Data processing:</strong> easy to loop over and manipulate.</li>
+    <li><strong>Flexibility:</strong> can hold different types (integers, strings, objects).</li>
+  </ul>
+  <h3>Advantages</h3>
+  <ul>
+    <li><strong>Less code:</strong> one array instead of many variables.</li>
+    <li><strong>Easy to traverse</strong> with loops.</li>
+    <li><strong>Easy to sort</strong> with built-in functions.</li>
+    <li><strong>Dynamic size:</strong> grows automatically as items are added.</li>
+    <li><strong>Data grouping:</strong> related data is easier to find.</li>
+  </ul>
+  <h3>Types</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Type</th><th>Keys</th><th>Example use</th></tr>
+    <tr><td><strong>Indexed</strong> (numeric)</td><td>Numbers, starting at 0</td><td>A list of names</td></tr>
+    <tr><td><strong>Associative</strong></td><td>Custom keys (strings)</td><td>Employee → salary</td></tr>
+    <tr><td><strong>Multidimensional</strong></td><td>Arrays inside arrays</td><td>Tables, matrices</td></tr>
+  </table></div>
+</section>
+
+<!-- 24 -->
+<section class="topic" id="indexed">
+  <h2><span class="num">24</span>Indexed Arrays</h2>
+  <div class="def">An <strong>indexed (numeric) array</strong> stores elements under <strong>numeric indexes starting from 0</strong>. It can hold numbers, strings or objects.</div>
+  <h3>Two ways to create one</h3>
+<div class="code"><script type="text/plain">
+<?php
+// 1. Using array()
+$size = array("Big", "Medium", "Short");
+
+// 2. Assigning values manually
+$size[0] = "Big";
+$size[1] = "Medium";
+$size[2] = "Short";
+
+// Short syntax (PHP 5.4+)
+$size = ["Big", "Medium", "Short"];
+?>
+</script></div>
+  <h3>Traversing</h3>
+<div class="code"><script type="text/plain">
+<?php
+$size = array("Big", "Medium", "Short");
+foreach ($size as $s) {
+    echo "Size is: $s<br>";
+}
+
+$numbers = array(10, 20, 30, 40);
+for ($i = 0; $i < count($numbers); $i++) {
+    echo "Number: $numbers[$i]<br>";
+}
+?>
+</script></div>
+  <h3>Advantages</h3>
+  <ul>
+    <li><strong>Easy access</strong> by number: 0, 1, 2 …</li>
+    <li><strong>Efficient traversal</strong> with for and foreach. No key-value mapping to think about.</li>
+  </ul>
+</section>
+
+<!-- 25 -->
+<section class="topic" id="assoc">
+  <h2><span class="num">25</span>Associative Arrays</h2>
+  <div class="def">An <strong>associative array</strong> uses <strong>custom keys (labels)</strong> instead of numbers. Each value is stored with the <strong><code>=&gt;</code></strong> symbol and read with its meaningful key.</div>
+  <h3>Two ways to create one</h3>
+<div class="code"><script type="text/plain">
+<?php
+// 1. Using array()
+$salary = array("Sam" => "550000", "John" => "250000", "Randolph" => "200000");
+
+// 2. Assigning values by key
+$salary["Sam"] = "550000";
+$salary["John"] = "250000";
+$salary["Randolph"] = "200000";
+
+echo "Sam's salary: " . $salary["Sam"];
+?>
+</script></div>
+  <h3>Traversing (key and value)</h3>
+<div class="code"><script type="text/plain">
+<?php
+$salary = array("Sam" => "550000", "John" => "250000", "Randolph" => "200000");
+foreach ($salary as $k => $v) {
+    echo "Key: $k ; Value: $v<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Key: Sam ; Value: 550000
+Key: John ; Value: 250000
+Key: Randolph ; Value: 200000</div>
+  <h3>Advantages</h3>
+  <ul>
+    <li><strong>Meaningful keys</strong> make code easier to read.</li>
+    <li><strong>Direct retrieval</strong> by key, without remembering positions.</li>
+    <li><strong>Flexible keys:</strong> strings or integers.</li>
+    <li><strong>Good for structured data:</strong> user profiles, settings, database records.</li>
+    <li><strong>No sequential indexing</strong> needed.</li>
+    <li><strong>Efficient</strong> searching and updating in large datasets.</li>
+  </ul>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Indexed array</th><th>Associative array</th></tr>
+    <tr><td>Numeric keys from 0</td><td>Custom string keys</td></tr>
+    <tr><td><code>$a[0]</code></td><td><code>$a["Sam"]</code></td></tr>
+    <tr><td>Good for ordered lists</td><td>Good for labelled data</td></tr>
+  </table></div>
+</section>
+
+<!-- 26 -->
+<section class="topic" id="multi">
+  <h2><span class="num">26</span>Multidimensional Arrays</h2>
+  <div class="def">A <strong>multidimensional array</strong> is an <strong>array containing one or more arrays</strong> as its elements. It stores data in rows and columns (or more dimensions), like a table or matrix.</div>
+  <ul>
+    <li><strong>One-dimensional:</strong> a simple list.</li>
+    <li><strong>Two-dimensional:</strong> an array of arrays (rows × columns).</li>
+    <li>Elements are accessed with <strong>multiple indexes</strong>: <code>$array[row][column]</code>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+$emp = array(
+    array(1, "Sam", 400000),
+    array(2, "John", 500000),
+    array(3, "Rick", 300000)
+);
+for ($row = 0; $row < 3; $row++) {
+    for ($col = 0; $col < 3; $col++) {
+        echo $emp[$row][$col] . "  ";
+    }
+    echo "<br>";
+}
+echo $emp[1][1];     // John
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">1  Sam  400000
+2  John  500000
+3  Rick  300000
+John</div>
+</section>
+
+<!-- 27 -->
+<section class="topic" id="array-fn">
+  <h2><span class="num">27</span>Array Functions</h2>
+  <div class="def">PHP has many built-in <strong>array functions</strong> for accessing and manipulating array elements. They work on single and multidimensional arrays.</div>
+  <h3>array()</h3>
+  <p>Creates and returns an array: indexed, associative or multidimensional.</p>
+  <div class="decl">array array ([ mixed $... ])</div>
+  <h3>array_push()</h3>
+  <p>Adds <strong>one or more items to the end</strong> of an array. The array is passed <strong>by reference</strong>, so the original is changed. It returns the <strong>new number of elements</strong>.</p>
+  <div class="decl">array_push(array &amp;$array, mixed ...$values): int</div>
+<div class="code"><script type="text/plain">
+<?php
+$fruitBasket = ['apple', 'banana', 'orange'];
+array_push($fruitBasket, 'kiwi', 'mango');
+print_r($fruitBasket);
+// Array ( [0] => apple [1] => banana [2] => orange [3] => kiwi [4] => mango )
+?>
+</script></div>
+  <h3>array_pop()</h3>
+  <p><strong>Removes and returns the last element</strong>. The array shrinks by one. Returns NULL if the array is empty.</p>
+  <div class="decl">array_pop(array &amp;$array): mixed</div>
+<div class="code"><script type="text/plain">
+<?php
+$birdList = ['sparrow', 'crow', 'pigeon'];
+$removed = array_pop($birdList);
+echo $removed . "<br>";     // pigeon
+print_r($birdList);         // Array ( [0] => sparrow [1] => crow )
+?>
+</script></div>
+  <h3>Other common array functions<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table>
+    <tr><th>Function</th><th>Description</th></tr>
+    <tr><td>count($arr)</td><td>Number of elements</td></tr>
+    <tr><td>sort($arr) / rsort($arr)</td><td>Sort ascending / descending</td></tr>
+    <tr><td>array_shift($arr)</td><td>Remove the first element</td></tr>
+    <tr><td>array_unshift($arr, $v)</td><td>Add to the beginning</td></tr>
+    <tr><td>in_array($v, $arr)</td><td>Check whether a value exists</td></tr>
+    <tr><td>array_merge($a, $b)</td><td>Join arrays</td></tr>
+    <tr><td>array_keys($arr) / array_values($arr)</td><td>Get all keys / all values</td></tr>
+  </table></div>
+</section>
+
+<!-- 28 -->
+<section class="topic" id="string-fn">
+  <h2><span class="num">28</span>String Functions</h2>
+  <div class="def">Built-in functions that <strong>process and change strings</strong>.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Function</th><th>Syntax</th><th>Description</th><th>Example → Output</th></tr>
+    <tr><td>strtolower()</td><td>string strtolower(string $str)</td><td>Converts to lowercase</td><td>"My name is PHP" → my name is php</td></tr>
+    <tr><td>strtoupper()</td><td>string strtoupper(string $str)</td><td>Converts to UPPERCASE</td><td>"My name is PHP" → MY NAME IS PHP</td></tr>
+    <tr><td>ucfirst()</td><td>string ucfirst(string $str)</td><td>First character to uppercase. The rest are unchanged.</td><td>"my name is PHP" → My name is PHP</td></tr>
+    <tr><td>lcfirst()</td><td>string lcfirst(string $str)</td><td>First character to lowercase. The rest are unchanged.</td><td>"MY name IS PHP" → mY name IS PHP</td></tr>
+    <tr><td>strrev()</td><td>string strrev(string $str)</td><td>Reverses the string</td><td>"my name is PHP" → PHP si eman ym</td></tr>
+    <tr><td>strlen()</td><td>int strlen(string $str)</td><td>Returns the length</td><td>"my name is PHP" → 14</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$str = "my name is PHP";
+echo strtolower($str) . "<br>";   // my name is php
+echo strtoupper($str) . "<br>";   // MY NAME IS PHP
+echo ucfirst($str) . "<br>";      // My name is PHP
+echo lcfirst("MY name") . "<br>"; // mY name
+echo strrev($str) . "<br>";       // PHP si eman ym
+echo strlen($str);                // 14
+?>
+</script></div>
+  <p>Also useful<span class="tag add">not in slides</span>: <code>ucwords()</code> (capitalise every word), <code>str_replace()</code>, <code>strpos()</code>, <code>substr()</code>, <code>trim()</code>, <code>str_word_count()</code>.</p>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

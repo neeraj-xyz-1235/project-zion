@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHP Basics</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">PHP Notes</a></div>
+  <div class="sub">Unit 1 · Introduction to PHP</div>
+  <div class="pages">
+    <a class="on" href="unit-1.html">Unit 1</a>
+    <a href="unit-2.html">Unit 2</a>
+    <a href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#intro">1. Introduction to PHP</a></li>
+    <li><a href="#features">2. Features of PHP</a></li>
+    <li><a href="#advantages">3. Advantages</a></li>
+    <li><a href="#purpose">4. Purpose in Web Development</a></li>
+    <li><a href="#working">5. How PHP Works</a></li>
+    <li><a href="#syntax">6. PHP Syntax</a></li>
+    <li><a href="#types">7. Data Types</a></li>
+    <li><a href="#scalar">8. Scalar Types</a></li>
+    <li><a href="#compound">9. Compound Types</a></li>
+    <li><a href="#special">10. Special Types</a></li>
+    <li><a href="#vardump">11. var_dump()</a></li>
+    <li><a href="#variables">12. Variables</a></li>
+    <li><a href="#scope">13. Variable Scope</a></li>
+    <li><a href="#varvar">14. Variable Variables ($$)</a></li>
+    <li><a href="#constants">15. Constants</a></li>
+    <li><a href="#operators">16. Operators</a></li>
+    <li><a href="#arith">17. Arithmetic Operators</a></li>
+    <li><a href="#assign">18. Assignment Operators</a></li>
+    <li><a href="#bitwise">19. Bitwise Operators</a></li>
+    <li><a href="#compare">20. Comparison Operators</a></li>
+    <li><a href="#incdec">21. Increment / Decrement</a></li>
+    <li><a href="#logical">22. Logical Operators</a></li>
+    <li><a href="#string-ops">23. String Operators</a></li>
+    <li><a href="#comments">24. Comments</a></li>
+    <li><a href="#echo">25. echo</a></li>
+    <li><a href="#print">26. print &amp; print_r()</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 1: Introduction to PHP</h1>
+  <p>What PHP is, its features, syntax, data types, variables and scope, constants, operators, comments and output with echo and print.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="intro">
+  <h2><span class="num">1</span>Introduction to PHP</h2>
+  <div class="def"><strong>PHP</strong> stands for <strong>"PHP: Hypertext Preprocessor"</strong>. It is a widely used, <strong>open-source, general-purpose, server-side scripting language</strong>, especially suited to web development, that can be <strong>embedded into HTML</strong>.</div>
+  <h3>Key facts</h3>
+  <ul>
+    <li>Created by <strong>Rasmus Lerdorf</strong> in <strong>1994</strong>, released to the public in <strong>1995</strong>.</li>
+    <li>The slides list <strong>PHP 8.4.12</strong> as the latest version.</li>
+    <li>PHP scripts run <strong>on the server</strong>. The browser only receives the HTML output.</li>
+    <li>It supports many databases: MySQL, Oracle, PostgreSQL, Informix, Sybase, Solid, Generic ODBC and others.</li>
+    <li>It runs on many platforms (Windows, Linux, Unix, macOS) and works with almost all servers (Apache, IIS, Nginx).</li>
+    <li>It's <strong>free</strong> to download from <code>www.php.net</code>, easy to learn and efficient on the server.</li>
+  </ul>
+  <div class="tip"><strong>Remember:</strong> PHP is a <em>recursive acronym</em>: the "P" in PHP stands for PHP itself.</div>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="features">
+  <h2><span class="num">2</span>Features of PHP</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>Description</th></tr>
+    <tr><td><strong>Performance</strong></td><td>Runs faster than JSP and ASP scripts. PHP uses its own memory, so server workload and loading time drop.</td></tr>
+    <tr><td><strong>Open source</strong></td><td>The source and software are free. Every component is free to download and use.</td></tr>
+    <tr><td><strong>Familiar syntax</strong></td><td>Beginner-friendly, and similar to C, Java and Perl. Code goes in simple tags: <code>&lt;?php ... ?&gt;</code>.</td></tr>
+    <tr><td><strong>Embedded</strong></td><td>PHP code can be embedded inside HTML, mixing dynamic and static content in one file.</td></tr>
+    <tr><td><strong>Platform independent</strong></td><td>Runs on Windows, Mac, Linux and UNIX. Code written on one OS runs on another unchanged.</td></tr>
+    <tr><td><strong>Database support</strong></td><td>Supports MySQL, PostgreSQL, SQLite, ODBC, SQL Server and more, plus <strong>PDO</strong> (PHP Data Objects), a database abstraction layer.</td></tr>
+    <tr><td><strong>Error reporting</strong></td><td>Predefined constants report errors at runtime: <code>E_ERROR</code> (fatal), <code>E_WARNING</code> (non-fatal), <code>E_NOTICE</code> (minor), <code>E_PARSE</code> (compile-time parsing), <code>E_STRICT</code> (best-practice hints).</td></tr>
+    <tr><td><strong>Loosely typed</strong></td><td>No need to declare a variable's type. It's decided at runtime from the value, with automatic type conversion.</td></tr>
+    <tr><td><strong>Web server support</strong></td><td>Works with Apache, Nginx, LiteSpeed, Caddy, Microsoft IIS and others, which makes deployment easy.</td></tr>
+    <tr><td><strong>Security</strong></td><td>Has multiple layers of security against threats and malicious attacks.</td></tr>
+    <tr><td><strong>Control</strong></td><td>Does in a few lines what other languages need long code for. Concise, integrates directly with HTML, easy database connectivity.</td></tr>
+    <tr><td><strong>Helpful community</strong></td><td>A large community with documentation, tutorials, forums and Q&amp;A.</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="advantages">
+  <h2><span class="num">3</span>Advantages of PHP</h2>
+  <ul>
+    <li><strong>Cross-platform:</strong> works on Mac, Windows and Linux.</li>
+    <li><strong>Easy to learn</strong>, even for complete beginners.</li>
+    <li><strong>Works with all databases:</strong> relational and non-relational (MySQL, PostgreSQL, MongoDB).</li>
+    <li><strong>Open source:</strong> anyone can contribute, which is part of why frameworks like <strong>Laravel</strong> are popular.</li>
+    <li><strong>Friendly community</strong> and official documentation.</li>
+    <li><strong>Multi-paradigm:</strong> supports procedural, imperative, functional and object-oriented styles.</li>
+    <li><strong>Integrated with HTML:</strong> used for dynamic content, database work, session tracking and even whole e-commerce sites.</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="purpose">
+  <h2><span class="num">4</span>Purpose of Using PHP for Web Development</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Use</th><th>Description</th></tr>
+    <tr><td><strong>Dynamic content</strong></td><td>Handles dynamic content, databases and session tracking.</td></tr>
+    <tr><td><strong>Session management</strong></td><td>Can create and manage sessions.</td></tr>
+    <tr><td><strong>Cookie handling</strong></td><td>Can read and set cookies.</td></tr>
+    <tr><td><strong>Data validation</strong></td><td>Validates and encrypts data.</td></tr>
+    <tr><td><strong>Many frameworks and CMSs</strong></td><td>WordPress, Laravel, Symfony, Joomla, Magento and more.</td></tr>
+    <tr><td><strong>Many protocols</strong></td><td>HTTP, POP3, SNMP, LDAP, IMAP and others.</td></tr>
+    <tr><td><strong>Access control</strong></td><td>Controls which users can access which pages.</td></tr>
+    <tr><td><strong>Easy installation</strong></td><td>Simple to install and set up (e.g. with XAMPP).</td></tr>
+    <tr><td><strong>Form handling</strong></td><td>Collects form data, saves it to a database and returns information to the user (e.g. a registration form).</td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="working">
+  <h2><span class="num">5</span>How PHP Works<span class="tag add">not in slides</span></h2>
+<div class="tree">Browser ──request page.php──▶ Web server (Apache)
+                                  │
+                                  ▼
+                          PHP interpreter runs the script
+                          (may query MySQL)
+                                  │
+Browser ◀──plain HTML output──────┘</div>
+  <ul>
+    <li>The browser never sees the PHP code, only the HTML it produces. That's what "server-side" means.</li>
+    <li>On your own PC, <strong>XAMPP</strong> provides Apache + PHP + MySQL. Files go in <code>C:\xampp\htdocs</code> and open at <code>http://localhost/file.php</code>.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="syntax">
+  <h2><span class="num">6</span>PHP Syntax</h2>
+  <div class="def">A PHP file can contain <strong>HTML tags and PHP code</strong> together. All PHP code goes between the tags <strong><code>&lt;?php</code></strong> and <strong><code>?&gt;</code></strong>.</div>
+  <h3>Rules</h3>
+  <ul>
+    <li>Save the file with the <strong><code>.php</code></strong> extension.</li>
+    <li>Every PHP statement ends with a <strong>semicolon (;)</strong>.</li>
+    <li>Code starts with <code>&lt;?php</code> and ends with <code>?&gt;</code>.</li>
+    <li>Keywords, function and class names are <strong>not</strong> case-sensitive, but <strong>variable names are</strong>.<span class="tag add">not in slides</span></li>
+  </ul>
+  <h3>Demo: PHP inside HTML</h3>
+<div class="code"><script type="text/plain">
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>My first PHP page</h1>
+  <?php
+    echo "Hello World!";
+  ?>
+</body>
+</html>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">My first PHP page
+Hello World!</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="types">
+  <h2><span class="num">7</span>PHP Data Types</h2>
+  <div class="def">PHP supports <strong>8 primitive data types</strong>, grouped into <strong>3 categories</strong>: Scalar (predefined), Compound (user-defined) and Special.</div>
+<div class="tree">PHP data types (8)
+├── Scalar (4)    → boolean, integer, float, string
+├── Compound (2)  → array, object
+└── Special (2)   → resource, NULL</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="scalar">
+  <h2><span class="num">8</span>Scalar Types</h2>
+  <h3>1. Boolean</h3>
+  <div class="def">The simplest type. It works like a switch and holds only <strong>TRUE (1) or FALSE (0)</strong>. Often used in conditions.</div>
+<div class="code"><script type="text/plain">
+<?php
+$isLoggedIn = true;
+if ($isLoggedIn) {
+    echo "Welcome back!";
+}
+?>
+</script></div>
+
+  <h3>2. Integer</h3>
+  <div class="def">A <strong>whole number</strong> (no decimal point), positive or negative.</div>
+  <ul>
+    <li>Can be positive or negative.</li>
+    <li>Must not contain a decimal point.</li>
+    <li>Can be written in decimal (base 10), octal (base 8, prefix <code>0</code>), hexadecimal (base 16, prefix <code>0x</code>) or binary (prefix <code>0b</code>).</li>
+    <li>Range on 32-bit systems: <strong>−2,147,483,648 to 2,147,483,647</strong> (−2<sup>31</sup> to 2<sup>31</sup> − 1).</li>
+  </ul>
+  <div class="note">The slide gives the range as "−2^31 to 2^31". The upper limit is 2<sup>31</sup> <strong>− 1</strong>. On today's 64-bit systems, PHP integers actually go up to <code>PHP_INT_MAX</code> = 2<sup>63</sup> − 1.</div>
+<div class="code"><script type="text/plain">
+<?php
+$number = 42;
+echo "The integer value is: " . $number . "<br>";
+?>
+</script></div>
+
+  <h3>3. Float (double)</h3>
+  <div class="def">A number <strong>with a decimal point</strong> or fractional part, positive or negative.</div>
+<div class="code"><script type="text/plain">
+<?php
+$n1 = 19.34;
+$n2 = 54.472;
+$sum = $n1 + $n2;
+echo "Addition of floating numbers: " . $sum;   // 73.812
+?>
+</script></div>
+
+  <h3>4. String</h3>
+  <div class="def">A sequence of characters (letters, numbers, special characters), written in <strong>single or double quotes</strong>.</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Double quotes " "</th><th>Single quotes ' '</th></tr>
+    <tr><td>Variables inside are <strong>replaced with their values</strong> (parsed)</td><td>Content is taken <strong>literally</strong>, so variables are not parsed</td></tr>
+    <tr><td>Escape sequences like <code>\n</code> work</td><td>Only <code>\'</code> and <code>\\</code> work</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$company = "Google";
+echo "Hello $company <br>";    // Hello Google
+echo 'Hello $company';         // Hello $company
+?>
+</script></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="compound">
+  <h2><span class="num">9</span>Compound Types</h2>
+  <h3>1. Array</h3>
+  <div class="def">An <strong>array</strong> stores <strong>multiple values in a single variable</strong>.</div>
+<div class="code"><script type="text/plain">
+<?php
+$bikes = array("Royal Enfield", "Yamaha", "KTM");
+var_dump($bikes);
+echo "<br>Array element 1: $bikes[0]";
+?>
+</script></div>
+  <div class="note">The slide says an array stores values "of the same data type". PHP arrays can actually hold <strong>mixed types</strong>, e.g. <code>array(1, "two", 3.0)</code>. Unit 2's slides say so too.</div>
+
+  <h3>2. Object</h3>
+  <div class="def">An <strong>object</strong> is an <strong>instance of a user-defined class</strong> that stores both values (properties) and functions (methods).</div>
+<div class="code"><script type="text/plain">
+<?php
+class Bike {
+    function model() {
+        $model_name = "Royal Enfield";
+        echo "Bike Model: " . $model_name;
+    }
+}
+$obj = new Bike();
+$obj->model();
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Bike Model: Royal Enfield</div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="special">
+  <h2><span class="num">10</span>Special Types</h2>
+  <h3>1. Resource</h3>
+  <div class="def">A <strong>resource</strong> is a special variable that holds a <strong>reference to an external resource</strong>, not an actual value.</div>
+  <p>Examples: file handles, database connections, URL sessions, image objects.</p>
+<div class="code"><script type="text/plain">
+<?php
+$file = fopen("notes.txt", "r");   // $file is a resource
+var_dump($file);                   // resource(5) of type (stream)
+?>
+</script></div>
+  <h3>2. NULL</h3>
+  <div class="def"><strong>NULL</strong> means a variable has <strong>no value</strong>. It has only one possible value: <code>NULL</code>. By convention it's written in capitals.</div>
+<div class="code"><script type="text/plain">
+<?php
+$nl = NULL;
+echo $nl;        // prints nothing
+var_dump($nl);   // NULL
+?>
+</script></div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="vardump">
+  <h2><span class="num">11</span>var_dump() Function</h2>
+  <div class="def"><code>var_dump()</code> is a built-in function that <strong>dumps information about variables</strong>: their <strong>data type and value</strong>. For strings it also shows the length.</div>
+  <div class="decl">var_dump(var1, var2, ...);</div>
+  <ul>
+    <li><strong>Parameter:</strong> one or more variables or values to dump.</li>
+    <li><strong>Return:</strong> nothing. It prints the result directly.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+$x = 25;
+var_dump($x);
+echo "<br>";
+$y = 32.5;
+var_dump($y);
+echo "<br>";
+$bvalue = true;
+var_dump($bvalue);
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">int(25)
+float(32.5)
+bool(true)</div>
+  <div class="note">The slide's output leaves out the middle line, <code>float(32.5)</code>.</div>
+  <h3>More examples</h3>
+<div class="tree">var_dump(5);           → int(5)
+var_dump("John");      → string(4) "John"
+var_dump(3.14);        → float(3.14)
+var_dump(true);        → bool(true)
+var_dump([2, 3, 56]);  → array(3) { [0]=> int(2) [1]=> int(3) [2]=> int(56) }
+var_dump(NULL);        → NULL</div>
+  <p>Related: <code>gettype($x)</code> returns the type name as a string.<span class="tag add">not in slides</span></p>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="variables">
+  <h2><span class="num">12</span>Variables</h2>
+  <div class="def">A <strong>variable</strong> is a <strong>named region of memory</strong> that holds data. In PHP it starts with a <strong><code>$</code></strong> sign. PHP is dynamically typed, so the type is <strong>inferred from the value</strong>.</div>
+  <ul>
+    <li>There's no command to declare a variable. It's <strong>created when you first assign a value</strong>.</li>
+  </ul>
+  <h3>Rules for variable names</h3>
+  <ul>
+    <li>Starts with <code>$</code>, followed by the name.</li>
+    <li>The name must start with a <strong>letter or underscore</strong>, <strong>never a number</strong>.</li>
+    <li>It can contain only letters, numbers and underscores (A–z, 0–9, _).</li>
+    <li>Names are <strong>case-sensitive</strong>: <code>$age</code> and <code>$AGE</code> are different.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+$x = 5;            // integer
+$y = "John";       // string
+$txt = "PHP";
+echo "I love $txt!";   // I love PHP!
+?>
+</script></div>
+  <div class="tip"><strong>Valid:</strong> <code>$name</code>, <code>$_total</code>, <code>$age2</code> · <strong>Invalid:</strong> <code>$2age</code>, <code>$my-name</code>, <code>$my name</code></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="scope">
+  <h2><span class="num">13</span>Variable Scope</h2>
+  <div class="def">The <strong>scope</strong> of a variable is the part of the script where it can be used. PHP has three scopes: <strong>local, global and static</strong>.</div>
+
+  <h3>1. Global scope</h3>
+  <p>A variable declared <strong>outside a function</strong> has global scope. It can only be used <strong>outside</strong> functions.</p>
+<div class="code"><script type="text/plain">
+<?php
+$name = "PHP";          // global variable
+function global_var() {
+    echo "Inside: " . $name;    // Warning: Undefined variable $name
+}
+global_var();
+echo "Outside: " . $name;       // Outside: PHP
+?>
+</script></div>
+
+  <h3>The global keyword</h3>
+  <p>To use a global variable <strong>inside</strong> a function, declare it with <code>global</code>:</p>
+<div class="code"><script type="text/plain">
+<?php
+$x = 5;
+function myTest() {
+    global $x;
+    echo "x inside function is: $x <br>";   // 5
+}
+myTest();
+echo "x outside function is: $x";           // 5
+?>
+</script></div>
+  <p>The <code>$GLOBALS['x']</code> array does the same job.<span class="tag add">not in slides</span></p>
+
+  <h3>2. Local scope</h3>
+  <p>A variable declared <strong>inside a function</strong> exists only within that function.</p>
+<div class="code"><script type="text/plain">
+<?php
+function myTest() {
+    $x = 10;                 // local variable
+    echo "x inside: $x <br>";
+}
+myTest();
+echo "x outside: $x";        // Warning: Undefined variable $x
+?>
+</script></div>
+
+  <h3>3. Static scope</h3>
+  <p>Normally a function's local variables are deleted when it finishes. A <strong><code>static</code></strong> variable <strong>keeps its value between calls</strong>, but is still local to the function.</p>
+<div class="code"><script type="text/plain">
+<?php
+function myTest() {
+    static $x = 0;
+    echo $x . " ";
+    $x++;
+}
+myTest();
+myTest();
+myTest();
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">0 1 2</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Scope</th><th>Declared</th><th>Accessible</th><th>Lifetime</th></tr>
+    <tr><td>Global</td><td>Outside functions</td><td>Outside functions (or via <code>global</code>)</td><td>Whole script</td></tr>
+    <tr><td>Local</td><td>Inside a function</td><td>Only inside that function</td><td>One function call</td></tr>
+    <tr><td>Static</td><td>Inside a function, with <code>static</code></td><td>Only inside that function</td><td>Keeps its value between calls</td></tr>
+  </table></div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="varvar">
+  <h2><span class="num">14</span>Variable Variables ($$)</h2>
+  <div class="def">A <strong>variable variable</strong> (<code>$$</code>) uses the <strong>value of one variable as the name of another</strong> variable.</div>
+  <ul>
+    <li>Used in dynamic programming, when variable names are generated at runtime.</li>
+    <li>Hard to read, so avoid it unless really needed.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+$foo = "bar";
+$$foo = "Hello!";    // same as $bar = "Hello!";
+
+echo $foo;    // bar
+echo $bar;    // Hello!
+echo $$foo;   // Hello!
+?>
+</script></div>
+  <h3>Demo: creating variables in a loop</h3>
+<div class="code"><script type="text/plain">
+<?php
+for ($i = 1; $i <= 3; $i++) {
+    $varName = "num" . $i;
+    $$varName = $i * 10;      // creates $num1, $num2, $num3
+}
+echo "num1: $num1 <br>";      // 10
+echo "num2: $num2 <br>";      // 20
+echo "num3: $num3 <br>";      // 30
+?>
+</script></div>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="constants">
+  <h2><span class="num">15</span>Constants</h2>
+  <div class="def">A <strong>constant</strong> is a name for a value that <strong>can't be changed or undefined</strong> while the script runs. Once defined, it stays the same across the whole program.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Follows the same naming rules as variables, but has <strong>no <code>$</code> sign</strong>.</li>
+    <li>By convention, written in <strong>UPPERCASE</strong>.</li>
+    <li>Constants are <strong>automatically global</strong> and can be used inside functions without <code>global</code>.</li>
+    <li>Two ways to define one: <strong><code>define()</code></strong> and the <strong><code>const</code></strong> keyword.</li>
+  </ul>
+  <h3>1. define()</h3>
+  <div class="decl">define(name, value);</div>
+<div class="code"><script type="text/plain">
+<?php
+define("MESSAGE", "Hello world in PHP");
+echo MESSAGE;
+?>
+</script></div>
+  <h3>2. const keyword</h3>
+<div class="code"><script type="text/plain">
+<?php
+const MYCAR = "Volvo";
+echo MYCAR;
+?>
+</script></div>
+  <h3>Constants are global</h3>
+<div class="code"><script type="text/plain">
+<?php
+define("GREETING", "Welcome to PHP");
+function myTest() {
+    echo GREETING;        // works inside the function
+}
+myTest();
+?>
+</script></div>
+  <h3>const vs define()</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>const</th><th>define()</th></tr>
+    <tr><td>A language keyword</td><td>A function</td></tr>
+    <tr><td><strong>Can't</strong> be used inside a block (function, if, loop)</td><td><strong>Can</strong> be used inside blocks</td></tr>
+    <tr><td>Can be used inside classes (class constants)</td><td>Can't define class constants</td></tr>
+    <tr><td>Defined at compile time</td><td>Defined at runtime</td></tr>
+  </table></div>
+  <h3>Magic constants<span class="tag add">not in slides</span></h3>
+  <p>These are built-in and change depending on where they're used: <code>__LINE__</code>, <code>__FILE__</code>, <code>__DIR__</code>, <code>__FUNCTION__</code>, <code>__CLASS__</code>, <code>__METHOD__</code>. That's why they're "not really constants".</p>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="operators">
+  <h2><span class="num">16</span>Operators</h2>
+  <div class="def">An <strong>operator</strong> is a <strong>symbol that performs an operation on operands</strong> (variables or values). In <code>$num = 10 + 20;</code>, <code>+</code> is the operator and 10 and 20 are the operands.</div>
+  <h3>Categories</h3>
+  <ol>
+    <li>Arithmetic operators</li>
+    <li>Assignment operators</li>
+    <li>Bitwise operators</li>
+    <li>Comparison operators</li>
+    <li>Increment / decrement operators</li>
+    <li>Logical operators</li>
+    <li>String operators<span class="tag add">not in slides</span></li>
+  </ol>
+  <div class="note">The operator tables on the slides are images. The tables below are rebuilt from the PHP manual.</div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="arith">
+  <h2><span class="num">17</span>Arithmetic Operators</h2>
+  <div class="def">Used for common math operations on numbers.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr>
+    <tr><td>+</td><td>Addition</td><td>$a + $b</td><td>Sum</td></tr>
+    <tr><td>-</td><td>Subtraction</td><td>$a - $b</td><td>Difference</td></tr>
+    <tr><td>*</td><td>Multiplication</td><td>$a * $b</td><td>Product</td></tr>
+    <tr><td>/</td><td>Division</td><td>$a / $b</td><td>Quotient</td></tr>
+    <tr><td>%</td><td>Modulus</td><td>$a % $b</td><td>Remainder</td></tr>
+    <tr><td>**</td><td>Exponentiation</td><td>$a ** $b</td><td>$a to the power $b</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$a = 12;
+$b = 4;
+echo "Addition: " . ($a + $b) . "<br>";        // 16
+echo "Subtraction: " . ($a - $b) . "<br>";     // 8
+echo "Multiplication: " . ($a * $b) . "<br>";  // 48
+echo "Division: " . ($a / $b) . "<br>";        // 3
+echo "Modulus: " . ($a % $b) . "<br>";         // 0
+echo "Exponentiation: " . ($a ** $b);          // 20736
+?>
+</script></div>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="assign">
+  <h2><span class="num">18</span>Assignment Operators</h2>
+  <div class="def">Used to <strong>assign values</strong> to variables. The basic one is <strong><code>=</code></strong>. The others combine an operation with assignment.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Example</th><th>Same as</th></tr>
+    <tr><td>=</td><td>$a = $b</td><td>Assign $b to $a</td></tr>
+    <tr><td>+=</td><td>$a += $b</td><td>$a = $a + $b</td></tr>
+    <tr><td>-=</td><td>$a -= $b</td><td>$a = $a - $b</td></tr>
+    <tr><td>*=</td><td>$a *= $b</td><td>$a = $a * $b</td></tr>
+    <tr><td>/=</td><td>$a /= $b</td><td>$a = $a / $b</td></tr>
+    <tr><td>%=</td><td>$a %= $b</td><td>$a = $a % $b</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$x = 24;
+$z = 10;
+$z += $x;  echo "z += x : $z <br>";   // 34
+$z -= $x;  echo "z -= x : $z <br>";   // 10
+$z *= $x;  echo "z *= x : $z <br>";   // 240
+$z /= $x;  echo "z /= x : $z <br>";   // 10
+$z %= $x;  echo "z %= x : $z <br>";   // 10
+?>
+</script></div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="bitwise">
+  <h2><span class="num">19</span>Bitwise Operators</h2>
+  <div class="def">Bitwise operators work on the <strong>individual bits</strong> of integers.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>Rule</th><th>Example (6, 3)</th></tr>
+    <tr><td>&amp;</td><td>AND</td><td>1 only if <strong>both</strong> bits are 1</td><td>6 &amp; 3 = 2</td></tr>
+    <tr><td>|</td><td>OR</td><td>1 if <strong>either</strong> bit is 1</td><td>6 | 3 = 7</td></tr>
+    <tr><td>^</td><td>XOR</td><td>1 if the bits are <strong>different</strong></td><td>6 ^ 3 = 5</td></tr>
+    <tr><td>~</td><td>NOT (unary)</td><td><strong>Inverts</strong> every bit</td><td>~5 = −6</td></tr>
+    <tr><td>&lt;&lt;</td><td>Left shift</td><td>Shift bits left n places (× 2<sup>n</sup>)</td><td>6 &lt;&lt; 3 = 48</td></tr>
+    <tr><td>&gt;&gt;</td><td>Right shift</td><td>Shift bits right n places (÷ 2<sup>n</sup>)</td><td>24 &gt;&gt; 3 = 3</td></tr>
+  </table></div>
+  <h3>Worked bits</h3>
+<div class="tree">6 = 110      6 = 110      6 = 110
+3 = 011      3 = 011      3 = 011
+    ─── &amp;        ─── |        ─── ^
+    010 = 2      111 = 7      101 = 5
+
+~5 : 5 = 00000101 → 11111010 = −6   (two's complement: ~n = −(n+1))
+6 &lt;&lt; 3 : 110 → 110000 = 48
+24 &gt;&gt; 3 : 11000 → 11 = 3</div>
+<div class="code"><script type="text/plain">
+<?php
+$x = 6;
+$y = 3;
+echo "AND: " . ($x & $y) . "<br>";     // 2
+echo "OR: " . ($x | $y) . "<br>";      // 7
+echo "XOR: " . ($x ^ $y) . "<br>";     // 5
+echo "NOT 5: " . (~5) . "<br>";        // -6
+echo "6 << 3: " . (6 << 3) . "<br>";   // 48
+echo "24 >> 3: " . (24 >> 3);          // 3
+?>
+</script></div>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="compare">
+  <h2><span class="num">20</span>Comparison Operators</h2>
+  <div class="def">Comparison operators <strong>compare two values</strong> (numbers or strings) and return <strong>true or false</strong>.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>True when</th></tr>
+    <tr><td>==</td><td>Equal</td><td>Values are equal (after type juggling)</td></tr>
+    <tr><td>===</td><td>Identical</td><td>Values <strong>and types</strong> are equal</td></tr>
+    <tr><td>!= or &lt;&gt;</td><td>Not equal</td><td>Values are not equal</td></tr>
+    <tr><td>!==</td><td>Not identical</td><td>Values or types differ</td></tr>
+    <tr><td>&lt;</td><td>Less than</td><td>$a is less than $b</td></tr>
+    <tr><td>&gt;</td><td>Greater than</td><td>$a is greater than $b</td></tr>
+    <tr><td>&lt;=</td><td>Less than or equal</td><td>$a ≤ $b</td></tr>
+    <tr><td>&gt;=</td><td>Greater than or equal</td><td>$a ≥ $b</td></tr>
+    <tr><td>&lt;=&gt;</td><td>Spaceship</td><td>Returns −1, 0 or 1 if $a is less than, equal to or greater than $b</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$a = 6;
+$b = 3;
+if ($a == $b) echo "equal <br>";        else echo "not equal <br>";
+if ($a > $b)  echo "a is greater <br>"; else echo "a is not greater <br>";
+if ($a != $b) echo "a != b <br>";
+
+var_dump(5 == "5");    // bool(true)  - same value
+var_dump(5 === "5");   // bool(false) - different types
+echo 5 <=> 3;          // 1
+?>
+</script></div>
+  <div class="tip"><strong>== vs ===:</strong> <code>==</code> compares values only. <code>===</code> also checks the type.</div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="incdec">
+  <h2><span class="num">21</span>Increment / Decrement Operators</h2>
+  <div class="def">Unary operators that <strong>increase or decrease a variable by 1</strong>. Written before the variable (<strong>prefix</strong>) or after it (<strong>postfix</strong>).</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>Effect</th></tr>
+    <tr><td>++$a</td><td>Pre-increment</td><td>Increase $a by 1, <strong>then</strong> return $a</td></tr>
+    <tr><td>$a++</td><td>Post-increment</td><td>Return $a, <strong>then</strong> increase it by 1</td></tr>
+    <tr><td>--$a</td><td>Pre-decrement</td><td>Decrease $a by 1, then return $a</td></tr>
+    <tr><td>$a--</td><td>Post-decrement</td><td>Return $a, then decrease it by 1</td></tr>
+  </table></div>
+  <div class="note">The slide writes the prefix increment as <code>$++a</code>. That's a typo. It's <code>++$a</code>.</div>
+<div class="code"><script type="text/plain">
+<?php
+$a = 6;  $b = $a++;  echo "a = $a, b = $b <br>";   // a = 7, b = 6
+$a = 6;  $b = ++$a;  echo "a = $a, b = $b <br>";   // a = 7, b = 7
+$a = 3;  $b = $a--;  echo "a = $a, b = $b <br>";   // a = 2, b = 3
+$a = 3;  $b = --$a;  echo "a = $a, b = $b";        // a = 2, b = 2
+?>
+</script></div>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="logical">
+  <h2><span class="num">22</span>Logical Operators</h2>
+  <div class="def">Logical operators <strong>combine conditions</strong> and return true or false.</div>
+  <div class="note">The slide says logical operators "perform bit-level operations". That sentence was copied from the bitwise slide by mistake. Logical operators work on <strong>true/false conditions</strong>, not bits.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>True when</th></tr>
+    <tr><td>&amp;&amp; or and</td><td>AND</td><td>Both are true</td></tr>
+    <tr><td>|| or or</td><td>OR</td><td>At least one is true</td></tr>
+    <tr><td>!</td><td>NOT</td><td>The operand is false</td></tr>
+    <tr><td>xor</td><td>XOR</td><td>Exactly one is true, not both</td></tr>
+  </table></div>
+  <p><code>&amp;&amp;</code> and <code>and</code> do the same thing but have different <strong>precedence</strong>: <code>&amp;&amp;</code> binds more tightly. The same goes for <code>||</code> and <code>or</code>.</p>
+<div class="code"><script type="text/plain">
+<?php
+$a = 40;
+$b = 20;
+if ($a && $b)   echo "Both a and b are true <br>";
+if ($a || $b)   echo "Either a or b is true <br>";
+if (!$a)        echo "a is false <br>";
+else            echo "a is true <br>";
+if ($a xor $b)  echo "Exactly one is true <br>";
+else            echo "Both true or both false <br>";
+?>
+</script></div>
+  <div class="note">On the slide, the <code>!$a</code> example prints "a is true" in the wrong branch (the messages are swapped), and it uses <code>^</code> (bitwise XOR) where it means the logical <code>xor</code>.</div>
+</section>
+
+<!-- 23 -->
+<section class="topic" id="string-ops">
+  <h2><span class="num">23</span>String Operators<span class="tag add">not in slides</span></h2>
+  <div class="table-wrap"><table>
+    <tr><th>Operator</th><th>Name</th><th>Example</th></tr>
+    <tr><td>.</td><td>Concatenation</td><td>"Hello " . "World" → Hello World</td></tr>
+    <tr><td>.=</td><td>Concatenation assignment</td><td>$s .= "!" appends to $s</td></tr>
+  </table></div>
+<div class="code"><script type="text/plain">
+<?php
+$first = "Hello";
+$msg = $first . " World";
+$msg .= "!";
+echo $msg;     // Hello World!
+?>
+</script></div>
+</section>
+
+<!-- 24 -->
+<section class="topic" id="comments">
+  <h2><span class="num">24</span>Comments</h2>
+  <div class="def"><strong>Comments</strong> are notes in the code that <strong>aren't executed</strong>. They explain code to other developers (or to you later), and can temporarily hide code while debugging.</div>
+  <h3>Types</h3>
+  <ul>
+    <li><strong>Single-line:</strong> <code>// comment</code> (C++ style) or <code># comment</code> (Unix shell / Perl style).</li>
+    <li><strong>Multi-line:</strong> <code>/* ... */</code> (C style).</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+// Outputs a welcome message
+echo "Welcome Home!";
+
+# This is also a single-line comment
+
+/* The next statement
+   will print a welcome message */
+echo "Welcome Home!";
+?>
+</script></div>
+</section>
+
+<!-- 25 -->
+<section class="topic" id="echo">
+  <h2><span class="num">25</span>echo Statement</h2>
+  <div class="def"><code>echo</code> is a <strong>language construct (statement)</strong> used to <strong>display output</strong>: strings, multi-line strings, variables, escaped characters and HTML.</div>
+  <div class="decl">void echo ( string $arg1 [, string $... ] )</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Can be used with or without parentheses: <code>echo</code> or <code>echo()</code>.</li>
+    <li>Returns <strong>no value</strong>.</li>
+    <li>Can take <strong>multiple strings separated by commas</strong>.</li>
+    <li><strong>Faster</strong> than <code>print</code>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+echo 'Hello, World!<br>';
+echo "Learning ", "PHP ", "is fun!<br>";      // multiple arguments
+echo "Hello by PHP echo
+this is multi-line
+text printed by echo";
+
+// HTML inside echo
+echo "<p><span style='color:blue;'>This text is in blue.</span></p>";
+echo "<p><span style='color:red;'>This text is in red.</span></p>";
+?>
+</script></div>
+</section>
+
+<!-- 26 -->
+<section class="topic" id="print">
+  <h2><span class="num">26</span>print Statement &amp; print_r()</h2>
+  <div class="def"><code>print</code> is also a <strong>language construct</strong> that displays output, like echo. It always <strong>returns 1</strong>, so it can be used inside expressions.</div>
+  <div class="decl">int print ( string $arg )</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Parentheses are optional: <code>print "Hi";</code> and <code>print("Hi");</code> are both valid.</li>
+    <li>Always returns <strong>1</strong>.</li>
+    <li>Takes only <strong>one argument</strong>.</li>
+    <li><strong>Slower</strong> than echo.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+print "Hello by PHP print <br>";
+print ("Hello by PHP print() <br>");
+
+$msg = "Hello print() in PHP";
+print "Message is: $msg";       // Message is: Hello print() in PHP
+?>
+</script></div>
+  <h3>Printing arrays: print_r()</h3>
+  <p><code>print</code> and <code>echo</code> can't print a whole array. Use <code>print_r()</code>, or print one element at a time.</p>
+<div class="code"><script type="text/plain">
+<?php
+$colours = array("Red", "Blue", "Green");
+print_r($colours);     // Array ( [0] => Red [1] => Blue [2] => Green )
+print $colours[1];     // Blue
+?>
+</script></div>
+  <h3>echo vs print</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>echo</th><th>print</th></tr>
+    <tr><td>Returns no value</td><td>Returns 1</td></tr>
+    <tr><td>Can take multiple arguments (comma-separated)</td><td>Only one argument</td></tr>
+    <tr><td>Faster</td><td>Slower</td></tr>
+    <tr><td>Can't be used in expressions</td><td>Can be used in expressions</td></tr>
+  </table></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

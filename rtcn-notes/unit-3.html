@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transport Layer and SCTP</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">RTCN Notes</a></div>
+  <div class="sub">Unit 3 · Transport Layer &amp; SCTP</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a href="unit-2.html">Unit 2</a>
+    <a class="on" href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#transport">1. Transport Layer</a></li>
+    <li><a href="#terms">2. Basic Terms</a></li>
+    <li><a href="#mux">3. Multiplexing &amp; Demultiplexing</a></li>
+    <li><a href="#ports">4. Ports &amp; Sockets</a></li>
+    <li><a href="#services">5. Transport Layer Services</a></li>
+    <li><a href="#tcp">6. TCP</a></li>
+    <li><a href="#tcp-header">7. TCP Segment Header</a></li>
+    <li><a href="#handshake">8. Three-Way Handshake</a></li>
+    <li><a href="#termination">9. Four-Way Termination</a></li>
+    <li><a href="#tcp-control">10. TCP Flow &amp; Congestion Control</a></li>
+    <li><a href="#udp">11. UDP</a></li>
+    <li><a href="#tcp-udp">12. TCP vs UDP</a></li>
+    <li><a href="#others">13. Other Transport Protocols</a></li>
+    <li><a href="#sctp">14. SCTP</a></li>
+    <li><a href="#sctp-services">15. SCTP Services</a></li>
+    <li><a href="#sctp-features">16. SCTP Features</a></li>
+    <li><a href="#sctp-packet">17. SCTP Packet vs TCP Segment</a></li>
+    <li><a href="#sctp-format">18. SCTP Packet Format</a></li>
+    <li><a href="#chunks">19. Chunks</a></li>
+    <li><a href="#data-chunk">20. DATA Chunk</a></li>
+    <li><a href="#association">21. SCTP Association</a></li>
+    <li><a href="#compare">22. UDP vs TCP vs SCTP</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 3: Transport Layer and SCTP</h1>
+  <p>End-to-end delivery between applications: ports and sockets, TCP and UDP in detail, and SCTP with its streams, multihoming and chunks.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="transport">
+  <h2><span class="num">1</span>The Transport Layer</h2>
+  <div class="def">The <strong>transport layer</strong> provides <strong>logical, end-to-end communication between application processes</strong> running on different hosts. It delivers data from one application to another reliably, in order and efficiently.</div>
+  <h3>Position</h3>
+<div class="tree">   OSI model            TCP/IP model
+7  Application  ┐
+6  Presentation ├────▶  Application
+5  Session      ┘
+4  TRANSPORT    ─────▶  TRANSPORT
+3  Network      ─────▶  Internet
+2  Data link    ┐
+1  Physical     ┴────▶  Network access</div>
+  <ul>
+    <li>In OSI it is <strong>Layer 4</strong>, above the network layer and below the session layer.</li>
+    <li>In TCP/IP it sits between the <strong>Internet layer</strong> and the <strong>Application layer</strong>.</li>
+    <li>It hides the complexity of routing and gives applications <strong>end-to-end</strong> delivery.</li>
+  </ul>
+  <h3>Main responsibilities</h3>
+  <ul>
+    <li><strong>Reliable data transfer:</strong> data arrives correctly and without loss.</li>
+    <li><strong>Flow control:</strong> the sender doesn't overwhelm the receiver.</li>
+    <li><strong>Process-to-process delivery</strong> using port numbers, plus error control and congestion control.</li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="terms">
+  <h2><span class="num">2</span>Basic Terms and Concepts</h2>
+  <h3>Segment and datagram</h3>
+  <ul>
+    <li>A <strong>segment</strong> is the unit of data in <strong>TCP</strong>: data plus a header with ports, sequence numbers and control flags.</li>
+    <li>A <strong>datagram</strong> is the unit of data in <strong>UDP</strong>.</li>
+  </ul>
+  <h3>End-to-end communication</h3>
+  <ul>
+    <li>Communication happens <strong>directly between the transport layers</strong> of sender and receiver.</li>
+    <li>The network layer does <strong>hop-to-hop</strong> delivery. The transport layer does <strong>end-to-end</strong> delivery, including error recovery and flow control.</li>
+  </ul>
+<div class="tree">Host A ──────── Router ───── Router ──── Host B
+│◀───────── transport: end-to-end ─────────▶│
+│◀── network hop ──▶│◀── hop ──▶│◀── hop ──▶│</div>
+  <h3>Connection-oriented vs connectionless</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Connection-oriented (TCP)</th><th>Connectionless (UDP)</th></tr>
+    <tr><td>A connection is set up before data is sent</td><td>Data is sent without any setup</td></tr>
+    <tr><td>Reliable, ordered delivery</td><td>No guarantee of delivery or order</td></tr>
+    <tr><td>More overhead</td><td>Fast, minimal overhead</td></tr>
+  </table></div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="mux">
+  <h2><span class="num">3</span>Multiplexing and Demultiplexing</h2>
+  <div class="def"><strong>Multiplexing</strong> (at the sender) combines data from <strong>many applications</strong> into one stream, tagging each segment with its <strong>port number</strong>. <strong>Demultiplexing</strong> (at the receiver) reads the port number of each incoming segment and delivers it to the <strong>correct application</strong>.</div>
+<div class="tree">SENDER                                      RECEIVER
+Browser (port 50001) ┐                      ┌─▶ Web server  (port 80)
+Email   (port 50002) ├─ MUX ─▶ network ─▶ DEMUX ─┼─▶ Mail server (port 25)
+DNS     (port 50003) ┘                      └─▶ DNS server  (port 53)</div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="ports">
+  <h2><span class="num">4</span>Ports and Sockets</h2>
+  <h3>Port</h3>
+  <div class="def">A <strong>port</strong> is a <strong>16-bit number (0 – 65535)</strong> that TCP or UDP uses to identify a particular <strong>application process</strong> on a host.</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Range</th><th>Name</th><th>Use</th></tr>
+    <tr><td><strong>0 – 1023</strong></td><td>Well-known ports</td><td>Reserved for common services: HTTP 80, HTTPS 443, FTP 21, SSH 22, SMTP 25, DNS 53</td></tr>
+    <tr><td><strong>1024 – 49151</strong></td><td>Registered ports</td><td>Less common applications that need a fixed port. Organisations can register them with <strong>IANA</strong>.</td></tr>
+    <tr><td><strong>49152 – 65535</strong></td><td>Dynamic / ephemeral / private</td><td>Temporary, short-lived connections (e.g. the client side). Not assigned to anyone.</td></tr>
+  </table></div>
+  <h3>Socket</h3>
+  <div class="def">A <strong>socket</strong> is a <strong>communication endpoint</strong>, identified by the combination of <strong>IP address + transport protocol + port number</strong>.</div>
+  <ul>
+    <li>Web server: <code>(192.168.1.10, TCP, 80)</code></li>
+    <li>Email on the same host: <code>(192.168.1.10, TCP, 25)</code></li>
+    <li>Same machine, different ports, so each application gets its own data.</li>
+  </ul>
+  <div class="tip"><strong>Remember:</strong> IP address finds the <em>host</em>. Port finds the <em>process</em>. IP + port is the <em>socket</em>.</div>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="services">
+  <h2><span class="num">5</span>Services Provided by the Transport Layer</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Service</th><th>Description</th></tr>
+    <tr><td><strong>Reliability</strong></td><td>Data is delivered accurately and in sequence, using <strong>acknowledgements (ACKs)</strong>, <strong>retransmission</strong> on loss, and <strong>sequence numbers</strong> to spot duplicates and reorder.</td></tr>
+    <tr><td><strong>Flow control</strong></td><td>Stops a fast sender overwhelming a slow receiver, using a <strong>sliding window</strong> limited by the receiver's buffer.</td></tr>
+    <tr><td><strong>Error detection and correction</strong></td><td><strong>Checksums</strong> detect corrupted data. Bad segments are discarded and resent.</td></tr>
+    <tr><td><strong>Congestion control</strong></td><td>Stops too much data entering the network, e.g. TCP's <strong>slow start</strong> and <strong>congestion avoidance</strong>.</td></tr>
+    <tr><td><strong>Quality of Service (QoS)</strong></td><td>Prioritises traffic like voice and video to meet delay, jitter and bandwidth needs.</td></tr>
+  </table></div>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="tcp">
+  <h2><span class="num">6</span>Transmission Control Protocol (TCP)</h2>
+  <div class="def"><strong>TCP</strong> is the most widely used transport protocol. It gives <strong>reliable, connection-oriented, byte-stream</strong> communication. Data arrives <strong>in order, without duplicates and free of errors</strong>.</div>
+  <h3>Key features</h3>
+  <ul>
+    <li><strong>Connection-oriented:</strong> a connection is set up with a <strong>three-way handshake</strong>.</li>
+    <li><strong>Reliable:</strong> acknowledgements and retransmissions.</li>
+    <li><strong>Flow control</strong> with sliding windows.</li>
+    <li><strong>Congestion control</strong> to avoid overloading the network.</li>
+    <li><strong>Byte-oriented:</strong> treats data as a stream of bytes, numbering every byte.</li>
+    <li><strong>Full-duplex:</strong> data flows both ways at once.</li>
+  </ul>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Reliable, ordered delivery</li>
+      <li>Flow and congestion control adapt to the network</li>
+      <li>Widely supported and well tested</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>Higher overhead (connection management, error control)</li>
+      <li>Not suitable for low-latency or real-time traffic</li>
+    </ul></div>
+  </div>
+  <p><strong>Applications:</strong> web (HTTP/HTTPS), email (SMTP), file transfer (FTP), remote login (SSH).</p>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="tcp-header">
+  <h2><span class="num">7</span>TCP Segment Header</h2>
+  <div class="def">A TCP segment is a <strong>header (20 to 60 bytes)</strong> plus data. The header carries the ports, sequence and acknowledgement numbers, and control flags.</div>
+<div class="tree">0                   16                                31
+┌───────────────────┬─────────────────────────────────┐
+│ Source port (16)  │ Destination port (16)           │
+├───────────────────┴─────────────────────────────────┤
+│ Sequence number (32)                                │
+├─────────────────────────────────────────────────────┤
+│ Acknowledgment number (32)                          │
+├────────┬──────────┬─────────────────────────────────┤
+│ Offset │  Flags   │ Window size (16)                │
+├────────┴──────────┼─────────────────────────────────┤
+│ Checksum (16)     │ Urgent pointer (16)             │
+├───────────────────┴─────────────────────────────────┤
+│ Options (0 – 40 bytes)                              │
+└─────────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table>
+    <tr><th>Field (bits)</th><th>Purpose</th></tr>
+    <tr><td>Source / Destination port (16 each)</td><td>Identify the sending and receiving processes.</td></tr>
+    <tr><td>Sequence number (32)</td><td>Position of the <strong>first data byte</strong> of this segment in the byte stream.</td></tr>
+    <tr><td>Acknowledgment number (32)</td><td>The <strong>next byte expected</strong> from the other side.</td></tr>
+    <tr><td>Data offset (4)</td><td>Header length.</td></tr>
+    <tr><td>Flags (9)</td><td>Control bits: <strong>SYN</strong> (start connection), <strong>ACK</strong> (acknowledgement valid), <strong>FIN</strong> (finish), <strong>RST</strong> (reset), PSH, URG.</td></tr>
+    <tr><td>Window size (16)</td><td>Receiver's free buffer space, used for flow control.</td></tr>
+    <tr><td>Checksum (16)</td><td>Error detection.</td></tr>
+    <tr><td>Urgent pointer (16)</td><td>Marks urgent data when URG is set.</td></tr>
+    <tr><td>Options (variable)</td><td>E.g. timestamps, window scaling.</td></tr>
+  </table></div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="handshake">
+  <h2><span class="num">8</span>TCP Three-Way Handshake (Connection Establishment)</h2>
+  <div class="def">The <strong>three-way handshake</strong> sets up a TCP connection before any data is sent. Both sides <strong>synchronise their initial sequence numbers (ISNs)</strong> and agree to communicate.</div>
+<div class="tree">Client (192.168.1.2)                       Server (192.168.1.10:80)
+      │ ── SYN, Seq = 1000 ──────────────────────▶ │  1
+      │ ◀── SYN-ACK, Seq = 5000, Ack = 1001 ────── │  2
+      │ ── ACK, Seq = 1001, Ack = 5001 ──────────▶ │  3
+      │        connection established              │</div>
+  <ol>
+    <li><strong>SYN:</strong> the client sends a segment with SYN set and its ISN (x = 1000).</li>
+    <li><strong>SYN-ACK:</strong> the server replies with SYN and ACK set. Ack = x + 1 = 1001, and it sends its own ISN (y = 5000).</li>
+    <li><strong>ACK:</strong> the client acknowledges with Ack = y + 1 = 5001. The connection is open.</li>
+  </ol>
+  <div class="tip"><strong>Remember:</strong> SYN → SYN-ACK → ACK. The ack number is always "the other side's sequence number + 1".</div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="termination">
+  <h2><span class="num">9</span>TCP Connection Termination (Four-Way Handshake)</h2>
+  <div class="def">TCP closes a connection with a <strong>four-step handshake</strong>, so that <strong>each side closes independently</strong> after finishing its own data and nothing is lost.</div>
+<div class="tree">Host A (client)                          Host B (server)
+      │ ── FIN, Seq = 2001 ─────────────────▶ │  1  A done sending
+      │ ◀── ACK, Ack = 2002 ───────────────── │  2  half-closed: B may still send
+      │ ◀── FIN, Seq = 3001 ───────────────── │  3  B done sending
+      │ ── ACK, Ack = 3002 ─────────────────▶ │  4  fully closed
+   (TIME-WAIT)</div>
+  <ol>
+    <li><strong>FIN from sender (active close):</strong> Host A has finished sending but can still receive.</li>
+    <li><strong>ACK from receiver:</strong> Host B acknowledges. The connection is now <strong>half-open</strong>, and B can still send.</li>
+    <li><strong>FIN from receiver (passive close):</strong> B finishes and sends its own FIN.</li>
+    <li><strong>ACK from sender:</strong> A acknowledges, and both sides close.</li>
+  </ol>
+  <p>The sockets pass through states such as <strong>FIN-WAIT-1, FIN-WAIT-2 and TIME-WAIT</strong> to close cleanly.</p>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="tcp-control">
+  <h2><span class="num">10</span>TCP Flow Control, Congestion Control, Reliability &amp; Timers</h2>
+  <h3>Flow control: sliding window</h3>
+  <p>The receiver advertises a <strong>window size</strong>: how many bytes the sender may send without waiting for an ACK. This prevents receiver buffer overflow.</p>
+<div class="tree">Bytes:  [ sent &amp; ACKed | sent, not ACKed | can send now | cannot send yet ]
+                       └──────── window (advertised by receiver) ───────┘
+As ACKs arrive, the window slides to the right →</div>
+  <h3>Congestion control</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Mechanism</th><th>What it does</th></tr>
+    <tr><td><strong>Slow start</strong></td><td>Starts with a small congestion window (cwnd) and grows it <strong>exponentially</strong> until a threshold.</td></tr>
+    <tr><td><strong>Congestion avoidance</strong></td><td>After the threshold, grows cwnd <strong>linearly</strong> to probe for bandwidth.</td></tr>
+    <tr><td><strong>Fast retransmit</strong></td><td>Resends a lost segment as soon as <strong>duplicate ACKs</strong> show it's missing, without waiting for the timer.</td></tr>
+    <tr><td><strong>Fast recovery</strong></td><td>After a loss, <strong>reduces</strong> cwnd instead of resetting it to one segment.</td></tr>
+  </table></div>
+  <h3>Reliable data transfer</h3>
+  <p>Every byte is numbered and must be acknowledged. Lost or corrupted segments are resent, based on timers and duplicate ACKs.</p>
+  <h3>TCP timers</h3>
+  <ul>
+    <li><strong>Retransmission timer:</strong> resends a segment if its ACK doesn't arrive in time.</li>
+    <li><strong>Delayed ACK timer:</strong> holds an ACK briefly so it can <strong>piggyback</strong> on outgoing data.</li>
+    <li><strong>Persistence timer</strong> (handles zero-window deadlock) and <strong>keepalive timer</strong> (detects idle, dead connections).<span class="tag add">not in slides</span></li>
+  </ul>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="udp">
+  <h2><span class="num">11</span>User Datagram Protocol (UDP)</h2>
+  <div class="def"><strong>UDP</strong> is a <strong>connectionless, lightweight, message-oriented</strong> transport protocol. It provides minimal service, with <strong>no reliability, ordering or flow control</strong>, so it's faster than TCP.</div>
+  <h3>Header (8 bytes)</h3>
+<div class="tree">┌───────────────────┬─────────────────────────┐
+│ Source port (16)  │ Destination port (16)   │
+├───────────────────┼─────────────────────────┤
+│ Length (16)       │ Checksum (16)           │
+└───────────────────┴─────────────────────────┘</div>
+  <ul>
+    <li><strong>Source / destination port:</strong> identify the applications.</li>
+    <li><strong>Length:</strong> header + data.</li>
+    <li><strong>Checksum:</strong> optional error check of header and data.</li>
+  </ul>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>No connection setup. No delivery, order or integrity guarantee beyond the checksum.</li>
+    <li>No retransmission and no congestion control.</li>
+    <li>Preserves <strong>message boundaries</strong>: each datagram is independent.</li>
+  </ul>
+  <h3>When UDP is preferred</h3>
+  <p>Live audio and video streaming · online multiplayer games · <strong>DNS</strong> queries · <strong>VoIP</strong>, wherever speed matters more than perfect delivery.</p>
+  <div class="pc">
+    <div class="pros"><h4>Advantages</h4><ul>
+      <li>Low overhead, minimal delay</li>
+      <li>Simple</li>
+      <li>Good for time-sensitive applications</li>
+    </ul></div>
+    <div class="cons"><h4>Limitations</h4><ul>
+      <li>No guarantee of delivery or order</li>
+      <li>No congestion or flow control, so packets can be lost</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="tcp-udp">
+  <h2><span class="num">12</span>TCP vs UDP</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>TCP</th><th>UDP</th></tr>
+    <tr><td>Connection-oriented (handshake)</td><td>Connectionless</td></tr>
+    <tr><td>Reliable: ACKs, retransmission</td><td>Unreliable: best effort</td></tr>
+    <tr><td>Ordered delivery</td><td>No ordering</td></tr>
+    <tr><td>Byte-stream (no message boundaries)</td><td>Message-oriented (keeps boundaries)</td></tr>
+    <tr><td>Flow and congestion control</td><td>None</td></tr>
+    <tr><td>Header 20–60 bytes</td><td>Header 8 bytes</td></tr>
+    <tr><td>Slower, more overhead</td><td>Faster, less overhead</td></tr>
+    <tr><td>Data unit: segment</td><td>Data unit: datagram</td></tr>
+    <tr><td>HTTP, FTP, SMTP, SSH</td><td>DNS, VoIP, streaming, games</td></tr>
+  </table></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="others">
+  <h2><span class="num">13</span>Other Transport Layer Protocols</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Protocol</th><th>Description</th></tr>
+    <tr><td><strong>SCTP</strong> (Stream Control Transmission Protocol)</td><td>Reliable, <strong>message-oriented</strong> protocol with <strong>multi-streaming</strong> and <strong>multi-homing</strong>. Combines the strengths of TCP and UDP. Used in telecom signalling. Covered in detail below.</td></tr>
+    <tr><td><strong>DCCP</strong> (Datagram Congestion Control Protocol)</td><td>Adds <strong>congestion control to unreliable datagram flows</strong>. Useful for streaming and games that need timely delivery without congestion collapse.</td></tr>
+    <tr><td><strong>QUIC</strong> (Quick UDP Internet Connections)</td><td>A modern protocol by <strong>Google</strong> that runs <strong>over UDP</strong> but gives TCP-like reliability, multiplexing and <strong>built-in encryption</strong>, with faster connection setup. Used in <strong>HTTP/3</strong>.</td></tr>
+  </table></div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="sctp">
+  <h2><span class="num">14</span>Stream Control Transmission Protocol (SCTP)</h2>
+  <div class="def"><strong>SCTP</strong> is a general-purpose transport protocol designed for <strong>multimedia and stream traffic</strong>. It is a <strong>reliable, message-oriented protocol</strong> that <strong>combines the best features of UDP and TCP</strong>.</div>
+  <h3>Comparing UDP, TCP and SCTP</h3>
+  <ul>
+    <li><strong>UDP is message-oriented:</strong> it keeps message boundaries and each message is independent. But it's <strong>unreliable</strong> (messages can be lost, duplicated or out of order) and has no congestion or flow control.</li>
+    <li><strong>TCP is byte-oriented:</strong> it stores messages as a stream of bytes and sends segments, so <strong>message boundaries are lost</strong>. But it's <strong>reliable</strong> (it detects duplicates, resends lost segments and delivers in order), with congestion and flow control.</li>
+    <li><strong>SCTP gets the best of both:</strong> it <strong>preserves message boundaries</strong> like UDP and is <strong>reliable</strong> like TCP. It detects lost, duplicate and out-of-order data, and has congestion and flow control.</li>
+  </ul>
+  <div class="tip"><strong>Remember:</strong> SCTP = UDP's message boundaries + TCP's reliability, plus multistreaming and multihoming.</div>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="sctp-services">
+  <h2><span class="num">15</span>SCTP Services</h2>
+  <h3>1. Process-to-process communication</h3>
+  <p>SCTP uses all the <strong>well-known ports in the TCP space</strong>.</p>
+
+  <h3>2. Multiple streams (multistreaming)</h3>
+  <div class="def">SCTP allows <strong>several streams in each connection</strong>. In SCTP, a connection is called an <strong>association</strong>. If one stream is blocked, the <strong>other streams can still deliver</strong> their data.</div>
+<div class="tree">Sending process                                   Receiving process
+     │                                                    ▲
+  ┌──┴──┐ ── Stream 0 of data chunks ──────────────▶ ┌──┴──┐
+  │SCTP │ ── Stream 1 of data chunks ──────────────▶ │SCTP │
+  │     │ ── Stream n of data chunks ──────────────▶ │     │
+  └─────┘           (one association)                └─────┘</div>
+  <p>This avoids TCP's <strong>head-of-line blocking</strong>, where one lost segment holds up everything behind it. For example, a web page's text, images and video can each have their own stream.</p>
+
+  <h3>3. Multihoming</h3>
+  <div class="def">A <strong>multihomed</strong> host is connected to more than one physical network, with <strong>multiple IP addresses</strong>. An SCTP association <strong>allows multiple IP addresses at each end</strong>.</div>
+<div class="tree">        IP1 ──┐                       ┌── IP3
+Client        ├──── Internet ────────┤          Server
+        IP2 ──┘                       └── IP4</div>
+  <ul>
+    <li>Only one IP address per end is used at a time (the <strong>primary</strong> path). The others are kept as <strong>backups</strong>.</li>
+    <li>If the primary path fails, SCTP switches to another without breaking the association. This gives <strong>fault tolerance</strong>.</li>
+  </ul>
+
+  <h3>4. Full-duplex communication</h3>
+  <p>Data flows <strong>in both directions at the same time</strong>. Each SCTP end has a sending buffer and a receiving buffer.</p>
+
+  <h3>5. Connection-oriented service</h3>
+  <p>SCTP is connection-oriented, but the connection is called an <strong>association</strong>. When process A wants to talk to process B:</p>
+  <ol>
+    <li>The two SCTPs <strong>establish an association</strong>.</li>
+    <li>Data is <strong>exchanged in both directions</strong>.</li>
+    <li>The association is <strong>terminated</strong>.</li>
+  </ol>
+
+  <h3>6. Reliable service</h3>
+  <p>SCTP uses an <strong>acknowledgement mechanism</strong> to check that data arrived safely.</p>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="sctp-features">
+  <h2><span class="num">16</span>SCTP Features</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>Description</th></tr>
+    <tr><td><strong>Transmission Sequence Number (TSN)</strong></td><td>The unit of data is a <strong>data chunk</strong>, and data chunks are numbered with a <strong>TSN</strong>. It does the same job as TCP's sequence number. <strong>32 bits</strong>, randomly initialised between 0 and 2<sup>32</sup> − 1. Every data chunk carries its TSN.</td></tr>
+    <tr><td><strong>Stream Identifier (SI)</strong></td><td>Identifies <strong>which stream</strong> a chunk belongs to in the association. <strong>16 bits</strong>, starting at 0. Every data chunk carries it so the receiver can put it in the right stream.</td></tr>
+    <tr><td><strong>Stream Sequence Number (SSN)</strong></td><td>Identifies the <strong>order of a chunk within its stream</strong>, so chunks are delivered to the right stream in the right order. <strong>16 bits</strong>.</td></tr>
+    <tr><td><strong>Packets</strong></td><td>Data goes in <strong>data chunks</strong> and control information in <strong>control chunks</strong>. Several of each can be packed into one packet. An SCTP <strong>packet</strong> plays the role of a TCP <strong>segment</strong>.</td></tr>
+    <tr><td><strong>Acknowledgment number</strong></td><td>TCP ACKs are <strong>byte-oriented</strong> (they refer to sequence numbers). SCTP ACKs are <strong>chunk-oriented</strong> (they refer to the TSN).</td></tr>
+    <tr><td><strong>Flow control</strong></td><td>Like TCP, it avoids overwhelming the receiver.</td></tr>
+    <tr><td><strong>Error control</strong></td><td>Like TCP, it uses TSNs and acknowledgement numbers for reliability.</td></tr>
+    <tr><td><strong>Congestion control</strong></td><td>Like TCP, it decides how many data chunks can be put into the network.</td></tr>
+  </table></div>
+  <h3>Example: TSN, SI and SSN in a flow of packets</h3>
+<div class="tree">First packet        Second packet       Third packet        Fourth packet
+TSN 101 SI 0 SSN 0  TSN 104 SI 0 SSN 3  TSN 107 SI 1 SSN 2  TSN 110 SI 2 SSN 2
+TSN 102 SI 0 SSN 1  TSN 105 SI 1 SSN 0  TSN 108 SI 2 SSN 0  TSN 111 SI 2 SSN 3
+TSN 103 SI 0 SSN 2  TSN 106 SI 1 SSN 1  TSN 109 SI 2 SSN 1
+───────────────────────── flow from sender to receiver ─────────────────────────▶</div>
+  <ul>
+    <li><strong>TSN</strong> is a cumulative number across the whole association (101, 102, 103 …).</li>
+    <li><strong>SI</strong> says which stream (0, 1, 2).</li>
+    <li><strong>SSN</strong> is the chunk's position within its own stream (each stream counts from 0).</li>
+  </ul>
+  <div class="tip"><strong>Remember:</strong> TSN identifies a chunk in the association, SI identifies the stream, and SSN identifies the chunk within the stream.</div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="sctp-packet">
+  <h2><span class="num">17</span>SCTP Packet vs TCP Segment</h2>
+<div class="tree">A segment in TCP                          A packet in SCTP
+┌───────────────┬──────────────────┐      ┌───────────────┬──────────────────┐
+│ Source port   │ Destination port │      │ Source port   │ Destination port │
+├───────────────┴──────────────────┤      ├───────────────┴──────────────────┤
+│ Sequence number                  │      │ Verification tag                 │
+│ Acknowledgment number            │      │ Checksum                         │
+│ HL │ Control flags │ Window size │      ├──────────────────────────────────┤
+│ Checksum      │ Urgent pointer   │      │ Control chunks                   │
+│ Options                          │      ├──────────────────────────────────┤
+├──────────────────────────────────┤      │ Data chunks                      │
+│ Data bytes                       │      │                                  │
+└──────────────────────────────────┘      └──────────────────────────────────┘</div>
+  <h3>Differences</h3>
+  <ol>
+    <li>TCP keeps control information <strong>in the header</strong>. SCTP keeps it in <strong>control chunks</strong>.</li>
+    <li>A TCP segment's data is <strong>one entity</strong>. An SCTP packet can carry <strong>several data chunks</strong>, each possibly from a different stream.</li>
+    <li>TCP has an <strong>options</strong> section. SCTP has none, and handles options by defining <strong>new chunk types</strong>.</li>
+    <li>TCP's mandatory header is <strong>20 bytes</strong>. SCTP's general header is only <strong>12 bytes</strong>, because:
+      <ul>
+        <li>the TSN belongs to each data chunk, so it's in the chunk header;</li>
+        <li>the acknowledgement number and window size are in control chunks;</li>
+        <li>no header length field is needed, since there are no options and the length is fixed at 12 bytes;</li>
+        <li>no urgent pointer is needed.</li>
+      </ul>
+    </li>
+    <li>TCP's checksum is <strong>16 bits</strong>. SCTP's is <strong>32 bits</strong> (CRC-32).</li>
+    <li>SCTP's <strong>verification tag</strong> identifies the association. TCP has no equivalent: in TCP the IPs and ports define a connection, but with multihoming SCTP needs a separate tag.</li>
+    <li>TCP has <strong>one sequence number</strong> for the first data byte. An SCTP packet has several data chunks, each with its own <strong>TSN, SI and SSN</strong>.</li>
+    <li>TCP control segments (SYN, FIN) <strong>use up a sequence number</strong>. SCTP control chunks <strong>never</strong> use a TSN, SI or SSN, which belong only to data chunks.</li>
+  </ol>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="sctp-format">
+  <h2><span class="num">18</span>SCTP Packet Format &amp; General Header</h2>
+  <div class="def">An SCTP packet has a <strong>mandatory 12-byte general header</strong> followed by a set of <strong>chunks</strong>. <strong>Control chunks</strong> maintain the association and <strong>data chunks</strong> carry user data. <strong>Control chunks always come before data chunks.</strong></div>
+<div class="tree">┌──────────────────────────────┐
+│ General header (12 bytes)    │
+├──────────────────────────────┤
+│ Chunk 1 (variable length)    │
+├──────────────────────────────┤
+│ ...                          │
+├──────────────────────────────┤
+│ Chunk N (variable length)    │
+└──────────────────────────────┘</div>
+  <h3>General header</h3>
+  <p>It identifies the association the packet belongs to, makes sure the packet really belongs to that association, and protects the integrity of the whole packet.</p>
+<div class="tree">┌──────────────────────────┬──────────────────────────┐
+│ Source port (16)         │ Destination port (16)    │
+├──────────────────────────┴──────────────────────────┤
+│ Verification tag (32)                               │
+├─────────────────────────────────────────────────────┤
+│ Checksum (32)                                       │
+└─────────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>Source port (16)</td><td>Sending port.</td></tr>
+    <tr><td>Destination port (16)</td><td>Receiving port.</td></tr>
+    <tr><td>Verification tag (32)</td><td>Matches the packet to its <strong>association</strong>, so a packet from an old association can't be mistaken for a current one. It's repeated in every packet, with a separate tag for each direction.</td></tr>
+    <tr><td>Checksum (32)</td><td>A <strong>CRC-32</strong> checksum.</td></tr>
+  </table></div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="chunks">
+  <h2><span class="num">19</span>Chunks</h2>
+  <div class="def">A <strong>chunk</strong> is a block that carries either <strong>control information or user data</strong>. All chunks share a common layout: <strong>Type, Flag, Length</strong>, then the chunk information.</div>
+<div class="tree">0          7 8         15 16                      31
+┌────────────┬────────────┬─────────────────────────┐
+│ Type (8)   │ Flag (8)   │ Length (16)             │
+├────────────┴────────────┴─────────────────────────┤
+│ Chunk information (multiple of 4 bytes)           │
+└───────────────────────────────────────────────────┘</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td><strong>Type (8 bits)</strong></td><td>Up to 256 chunk types. Only a few are defined, and the rest are reserved.</td></tr>
+    <tr><td><strong>Flag (8 bits)</strong></td><td>Special flags. Each bit's meaning depends on the chunk type.</td></tr>
+    <tr><td><strong>Length (16 bits)</strong></td><td>Total chunk size in bytes, <strong>including</strong> type, flag and length, but <strong>excluding padding</strong>. An empty chunk has length 4.</td></tr>
+  </table></div>
+  <h3>Padding rule</h3>
+  <p>The information section must be a <strong>multiple of 4 bytes</strong>. If it isn't, <strong>padding bytes (eight 0s each)</strong> are added at the end. Padding isn't counted in the length.</p>
+  <ul>
+    <li>Length = <strong>17</strong>: the next multiple of 4 is 20, so there are <strong>3 bytes of padding</strong> to discard.</li>
+    <li>Length = <strong>16</strong>: already a multiple of 4, so there's <strong>no padding</strong>.</li>
+  </ul>
+  <h3>Chunk types</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Type</th><th>Chunk</th><th>Description</th></tr>
+    <tr><td>0</td><td>DATA</td><td>User data</td></tr>
+    <tr><td>1</td><td>INIT</td><td>Sets up an association</td></tr>
+    <tr><td>2</td><td>INIT ACK</td><td>Acknowledges the INIT chunk</td></tr>
+    <tr><td>3</td><td>SACK</td><td>Selective acknowledgement</td></tr>
+    <tr><td>4</td><td>HEARTBEAT</td><td>Probes the peer to check it's alive</td></tr>
+    <tr><td>5</td><td>HEARTBEAT ACK</td><td>Acknowledges HEARTBEAT</td></tr>
+    <tr><td>6</td><td>ABORT</td><td>Aborts an association</td></tr>
+    <tr><td>7</td><td>SHUTDOWN</td><td>Terminates an association</td></tr>
+    <tr><td>8</td><td>SHUTDOWN ACK</td><td>Acknowledges SHUTDOWN</td></tr>
+    <tr><td>9</td><td>ERROR</td><td>Reports errors without shutting down</td></tr>
+    <tr><td>10</td><td>COOKIE ECHO</td><td>Third packet in association setup</td></tr>
+    <tr><td>11</td><td>COOKIE ACK</td><td>Acknowledges COOKIE ECHO</td></tr>
+    <tr><td>14</td><td>SHUTDOWN COMPLETE</td><td>Third packet in association termination</td></tr>
+    <tr><td>192</td><td>FORWARD TSN</td><td>Adjusts the cumulative TSN</td></tr>
+  </table></div>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="data-chunk">
+  <h2><span class="num">20</span>DATA Chunk</h2>
+  <div class="def">The <strong>DATA chunk</strong> (type 0) carries the <strong>user data</strong>. A packet can carry zero or more DATA chunks.</div>
+<div class="tree">0          7 8        13 14 15 16                   31
+┌────────────┬──────────┬─┬─┬─┬───────────────────────┐
+│ Type: 0    │ Reserved │U│B│E│ Length                │
+├────────────┴──────────┴─┴─┴─┴───────────────────────┤
+│ Transmission sequence number (TSN)                  │
+├──────────────────────────┬──────────────────────────┤
+│ Stream identifier (SI)   │ Stream sequence no. (SSN)│
+├──────────────────────────┴──────────────────────────┤
+│ Protocol identifier                                 │
+├─────────────────────────────────────────────────────┤
+│ User data                                           │
+└─────────────────────────────────────────────────────┘</div>
+  <h3>Flag bits (5 reserved + 3 defined)</h3>
+  <ul>
+    <li><strong>U (Unordered):</strong> when 1, the data is unordered and the SSN is ignored.</li>
+    <li><strong>B (Beginning)</strong> and <strong>E (End):</strong> together they give a chunk's position in a fragmented message:</li>
+  </ul>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>B</th><th>E</th><th>Meaning</th></tr>
+    <tr><td>1</td><td>1</td><td>Not fragmented: the whole message is in this one chunk (first and last)</td></tr>
+    <tr><td>1</td><td>0</td><td>First fragment</td></tr>
+    <tr><td>0</td><td>1</td><td>Last fragment</td></tr>
+    <tr><td>0</td><td>0</td><td>Middle fragment</td></tr>
+  </table></div>
+  <h3>Fields</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td>TSN (32)</td><td>Transmission sequence number.</td></tr>
+    <tr><td>Stream identifier (16)</td><td>Which stream. All chunks of one stream in one direction carry the same SI.</td></tr>
+    <tr><td>Stream sequence number (16)</td><td>The chunk's number within its stream, in one direction.</td></tr>
+    <tr><td>Protocol identifier (32)</td><td>Lets the application say what type of data it is.</td></tr>
+    <tr><td>User data</td><td>The actual data.</td></tr>
+  </table></div>
+  <h3>User data rules</h3>
+  <ol>
+    <li>A chunk <strong>can't carry data from more than one message</strong>, but one message <strong>can be split over several chunks</strong>.</li>
+    <li>The field <strong>can't be empty</strong>: at least 1 byte. So the <strong>length is never less than 17</strong> (16-byte chunk header + 1 byte of data).</li>
+    <li>If the data doesn't end on a 32-bit boundary, <strong>padding</strong> is added. It isn't counted in the length.</li>
+  </ol>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="association">
+  <h2><span class="num">21</span>SCTP Association Establishment &amp; Termination<span class="tag add">not in slides</span></h2>
+  <p>The slides' chunk table mentions these packets (COOKIE ECHO is "third packet in association establishment"). Here is the full exchange.</p>
+  <h3>Establishment: four-way handshake</h3>
+<div class="tree">Client                                         Server
+  │ ── INIT ───────────────────────────────────▶ │  1
+  │ ◀── INIT ACK (with state cookie) ─────────── │  2
+  │ ── COOKIE ECHO (cookie, may carry DATA) ───▶ │  3
+  │ ◀── COOKIE ACK (may carry DATA) ──────────── │  4</div>
+  <ul>
+    <li>The <strong>cookie</strong> means the server keeps <strong>no state</strong> until step 3. This protects against <strong>SYN-flood-style denial-of-service attacks</strong>, which TCP's three-way handshake is vulnerable to.</li>
+    <li>Data can be sent already in steps 3 and 4.</li>
+  </ul>
+  <h3>Termination: three packets</h3>
+<div class="tree">  │ ── SHUTDOWN ──────────────▶ │
+  │ ◀── SHUTDOWN ACK ────────── │
+  │ ── SHUTDOWN COMPLETE ─────▶ │</div>
+  <p>SCTP has <strong>no half-closed state</strong>, unlike TCP. <strong>ABORT</strong> ends an association immediately.</p>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="compare">
+  <h2><span class="num">22</span>UDP vs TCP vs SCTP</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>UDP</th><th>TCP</th><th>SCTP</th></tr>
+    <tr><td>Orientation</td><td>Message</td><td>Byte stream</td><td>Message</td></tr>
+    <tr><td>Connection</td><td>Connectionless</td><td>Connection</td><td>Association</td></tr>
+    <tr><td>Reliable</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Ordered delivery</td><td>No</td><td>Yes</td><td>Yes, per stream (or unordered if U = 1)</td></tr>
+    <tr><td>Message boundaries</td><td>Preserved</td><td>Lost</td><td>Preserved</td></tr>
+    <tr><td>Flow and congestion control</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Multistreaming</td><td>No</td><td>No</td><td><strong>Yes</strong></td></tr>
+    <tr><td>Multihoming</td><td>No</td><td>No</td><td><strong>Yes</strong></td></tr>
+    <tr><td>Header</td><td>8 bytes</td><td>20–60 bytes</td><td>12-byte general header + chunks</td></tr>
+    <tr><td>Checksum</td><td>16-bit (optional)</td><td>16-bit</td><td>32-bit CRC</td></tr>
+    <tr><td>Setup</td><td>None</td><td>3-way handshake</td><td>4-way handshake (with cookie)</td></tr>
+    <tr><td>Data unit</td><td>User datagram</td><td>Segment</td><td>Packet (with chunks)</td></tr>
+    <tr><td>Typical use</td><td>DNS, VoIP, streaming</td><td>Web, email, FTP</td><td>Telecom signalling, multimedia</td></tr>
+  </table></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

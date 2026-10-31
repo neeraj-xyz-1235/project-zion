@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OOP in PHP</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><a href="index.html">PHP Notes</a></div>
+  <div class="sub">Unit 3 · Object-Oriented PHP</div>
+  <div class="pages">
+    <a href="unit-1.html">Unit 1</a>
+    <a href="unit-2.html">Unit 2</a>
+    <a class="on" href="unit-3.html">Unit 3</a>
+  </div>
+  <ol>
+    <li><a href="#oop">1. OOP Concepts</a></li>
+    <li><a href="#class">2. Class</a></li>
+    <li><a href="#object">3. Object</a></li>
+    <li><a href="#this">4. $this Keyword</a></li>
+    <li><a href="#constructor">5. Constructor</a></li>
+    <li><a href="#param-constructor">6. Parameterised Constructor</a></li>
+    <li><a href="#overload-constructor">7. Overloading the Constructor</a></li>
+    <li><a href="#typed-constructor">8. Type Declarations</a></li>
+    <li><a href="#destructor">9. Destructor</a></li>
+    <li><a href="#inheritance">10. Inheritance</a></li>
+    <li><a href="#single">11. Single Inheritance</a></li>
+    <li><a href="#multilevel">12. Multilevel Inheritance</a></li>
+    <li><a href="#hierarchical">13. Hierarchical Inheritance</a></li>
+    <li><a href="#abstract">14. Abstract Classes</a></li>
+    <li><a href="#interface">15. Interfaces</a></li>
+    <li><a href="#abs-vs-int">16. Abstract Class vs Interface</a></li>
+    <li><a href="#polymorphism">17. Polymorphism</a></li>
+    <li><a href="#overriding">18. Method Overriding</a></li>
+    <li><a href="#poly-abs-int">19. Polymorphism via Abstract &amp; Interface</a></li>
+    <li><a href="#encapsulation">20. Encapsulation</a></li>
+    <li><a href="#access">21. Access Modifiers</a></li>
+    <li><a href="#final">22. final Keyword</a></li>
+  </ol>
+  <button class="theme-btn">Toggle theme</button>
+</nav>
+
+<main>
+<header class="page">
+  <h1>Unit 3: Object-Oriented Programming in PHP</h1>
+  <p>Classes and objects, $this, constructors and destructors, inheritance, abstract classes and interfaces, polymorphism, encapsulation and the final keyword.</p>
+</header>
+
+<!-- 1 -->
+<section class="topic" id="oop">
+  <h2><span class="num">1</span>OOP Concepts<span class="tag add">not in slides</span></h2>
+  <div class="def"><strong>Object-Oriented Programming (OOP)</strong> organises a program around <strong>objects</strong>, which bundle data (properties) and behaviour (methods), instead of around functions alone.</div>
+  <h3>The four pillars</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Pillar</th><th>Meaning</th><th>In PHP</th></tr>
+    <tr><td><strong>Encapsulation</strong></td><td>Wrap data and methods together and hide the internals</td><td>public / private / protected</td></tr>
+    <tr><td><strong>Inheritance</strong></td><td>A class reuses another class's members</td><td><code>extends</code></td></tr>
+    <tr><td><strong>Polymorphism</strong></td><td>The same method name behaves differently for different objects</td><td>Method overriding, interfaces</td></tr>
+    <tr><td><strong>Abstraction</strong></td><td>Show what an object does, hide how</td><td><code>abstract</code> classes, interfaces</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section class="topic" id="class">
+  <h2><span class="num">2</span>Class</h2>
+  <div class="def">A <strong>class</strong> is a <strong>blueprint or template</strong> that defines the <strong>properties (variables)</strong> and <strong>methods (functions)</strong> its objects will have.</div>
+  <ul>
+    <li>Declared with the <strong><code>class</code></strong> keyword, then the class name and curly braces.</li>
+    <li>Example: <strong>Car</strong> is a class. <strong>Mercedes, BMW and Audi</strong> are objects made from it.</li>
+    <li>Class = the idea or design. Object = the real thing built from it.</li>
+  </ul>
+  <div class="decl">class MyClass {
+    // properties and methods
+}</div>
+</section>
+
+<!-- 3 -->
+<section class="topic" id="object">
+  <h2><span class="num">3</span>Object</h2>
+  <div class="def">An <strong>object</strong> is an <strong>instance of a class</strong>: a real entity created from the blueprint with the <strong><code>new</code></strong> keyword.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li><strong>Contains data and behaviour:</strong> the properties and methods defined in the class.</li>
+    <li><strong>Has its own memory:</strong> each object gets its own copy of the properties, but methods are shared.</li>
+    <li><strong>Arrow operator (<code>-&gt;</code>):</strong> used to access properties and methods: <code>$obj-&gt;name</code>, <code>$obj-&gt;show()</code>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+class MyClass {
+    // empty class
+}
+$obj = new MyClass;
+var_dump($obj);      // object(MyClass)#1 (0) { }
+?>
+</script></div>
+  <h3>Demo: class with a property and a method</h3>
+<div class="code"><script type="text/plain">
+<?php
+class Student {
+    public $name;
+    public function greet() {
+        echo "Hello, I am $this->name";
+    }
+}
+$s1 = new Student();
+$s1->name = "Riya";
+$s1->greet();        // Hello, I am Riya
+?>
+</script></div>
+</section>
+
+<!-- 4 -->
+<section class="topic" id="this">
+  <h2><span class="num">4</span>$this Keyword</h2>
+  <div class="def"><code>$this</code> is a special variable that <strong>refers to the current object</strong>. Inside a class, it's used to access that object's own properties and methods.</div>
+  <h3>Without $this: wrong</h3>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public $brand;
+    public function setBrand($brand) {
+        $brand = $brand;      // only changes the local variable
+    }
+    public function getBrand() {
+        return $brand;        // Warning: undefined variable
+    }
+}
+?>
+</script></div>
+  <h3>With $this: correct</h3>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public $brand;
+    public function setBrand($brand) {
+        $this->brand = $brand;     // set the object's property
+    }
+    public function getBrand() {
+        return $this->brand;       // read the object's property
+    }
+}
+$car = new Car();
+$car->setBrand("Honda");
+echo $car->getBrand();    // Honda
+?>
+</script></div>
+  <h3>Rules</h3>
+  <ul>
+    <li><code>$this-&gt;property</code> reads or changes a property.</li>
+    <li><code>$this-&gt;method()</code> calls another method of the same class.</li>
+    <li><code>$this</code> <strong>can't be used in static methods</strong>, because they belong to the class, not to an object.</li>
+  </ul>
+</section>
+
+<!-- 5 -->
+<section class="topic" id="constructor">
+  <h2><span class="num">5</span>Constructor</h2>
+  <div class="def">A <strong>constructor</strong> is a special method named <strong><code>__construct()</code></strong> that is <strong>called automatically when an object is created</strong> with <code>new</code>. It sets up the object's initial state.</div>
+  <div class="decl">__construct(mixed ...$values = ""): void</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Runs <strong>automatically</strong>, so you never call it yourself.</li>
+    <li>Used to set default property values, open database connections and do other setup.</li>
+    <li>Optional: a class doesn't have to have one.</li>
+    <li>Can take any number of parameters, and <strong>returns no value</strong>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+class PHP {
+    public function __construct() {
+        echo 'The class ' . __CLASS__ . ' was initiated!';
+    }
+}
+$obj = new PHP;      // constructor runs automatically
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">The class PHP was initiated!</div>
+  <p><code>__CLASS__</code> is a <strong>magic constant</strong> that gives the current class name.</p>
+  <h3>Default constructor setting values</h3>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public $brand;
+    public $price;
+    function __construct() {
+        $this->brand = "Toyota";
+        $this->price = 15000;
+    }
+    function getBrand() { echo "Brand: $this->brand <br>"; }
+    function getPrice() { echo "Price: $this->price <br>"; }
+}
+$car1 = new Car;
+$car1->getBrand();     // Brand: Toyota
+$car1->getPrice();     // Price: 15000
+?>
+</script></div>
+  <p>Drawback: <strong>every</strong> object gets the same brand and price. A parameterised constructor fixes that.</p>
+</section>
+
+<!-- 6 -->
+<section class="topic" id="param-constructor">
+  <h2><span class="num">6</span>Parameterised Constructor</h2>
+  <div class="def">A constructor that <strong>takes arguments</strong>, so each object can be created with <strong>its own values</strong>.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public $brand;
+    public $price;
+    function __construct($carBrand, $carPrice) {
+        $this->brand = $carBrand;
+        $this->price = $carPrice;
+    }
+    function getBrand() { echo "Brand: $this->brand <br>"; }
+    function getPrice() { echo "Price: $this->price <br>"; }
+}
+$car1 = new Car("Toyota", 15000);
+$car2 = new Car("Honda", 18000);
+$car1->getBrand();  $car1->getPrice();
+$car2->getBrand();  $car2->getPrice();
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Brand: Toyota
+Price: 15000
+Brand: Honda
+Price: 18000</div>
+</section>
+
+<!-- 7 -->
+<section class="topic" id="overload-constructor">
+  <h2><span class="num">7</span>Overloading the Constructor</h2>
+  <div class="def"><strong>Constructor overloading</strong> means having several constructors with different numbers of parameters. <strong>PHP doesn't support it.</strong> The workaround is to give parameters <strong>default values</strong>.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public $brand;
+    public $price;
+    function __construct($brand = "Unknown", $price = 0) {
+        $this->brand = $brand;
+        $this->price = $price;
+    }
+    function show() { echo "Brand: $this->brand, Price: $this->price <br>"; }
+}
+$car1 = new Car("Toyota", 15000);   // both values
+$car2 = new Car("Honda");           // brand only
+$car3 = new Car();                  // no values
+$car1->show();
+$car2->show();
+$car3->show();
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Brand: Toyota, Price: 15000
+Brand: Honda, Price: 0
+Brand: Unknown, Price: 0</div>
+</section>
+
+<!-- 8 -->
+<section class="topic" id="typed-constructor">
+  <h2><span class="num">8</span>Type Declarations in the Constructor</h2>
+  <div class="def">Since <strong>PHP 7.0</strong>, parameters can declare <strong>scalar types</strong> (string, int, float, bool). Since <strong>7.4</strong>, properties can be typed too. Passing the wrong type causes an error.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Car {
+    public string $brand;
+    public int $price;
+    function __construct(string $brand, int $price) {
+        $this->brand = $brand;
+        $this->price = $price;
+    }
+    function show() { echo "Brand: $this->brand, Price: $this->price <br>"; }
+}
+$car1 = new Car("Hyundai", 18000);
+$car2 = new Car("Ford", 22000);
+$car1->show();
+$car2->show();
+?>
+</script></div>
+</section>
+
+<!-- 9 -->
+<section class="topic" id="destructor">
+  <h2><span class="num">9</span>Destructor</h2>
+  <div class="def">A <strong>destructor</strong> is a special method named <strong><code>__destruct()</code></strong> that is <strong>called automatically when an object is destroyed</strong>: when no references to it remain, or the script ends. It's used to <strong>clean up and free resources</strong>.</div>
+  <div class="decl">__destruct(): void</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Optional, but advisable when the constructor acquires resources.</li>
+    <li>Never called directly. PHP's <strong>garbage collector</strong> triggers it.</li>
+    <li><strong>Takes no parameters.</strong></li>
+    <li>A class has <strong>only one</strong> destructor, and it <strong>can't be overloaded</strong>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+class CleanupDemo {
+    function __construct() {
+        echo "Constructor is called.<br>";
+    }
+    function __destruct() {
+        echo "Object of class " . __CLASS__ . " is being destroyed.";
+    }
+}
+$obj = new CleanupDemo();
+// script ends here, so the destructor runs automatically
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Constructor is called.
+Object of class CleanupDemo is being destroyed.</div>
+  <h3>Advantages</h3>
+  <ul>
+    <li>Frees memory for new objects.</li>
+    <li>Handles cleanup, so tasks run efficiently.</li>
+    <li>Prevents <strong>memory leaks</strong> when many objects and structures are created.</li>
+  </ul>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Constructor</th><th>Destructor</th></tr>
+    <tr><td><code>__construct()</code></td><td><code>__destruct()</code></td></tr>
+    <tr><td>Called when an object is created</td><td>Called when an object is destroyed</td></tr>
+    <tr><td>Can take parameters</td><td>Takes no parameters</td></tr>
+    <tr><td>Initialises the object</td><td>Cleans up and frees resources</td></tr>
+  </table></div>
+</section>
+
+<!-- 10 -->
+<section class="topic" id="inheritance">
+  <h2><span class="num">10</span>Inheritance</h2>
+  <div class="def"><strong>Inheritance</strong> lets a class (the <strong>child</strong>) <strong>inherit properties and methods from another class</strong> (the <strong>parent</strong>), using the <strong><code>extends</code></strong> keyword. It promotes <strong>code reuse</strong> and builds a class hierarchy.</div>
+  <ul>
+    <li><strong>Parent (base / super) class:</strong> the class being inherited from.</li>
+    <li><strong>Child (derived / sub) class:</strong> the class that inherits. It can add new methods or <strong>override</strong> existing ones.</li>
+    <li>The child inherits <strong>public and protected</strong> members, <strong>not private</strong> ones.</li>
+  </ul>
+  <div class="decl">class ChildClass extends ParentClass {
+    // inherits public and protected members
+}</div>
+  <h3>Types in PHP</h3>
+<div class="tree">Single           Multilevel          Hierarchical
+  A                  A                      A
+  │                  │                  ┌───┴───┐
+  B                  B                  B       C
+                     │
+                     C</div>
+  <div class="note">PHP doesn't support <strong>multiple inheritance</strong> of classes (one class extending two). It gets the same effect through <strong>interfaces</strong> (a class can implement many) and <strong>traits</strong>.<span class="tag add">not in slides</span></div>
+</section>
+
+<!-- 11 -->
+<section class="topic" id="single">
+  <h2><span class="num">11</span>Single Inheritance</h2>
+  <div class="def"><strong>Single inheritance</strong>: <strong>one child class inherits from one parent class</strong>.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Animal {
+    public function makeSound() {
+        echo "Animals make sound<br>";
+    }
+}
+class Dog extends Animal {
+    public function bark() {
+        echo "Dog barks<br>";
+    }
+}
+$dog = new Dog();
+$dog->makeSound();    // inherited from Animal
+$dog->bark();         // defined in Dog
+?>
+</script></div>
+  <h3>Example: Shape → Trapezoid</h3>
+<div class="code"><script type="text/plain">
+<?php
+class Shape {
+    public function display() {
+        echo "Calculating area of shapes<br>";
+    }
+}
+class Trapezoid extends Shape {
+    private $base1, $base2, $height;
+    public function __construct($b1, $b2, $h) {
+        $this->base1 = $b1;
+        $this->base2 = $b2;
+        $this->height = $h;
+    }
+    public function area() {
+        $area = 0.5 * ($this->base1 + $this->base2) * $this->height;
+        echo "Area of trapezoid: $area<br>";
+    }
+}
+$trap = new Trapezoid(10, 6, 5);
+$trap->display();     // from Shape
+$trap->area();        // Area of trapezoid: 40
+?>
+</script></div>
+</section>
+
+<!-- 12 -->
+<section class="topic" id="multilevel">
+  <h2><span class="num">12</span>Multilevel Inheritance</h2>
+  <div class="def"><strong>Multilevel inheritance</strong>: a class inherits from a child class, which itself inherits from another class. That's a <strong>chain</strong>: grandparent → parent → child. The last class can use the methods of all its ancestors.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Vehicle {
+    public function start() { echo "Vehicles can start<br>"; }
+}
+class Car extends Vehicle {
+    public function drive() { echo "Car is driving<br>"; }
+}
+class SportsCar extends Car {
+    public function turboBoost() { echo "Sports car activates turbo boost<br>"; }
+}
+$sc = new SportsCar();
+$sc->start();        // from Vehicle (grandparent)
+$sc->drive();        // from Car (parent)
+$sc->turboBoost();   // own method
+?>
+</script></div>
+</section>
+
+<!-- 13 -->
+<section class="topic" id="hierarchical">
+  <h2><span class="num">13</span>Hierarchical Inheritance</h2>
+  <div class="def"><strong>Hierarchical inheritance</strong>: <strong>several child classes inherit from the same parent class</strong>. Each child gets the shared functionality and adds its own.</div>
+<div class="code"><script type="text/plain">
+<?php
+class Animal {
+    public function makeSound() { echo "Animals make sound<br>"; }
+}
+class Dog extends Animal {
+    public function bark() { echo "Dog barks<br>"; }
+}
+class Cat extends Animal {
+    public function meow() { echo "Cat meows<br>"; }
+}
+$dog = new Dog();
+$cat = new Cat();
+$dog->makeSound();  $dog->bark();
+$cat->makeSound();  $cat->meow();
+?>
+</script></div>
+</section>
+
+<!-- 14 -->
+<section class="topic" id="abstract">
+  <h2><span class="num">14</span>Abstract Classes</h2>
+  <div class="def">An <strong>abstract class</strong> is a <strong>blueprint for other classes</strong>, declared with the <strong><code>abstract</code></strong> keyword. It <strong>can't be instantiated</strong>, and it can contain <strong>abstract methods</strong> (declared, with no body) that child classes <strong>must</strong> implement.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Can't create an object of it: <code>new MyClass</code> gives a fatal error.</li>
+    <li>Can contain <strong>abstract methods</strong> (no body) <strong>and normal methods</strong> (with a body).</li>
+    <li>Child classes must <strong>override all abstract methods</strong>.</li>
+    <li>If a class has even <strong>one abstract method</strong>, the class itself must be declared abstract.</li>
+  </ul>
+  <div class="decl">abstract class MyClass {
+    abstract public function absMethod($arg1, $arg2);   // no body
+    public function normalMethod() { echo "Hello"; }     // with body
+}</div>
+  <h3>Errors</h3>
+<div class="tree">$obj = new MyClass;
+→ Fatal error: Cannot instantiate abstract class MyClass
+
+class myclass { abstract function absmethod(); }   // not declared abstract
+→ Fatal error: Class myclass contains 1 abstract method and must
+  therefore be declared abstract</div>
+  <h3>Why use abstract classes?</h3>
+  <ul>
+    <li><strong>Code reusability:</strong> shared properties and methods are written once in the base.</li>
+    <li><strong>Enforcing structure:</strong> every child must implement certain methods.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+abstract class Shape {
+    abstract public function area();              // must be implemented
+    public function describe() {                  // normal method
+        echo "I am a shape<br>";
+    }
+}
+class Square extends Shape {
+    private $side;
+    public function __construct($side) { $this->side = $side; }
+    public function area() { return $this->side * $this->side; }
+}
+$sq = new Square(5);
+$sq->describe();
+echo "Area of square: " . $sq->area();     // 25
+?>
+</script></div>
+</section>
+
+<!-- 15 -->
+<section class="topic" id="interface">
+  <h2><span class="num">15</span>Interfaces</h2>
+  <div class="def">An <strong>interface</strong> is a <strong>collection of method declarations (no bodies)</strong> that sets the rules a class must follow. It's declared with the <strong><code>interface</code></strong> keyword, and a class uses it with <strong><code>implements</code></strong>.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>All methods are <strong>public and abstract</strong> by default, with no implementation.</li>
+    <li>It can't have properties (variables), <strong>only constants</strong>.</li>
+    <li>A class that implements an interface must implement <strong>all</strong> its methods.</li>
+    <li>A class can implement <strong>multiple interfaces</strong>, which is how PHP gets <strong>multiple inheritance</strong>.</li>
+    <li>Used to enforce common behaviour across <strong>unrelated</strong> classes.</li>
+  </ul>
+  <div class="decl">interface InterfaceName {
+    public function method1();
+    public function method2($arg);
+}</div>
+<div class="code"><script type="text/plain">
+<?php
+interface Shape {
+    public function area();
+}
+interface Printable {
+    public function show();
+}
+class Circle implements Shape, Printable {     // multiple interfaces
+    private $radius;
+    public function __construct($r) { $this->radius = $r; }
+    public function area() { return 3.14 * $this->radius * $this->radius; }
+    public function show() { echo "Area of circle: " . $this->area(); }
+}
+$c = new Circle(7);
+$c->show();      // Area of circle: 153.86
+?>
+</script></div>
+</section>
+
+<!-- 16 -->
+<section class="topic" id="abs-vs-int">
+  <h2><span class="num">16</span>Abstract Class vs Interface</h2>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+    <tr><td>Keyword</td><td><code>abstract class</code></td><td><code>interface</code></td></tr>
+    <tr><td>Object creation</td><td>Can't be instantiated</td><td>Can't be instantiated</td></tr>
+    <tr><td>Methods</td><td>Abstract <strong>and</strong> normal methods</td><td>Only abstract methods (no body)</td></tr>
+    <tr><td>Variables</td><td>Can have normal properties</td><td>Only constants</td></tr>
+    <tr><td>Access modifiers</td><td>public, protected or private</td><td>All methods public</td></tr>
+    <tr><td>Inheritance</td><td>A class can extend <strong>only one</strong></td><td>A class can implement <strong>many</strong></td></tr>
+    <tr><td>Used with</td><td><code>extends</code></td><td><code>implements</code></td></tr>
+    <tr><td>Constructor</td><td>Can have one</td><td>Can't have one</td></tr>
+    <tr><td>Purpose</td><td>A base class with shared code</td><td>A contract (set of rules)</td></tr>
+    <tr><td>When to use</td><td>Closely related classes sharing code</td><td>Unrelated classes sharing behaviour</td></tr>
+  </table></div>
+</section>
+
+<!-- 17 -->
+<section class="topic" id="polymorphism">
+  <h2><span class="num">17</span>Polymorphism</h2>
+  <div class="def"><strong>Polymorphism</strong> comes from the Greek <strong>poly</strong> (many) + <strong>morph</strong> (forms), meaning "many forms". In OOP, <strong>different classes can use the same method name but behave differently</strong> depending on which object calls it.</div>
+  <ul>
+    <li>One of the four pillars of OOP.</li>
+    <li>Makes code flexible, reusable and maintainable.</li>
+  </ul>
+  <h3>Types</h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Compile-time (static)</th><th>Runtime (dynamic)</th></tr>
+    <tr><td>Decided <strong>at compile time</strong>, from the method signature</td><td>Decided <strong>at runtime</strong>, from the actual object</td></tr>
+    <tr><td>Achieved by <strong>function and operator overloading</strong></td><td>Achieved by <strong>function overriding</strong></td></tr>
+    <tr><td><strong>Not supported in PHP</strong></td><td><strong>Supported in PHP</strong></td></tr>
+  </table></div>
+  <div class="note">The slide's runtime polymorphism definition ends with "it is called function <strong>overloading</strong>". It means <strong>overriding</strong>: the same name, the same number of arguments and the same parameter types as the parent's method. The slide also translates "morphism" as "important structures". It means <strong>forms</strong>.</div>
+  <h3>Ways to achieve polymorphism in PHP</h3>
+  <ol>
+    <li>Inheritance (method overriding)</li>
+    <li>Abstract classes</li>
+    <li>Interfaces</li>
+  </ol>
+</section>
+
+<!-- 18 -->
+<section class="topic" id="overriding">
+  <h2><span class="num">18</span>Method Overriding</h2>
+  <div class="def"><strong>Method overriding</strong> is when a <strong>child class provides its own version of a method that already exists in the parent</strong>, with the same name and parameters. Calling it on a child object runs the child's version.</div>
+<div class="code"><script type="text/plain">
+<?php
+class ParentClass {
+    public function greet()     { echo "Greetings from the base class<br>"; }
+    public function sayThanks() { echo "Thanks from the base class<br>"; }
+}
+class ChildClass extends ParentClass {
+    public function sayThanks() {             // overrides the parent
+        echo "Thanks from the derived class<br>";
+    }
+}
+$base = new ParentClass();
+$base->greet();
+$base->sayThanks();
+
+$child = new ChildClass();
+$child->greet();         // inherited
+$child->sayThanks();     // overridden version
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Greetings from the base class
+Thanks from the base class
+Greetings from the base class
+Thanks from the derived class</div>
+  <p>The parent version can still be called from inside the child with <code>parent::sayThanks();</code>.<span class="tag add">not in slides</span></p>
+  <h3>Overloading vs overriding<span class="tag add">not in slides</span></h3>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Overloading</th><th>Overriding</th></tr>
+    <tr><td>Same name, <strong>different</strong> parameters, same class</td><td>Same name, <strong>same</strong> parameters, child class</td></tr>
+    <tr><td>Compile-time polymorphism</td><td>Runtime polymorphism</td></tr>
+    <tr><td>Not supported in PHP</td><td>Supported in PHP</td></tr>
+  </table></div>
+</section>
+
+<!-- 19 -->
+<section class="topic" id="poly-abs-int">
+  <h2><span class="num">19</span>Polymorphism via Abstract Classes &amp; Interfaces</h2>
+  <p>Different classes implement the same <code>area()</code> method in their own way, and the calling code treats them all the same:</p>
+<div class="code"><script type="text/plain">
+<?php
+interface Shape {
+    public function area();
+}
+class Square implements Shape {
+    private $side;
+    public function __construct($s) { $this->side = $s; }
+    public function area() { return $this->side * $this->side; }
+}
+class Circle implements Shape {
+    private $radius;
+    public function __construct($r) { $this->radius = $r; }
+    public function area() { return 3.14 * $this->radius * $this->radius; }
+}
+
+$shapes = [new Square(5), new Circle(7)];
+foreach ($shapes as $shape) {
+    echo get_class($shape) . " area: " . $shape->area() . "<br>";
+}
+?>
+</script></div>
+  <div class="out-label">Output</div>
+<div class="tree">Square area: 25
+Circle area: 153.86</div>
+  <p>The same call, <code>$shape-&gt;area()</code>, does different things for each object. That's polymorphism. With an abstract class <code>Shape</code> it works the same way, using <code>extends</code> instead of <code>implements</code>.</p>
+</section>
+
+<!-- 20 -->
+<section class="topic" id="encapsulation">
+  <h2><span class="num">20</span>Encapsulation</h2>
+  <div class="def"><strong>Encapsulation</strong> is <strong>wrapping data (properties) and methods together into a single unit</strong> (the object), and <strong>hiding</strong> the internal data from outside interference.</div>
+  <h3>Characteristics</h3>
+  <ul>
+    <li>Keeps data and code safe from outside interference.</li>
+    <li>A class can change its internal implementation without affecting the rest of the system.</li>
+    <li>Implemented in PHP with the access modifiers <strong>public, private and protected</strong>.</li>
+    <li>Private data is reached only through public <strong>getter and setter</strong> methods, which gives <strong>controlled access</strong>.</li>
+  </ul>
+<div class="code"><script type="text/plain">
+<?php
+class Book {
+    private $title;
+    private $price;
+    public function __construct($title = "PHP Basics", $price = 380) {
+        $this->title = $title;
+        $this->price = $price;
+    }
+    public function getTitle() { return $this->title; }   // getter
+    public function getPrice() { return $this->price; }   // getter
+    public function setPrice($newPrice) {                  // setter
+        if ($newPrice > 0) {
+            $this->price = $newPrice;
+        }
+    }
+}
+$book1 = new Book("Learning PHP", 450);
+// echo $book1->price;            // Error: Cannot access private property
+echo "Title: " . $book1->getTitle() . "<br>";
+$book1->setPrice(500);
+echo "Price: " . $book1->getPrice();     // 500
+?>
+</script></div>
+</section>
+
+<!-- 21 -->
+<section class="topic" id="access">
+  <h2><span class="num">21</span>Access Modifiers</h2>
+  <div class="def"><strong>Access modifiers</strong> control <strong>where a class member can be accessed from</strong>.</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Modifier</th><th>Same class</th><th>Child class</th><th>Outside the class</th></tr>
+    <tr><td><strong>public</strong> (default)</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td><strong>protected</strong></td><td>Yes</td><td>Yes</td><td>No</td></tr>
+    <tr><td><strong>private</strong></td><td>Yes</td><td>No</td><td>No</td></tr>
+  </table></div>
+  <h3>public</h3>
+  <p>Members are <strong>public by default</strong> and can be accessed from anywhere.</p>
+<div class="code"><script type="text/plain">
+<?php
+class Book {
+    public $title;
+    public function __construct($title) { $this->title = $title; }
+}
+$b = new Book("Learning PHP");
+echo $b->title;       // works: public
+?>
+</script></div>
+  <h3>private</h3>
+  <p>Only accessible <strong>inside the same class</strong>. See the Book example under Encapsulation above.</p>
+  <h3>protected</h3>
+  <p>Accessible inside the class <strong>and its child classes</strong>, but hidden from outside.</p>
+<div class="code"><script type="text/plain">
+<?php
+class Book {
+    protected $title;
+    protected $price;
+    public function __construct($title, $price) {
+        $this->title = $title;
+        $this->price = $price;
+    }
+}
+class Novel extends Book {
+    public function showDetails() {
+        echo "Title: $this->title | Price: $this->price";   // allowed in child
+    }
+}
+$novel = new Novel("Harry Potter", 550);
+// echo $novel->title;      // Error: Cannot access protected property
+$novel->showDetails();      // Title: Harry Potter | Price: 550
+?>
+</script></div>
+  <div class="tip"><strong>Remember:</strong> public = everyone · protected = family (class + children) · private = only me (the class).</div>
+</section>
+
+<!-- 22 -->
+<section class="topic" id="final">
+  <h2><span class="num">22</span>final Keyword</h2>
+  <div class="def">The <strong><code>final</code></strong> keyword <strong>prevents changes through inheritance</strong>. A final <strong>class can't be extended</strong>, a final <strong>method can't be overridden</strong>, and (from PHP 8.1) a final <strong>constant can't be overridden</strong>.</div>
+  <h3>1. final class</h3>
+  <p>A final class <strong>can't be inherited</strong>. Use it when a class must not be changed or extended.</p>
+<div class="code"><script type="text/plain">
+<?php
+final class MainClass {
+    function displayResult($a, $b) {
+        echo "Sum = " . ($a + $b);
+    }
+}
+class SubClass extends MainClass {     // not allowed
+}
+?>
+</script></div>
+<div class="tree">Fatal error: Class SubClass cannot extend final class MainClass</div>
+
+  <h3>2. final method</h3>
+  <p>A final method <strong>can't be overridden</strong> in a child class, although the class itself can still be extended.</p>
+<div class="code"><script type="text/plain">
+<?php
+class BaseClass {
+    final function calculate($a, $b) {
+        echo "Sum = " . ($a + $b);
+    }
+}
+class ChildClass extends BaseClass {
+    function calculate($x, $y) {        // not allowed
+        echo "Product = " . ($x * $y);
+    }
+}
+?>
+</script></div>
+<div class="tree">Fatal error: Cannot override final method BaseClass::calculate()</div>
+
+  <h3>3. final constant (PHP 8.1+)</h3>
+<div class="code"><script type="text/plain">
+<?php
+class AppSettings {
+    final public const VERSION = "1.0.0";
+}
+class CustomSettings extends AppSettings {
+    public const VERSION = "2.0.0";     // not allowed
+}
+?>
+</script></div>
+<div class="tree">Fatal error: CustomSettings::VERSION cannot override final constant AppSettings::VERSION</div>
+  <div class="table-wrap"><table class="plain">
+    <tr><th>Applied to</th><th>Effect</th></tr>
+    <tr><td>Class</td><td>Can't be extended</td></tr>
+    <tr><td>Method</td><td>Can't be overridden (the class can still be extended)</td></tr>
+    <tr><td>Constant (8.1+)</td><td>Can't be overridden in a child class</td></tr>
+  </table></div>
+  <div class="note">PHP doesn't allow <code>final</code> on <strong>properties</strong> (unlike Java). Use <code>readonly</code> (PHP 8.1+) for values that shouldn't change.<span class="tag add">not in slides</span></div>
+</section>
+
+</main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
